@@ -4,7 +4,7 @@
 define('PKG_NAME', 'ms2form');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
-define('PKG_VERSION', '1.0.0');
+define('PKG_VERSION', '1.0.1');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 define('PKG_NAMESPACE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
@@ -35,21 +35,28 @@ define('MODX_ASSETS_URL', MODX_BASE_URL . 'assets/');
 define('BUILD_MENU_UPDATE', false);
 define('BUILD_ACTION_UPDATE', false);
 define('BUILD_SETTING_UPDATE', false);
-define('BUILD_CHUNK_UPDATE', false);
+define('BUILD_CHUNK_UPDATE', true);
 
 define('BUILD_SNIPPET_UPDATE', true);
-define('BUILD_PLUGIN_UPDATE', true);
+define('BUILD_PLUGIN_UPDATE', false);
 //define('BUILD_EVENT_UPDATE', true);
 //define('BUILD_POLICY_UPDATE', true);
 //define('BUILD_POLICY_TEMPLATE_UPDATE', true);
 //define('BUILD_PERMISSION_UPDATE', true);
 
-define('BUILD_CHUNK_STATIC', false);
-define('BUILD_SNIPPET_STATIC', false);
-define('BUILD_PLUGIN_STATIC', false);
+if (!empty($_GET['development'])) {
+  define('STATIC_PATH', PKG_NAME . '/core/components/' . PKG_NAME_LOWER);
+  define('BUILD_CHUNK_STATIC', true);
+  define('BUILD_SNIPPET_STATIC', true);
+  define('BUILD_PLUGIN_STATIC', true);
+} else {
+  define('STATIC_PATH', 'core/components/' . PKG_NAME_LOWER);
+  define('BUILD_CHUNK_STATIC', false);
+  define('BUILD_SNIPPET_STATIC', false);
+  define('BUILD_PLUGIN_STATIC', false);
+}
 
 $BUILD_RESOLVERS = array(
-  'tables',
+  'setup',
   'chunks',
-  //'setup',
 );

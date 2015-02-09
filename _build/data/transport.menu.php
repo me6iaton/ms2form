@@ -3,12 +3,12 @@
 $menus = array();
 
 $tmp = array(
-  'ms2form' => array(
+/*  'ms2form' => array(
     'description' => 'ms2form_menu_desc',
     'action' => array(
       'controller' => 'index',
     ),
-  ),
+  ),*/
 );
 
 $i = 0;

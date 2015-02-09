@@ -3,8 +3,12 @@
 $chunks = array();
 
 $tmp = array(
-  'tpl.ms2form.item' => array(
-    'file' => 'item',
+  'tpl.ms2form.form.create' => array(
+    'file' => 'form_create',
+    'description' => '',
+  ),
+  'tpl.ms2form.form.update' => array(
+    'file' => 'form_update',
     'description' => '',
   ),
 );
@@ -22,7 +26,7 @@ foreach ($tmp as $k => $v) {
     'snippet' => file_get_contents($sources['source_core'] . '/elements/chunks/chunk.' . $v['file'] . '.tpl'),
     'static' => BUILD_CHUNK_STATIC,
     'source' => 1,
-    'static_file' => 'core/components/' . PKG_NAME_LOWER . '/elements/chunks/chunk.' . $v['file'] . '.tpl',
+    'static_file' => STATIC_PATH . '/elements/chunks/chunk.' . $v['file'] . '.tpl',
   ), '', true, true);
 
   $chunks[] = $chunk;
