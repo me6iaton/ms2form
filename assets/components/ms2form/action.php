@@ -7,7 +7,16 @@ else {
 }
 
 define('MODX_API_MODE', true);
-require_once dirname(dirname(dirname(dirname(__FILE__)))).'/index.php';
+
+$productionIndex = dirname(dirname(dirname(dirname(__FILE__)))). '/index.php';
+$developmentIndex = dirname(dirname(dirname(dirname(dirname(__FILE__))))). '/index.php';
+if (file_exists($productionIndex)){
+  require_once $productionIndex;
+}else{
+  require_once $developmentIndex;
+}
+
+
 
 $modx->getService('error', 'error.modError');
 $modx->getRequest();

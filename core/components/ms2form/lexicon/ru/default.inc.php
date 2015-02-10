@@ -3,7 +3,7 @@
  * Default Russian Lexicon Entries for ms2form
  */
 $_lang['ms2form_template'] = 'Шаблон';
-$_lang['ms2form_categories'] = 'Мероприятия';
+$_lang['ms2form_categories'] = 'Категории';
 $_lang['ms2form_tags'] = 'Теги';
 $_lang['ms2form_embed'] = 'Ссылка на встраиваемый обьект';
 $_lang['ms2form_template_text'] = 'Пост с текстом';

@@ -18,8 +18,7 @@
     "tag": "v2.8.0",
     "commit": "51b48d8249803e62ae543ba29cb3dcb8f8de5cbb"
   },
-  "_source": "https://github.com/toopay/bootstrap-markdown.git",
+  "_source": "git://github.com/toopay/bootstrap-markdown.git",
   "_target": "~2.8.0",
-  "_originalSource": "https://github.com/toopay/bootstrap-markdown.git",
-  "_direct": true
+  "_originalSource": "bootstrap-markdown"
 }

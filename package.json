@@ -1,0 +1,12 @@
+{
+  "name": "ms2form",
+  "version": "1.0.1",
+  "description": "",
+  "main": "node_modules/gulp/bin/gulp.js",
+  "author": "me6iaton <me6iaton@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.4.3"
+  }
+}

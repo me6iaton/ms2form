@@ -21,7 +21,6 @@ class ms2form {
   function __construct(modX &$modx, array $config = array()) {
     $this->modx =& $modx;
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
-    $assetsPath = $this->modx->getOption('ms2form_assets_path', $config, $this->modx->getOption('assets_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
     $source_default = $this->modx->getOption('ms2_product_source_default', $config, 1);
@@ -30,9 +29,7 @@ class ms2form {
     $this->config = array_merge(array(
       'assetsUrl' => $assetsUrl
     , 'cssUrl' => $assetsUrl . 'css/'
-    , 'jsUrl' => $assetsUrl . 'js/'
-    , 'jsPath' => $assetsPath . 'js/'
-    , 'imagesUrl' => $assetsUrl . 'images/'
+    , 'vendorUrl' => $assetsUrl . 'vendor/'
 
     , 'connectorUrl' => $connectorUrl
     , 'actionUrl' => $actionUrl
@@ -75,56 +72,29 @@ class ms2form {
         break;
       default:
         if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
-          $config = $this->makePlaceholders($this->config);
-
-
-          //region  Old Tikets initialize
-//                    if ($css = $this->modx->getOption('tickets.frontend_css')) {
-//            $this->modx->regClientCSS(str_replace($config['pl'], $config['vl'], $css));
-//          }
-//
-//          $enable_editor = $this->modx->getOption('tickets.enable_editor');
-//          $formBefore = !empty($this->config['formBefore']) ? 1 : 0;
-//          $editorConfig = 'enable_editor: '.$enable_editor.'';
-//          if ($enable_editor) {
-//            $this->modx->regClientScript($this->config['jsUrl'].'web/editor/jquery.markitup.js');
-//            $this->modx->regClientCSS($this->config['jsUrl'].'web/editor/editor.css');
-//            $editorConfig .= '
-//              ,editor: {
-//                ticket: '.$this->modx->getOption('tickets.editor_config.ticket').'
-//                ,comment: '.$this->modx->getOption('tickets.editor_config.comment').'
-//              }';
-//          }
-//          $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
-//            TicketsConfig = {
-//              jsUrl: "'.$this->config['jsUrl'].'web/"
-//              ,cssUrl: "'.$this->config['cssUrl'].'web/"
-//              ,actionUrl: "'.$this->config['actionUrl'].'"
-//              ,formBefore: '.$formBefore.'
-//              ,close_all_message: "'.$this->modx->lexicon('tickets_message_close_all').'"
-//              ,tpanel: '.($this->modx->user->isAuthenticated() ? 1 : 0).'
-//              ,thread_depth: '.$this->config['depth'].'
-//              ,'.$editorConfig.'
-//            };
-//          ');
-//
-//          if (file_put_contents($this->config['jsPath'] . 'web/config.js', $config_js)) {      1
-//            $this->modx->regClientStartupScript($this->config['jsUrl'] . 'web/config.js');
-//          }
-//          else {
-//            $this->modx->regClientStartupScript("<script type=\"text/javascript\">\n".$config_js."\n</script>", true);
-//          }
-          //endregion
+          $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
+            Ms2formConfig = {
+              ctx: "' . $ctx . '"
+              ,vendorUrl: "' . $this->config['vendorUrl'] . '"
+              ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
+              ,actionUrl: "' . $this->config['actionUrl'] . '"
+              ,close_all_message: "' . $this->modx->lexicon('tickets_message_close_all') . '"
+            };
+          ');
+          $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
+          $this->modx->regClientStartupScript($config_js, true);
 
           if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
             if (!empty($js) && preg_match('/\.js/i', $js)) {
-              $this->modx->regClientStartupScript(preg_replace(array('/^\n/', '/\t{7}/'), '', '
-              <script type="text/javascript">
+              $jsCurl = '
+                <script type="text/javascript">
                 if(typeof curl == "undefined") {
-                  document.write("<script src=\"' . $this->config['jsUrl'] . 'web/lib/curl.js\" type=\"text/javascript\"><\/script>");
+                  document.write("<script src=\"' . $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js\" type=\"text/javascript\"><\/script>");
                   }
-              </script>
-              '), true);
+              </script>';
+              $jsCurl = preg_replace(array('/^\n/', '/\t{7}/'), '', $jsCurl);
+
+              $this->modx->regClientStartupScript($jsCurl, true);
               $this->modx->regClientStartupScript($js);
             }
           }

@@ -16,7 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-markdown": "https://github.com/toopay/bootstrap-markdown.git#~2.8.0",
+    "bootstrap-markdown": "~2.8.0",
     "plupload": "~2.1.2",
     "select2": "~3.5.2",
     "curl": "~0.8.12",
@@ -24,6 +24,8 @@
     "sisyphus": "~1.1.103",
     "to-markdown": "~0.0.3",
     "marked": "~0.3.3",
-    "jquery-form": "~3.46.0"
+    "jquery-form": "~3.46.0",
+    "purl": "~2.3.1",
+    "when": "~3.7.2"
   }
 }

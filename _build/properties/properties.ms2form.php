@@ -5,15 +5,15 @@ $properties = array();
 $tmp = array(
   'tplFormCreate' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.create',
+    'value' => 'tpl.ms2form.create',
   ),
   'tplFormUpdate' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.update',
+    'value' => 'tpl.ms2form.update',
   ),
   'tplPreview' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.preview',
+    'value' => 'tpl.ms2form.preview',
   ),
 //  'tplSectionRow' => array(
 //    'type' => 'textfield',
@@ -21,7 +21,7 @@ $tmp = array(
 //  ),
   'tplTicketEmailBcc' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.ticket.email.bcc',
+    'value' => 'tpl.ms2form.email.bcc',
   ),
 //  'tplTicketEmailSubscription' => array(
 //    'type' => 'textfield',
@@ -99,15 +99,15 @@ $tmp = array(
   ),
   'tplFiles' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.files',
+    'value' => 'tpl.ms2form.files',
   ),
   'tplFile' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.file',
+    'value' => 'tpl.ms2form.file',
   ),
   'tplImage' => array(
     'type' => 'textfield',
-    'value' => 'tpl.ms2form.form.image',
+    'value' => 'tpl.ms2form.image',
   ),
 
 );

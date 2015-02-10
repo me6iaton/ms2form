@@ -1,38 +1,67 @@
 (function() {
   var ms2form = {
     config : {
-      jsUrl : "/assets/components/ms2form/js/web/",
-      cssUrl : "/assets/components/ms2form/css/web/",
-      actionUrl : "/assets/components/ms2form/action.php",
+      vendorUrl : Ms2formConfig.vendorUrl,
+      cssUrl : Ms2formConfig.cssUrl,
+      actionUrl : Ms2formConfig.actionUrl,
       formBefore : 0,
-      close_all_message : "закрыть все",
+      close_all_message : Ms2formConfig.close_all_message,
       tpanel : 1,
       thread_depth : 0,
       enable_editor : 1,
       locale: 'ru'
     },
     initialize : function(end) {
-      curl([ '' + ms2form.config.jsUrl + 'lib/when' ]).then(function(when) {
+      var firstLibs;
+      if (typeof jQuery == "undefined"){
+        firstLibs = [
+          ms2form.config.vendorUrl + 'when/when'
+          ,'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
+        ];
+      } else{
+        firstLibs = [
+          ms2form.config.vendorUrl + 'when/when'
+        ]
+      }
+      curl(firstLibs).then(function(when,jqery) {
         var deferreds = [];
-        if (typeof jQuery == "undefined")
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/jquery-2.0.3.min.js' ]));
         if (!jQuery().ajaxForm)
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/jquery.form.min.js' ]));
+          deferreds.push(curl([ ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
+
         if (!jQuery().jGrowl)
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/jquery.jgrowl.min.js' ]));
+          deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jgrowl/jquery.jgrowl.min.js']));
+
         if (!jQuery().sisyphus)
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/jquery.sisyphus.min.js' ]));
+          deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'sisyphus/sisyphus.js' ]));
+
         if(!jQuery().markdown){
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/marked.js','js!' + ms2form.config.jsUrl + 'lib/to-markdown.js']).next([ 'js!' + ms2form.config.jsUrl + 'lib/bootstrap-markdown/js/bootstrap-markdown.js']).next(['js!' + ms2form.config.jsUrl + 'lib/bootstrap-markdown/locale/bootstrap-markdown.ru.js']));
+          deferreds.push(curl([
+            'js!' + ms2form.config.vendorUrl + 'he/he.js'
+            , 'js!' + ms2form.config.vendorUrl + 'to-markdown/src/to-markdown.js'
+          ]).next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/js/bootstrap-markdown.js'])
+            .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.ru.js']));
         }
+
+        if (typeof marked !== 'function'){
+          deferreds.push(curl([
+            ms2form.config.vendorUrl + 'marked/marked.min.js'
+          ]).then(function(marked){
+            window.marked = marked
+            }));
+        }
+
         if(!jQuery().url){
           // todo-me fix  ms2form curl -> lib/purl.js
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/purl.js' ]));
+          deferreds.push(curl([ms2form.config.vendorUrl + 'purl/purl.js' ])
+            .then(function(purl){
+              purl();
+            }));
         }
-        if (!jQuery().select2)
-          deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/select2/select2.js' ]));
-        deferreds.push(curl([ 'js!' + ms2form.config.jsUrl + 'lib/plupload/plupload.full.min.js' ]).next([ 'js!' + ms2form.config.jsUrl + 'lib/plupload/i18n/ru.js']));
 
+        if (!jQuery().select2)
+          deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'select2/select2.min.js' ]));
+
+        deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'plupload/js/plupload.full.min.js' ]).next([ 'js!' + ms2form.config.vendorUrl + 'plupload/js//i18n/ru.js']));
         when.all(deferreds).then(end)
       })
     },
@@ -40,7 +69,7 @@
       editor: null,
       content: null,
       save : function(form, button) {
-        NProgress.start();
+        //NProgress.start();
 
         // save content
         ms2form.product.content.val(ms2form.product.editor.parseContent());
@@ -94,7 +123,7 @@
             return true;
           },
           success : function(response) {
-            NProgress.done();
+            //NProgress.done();
             $('#ms2form.create').sisyphus().manuallyReleaseData();
             if (response.success) {
               if (response.message) {
@@ -130,7 +159,7 @@
       if (message) {
         $.jGrowl(message, {theme: 'tickets-message-error'/*, sticky: true*/});
       }
-      NProgress.done();
+      //NProgress.done();
     }
     ,info: function(message) {
       if (message) {
@@ -143,11 +172,11 @@
   };
   ms2form.initialize(function() {
     ms2form.url = $.url();
+    //// set locale
+    //if(ms2form.url.segment(1) === 'en'){
+    //  ms2form.config.locale = 'en'
+    //}
 
-    // set locale
-    if(ms2form.url.segment(1) === 'en'){
-      ms2form.config.locale = 'en'
-    }
     var form = $('#comment-form');
     if (!form.length) form = $('#ms2form');
     var pid = form.find('[name="pid"]').val();
@@ -190,9 +219,10 @@
           $('#ms2formCategories').select2('val',response.data.product);
         }
         // add feedback category
-        if(ms2form.url.param('category')){
-          $('#ms2formCategories').select2('val',[ms2form.url.param('category')]);
-        }
+        // todo-me fix ms2form.url.param('category')
+        //if(ms2form.url.param('category')){
+        //  $('#ms2formCategories').select2('val',[ms2form.url.param('category')]);
+        //}
       }
       else {
         ms2form.Message.error(response.message);
@@ -213,15 +243,11 @@
           $('#ms2formTags').select2('val',response.data.product);
         }
         // init old value
-        if(window.location.search == '?template=16'){
-          $('#ms2formTags').select2('val',['media']);
-        }else if (window.location.search == '?template=14'){
-          $('#ms2formTags').select2('val',['photo']);
-        }
-        // add feedback tag
-        if(ms2form.url.param('category')){
-          $('#ms2formTags').select2('val',['feedback']);
-        }
+        //if(window.location.search == '?template=16'){
+        //  $('#ms2formTags').select2('val',['media']);
+        //}else if (window.location.search == '?template=14'){
+        //  $('#ms2formTags').select2('val',['photo']);
+        //}
 
       }
       else {
@@ -260,8 +286,8 @@
         height : 2048,
         quality : 100
       },
-      flash_swf_url : ms2form.config.jsUrl + 'lib/plupload/js/Moxie.swf',
-      silverlight_xap_url : ms2form.config.jsUrl + 'lib/plupload/js/Moxie.xap',
+      flash_swf_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.swf',
+      silverlight_xap_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.xap',
       init : {
         Init : function(up) {
           //					debugger;
@@ -344,6 +370,8 @@
     });
 
     // Forms listeners
+    //todo-me Forms listeners
+/*
     $(document).on('change','#ms2formTemplate',function(e){
       if ($(this).val() === '16') {
         window.location.search = '?template=16';
@@ -365,9 +393,11 @@
         }
       }
     });
+    */
+
     $(document).on('click', '.ms2-file-delete', function(e) {
       e.preventDefault();
-      NProgress.start();
+      //NProgress.start();
       var $this = $(this);
       var $form = $this.parents('form');
       var $parent = $this.parents('.ticket-file');
@@ -376,7 +406,7 @@
 
       $.post(ms2form.config.actionUrl, {action: 'gallery/delete', id: id, form_key: form_key}, function(response,  textStatus, jqXHR) {
         if (response.success) {
-            NProgress.done();
+            //NProgress.done();
             $('.ticket-file[data-id="'+response.data.id+'"]').remove();
         }
         else {

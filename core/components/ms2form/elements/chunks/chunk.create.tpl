@@ -35,15 +35,6 @@
     <input type="hidden" class="form-control" id="ms2formTags">
   </div>
 
-  [[!#GET.template:is=`16`:then=`
-  <div class="form-group">
-    <label class="popover-help" data-html="true" data-toggle="popover" data-placement="top"
-           data-content="[[%ms2form_help_embed]]">[[%ms2form_embed]]</label>
-    <span class="text-danger">*</span>
-    <br/>
-    <input type="text" name="tv31" class="form-control" id="ms2formUrlEmbed">
-  </div>
-  `]]
 
   <div class="form-group popover-help" id="form-group-content">
     <input id="content" name="content" type="hidden" value="[[+content]]"/>
@@ -51,7 +42,7 @@
     <p data-trigger="manual" class="popover-help" data-html="true" data-toggle="popover" data-placement="bottom"
        data-content="[[%ms2form_help_editor]]"></p>
 
-    <div data-iconlibrary="fa-3" id="ms2form-editor">
+    <div id="ms2form-editor">
     </div>
   </div>
 

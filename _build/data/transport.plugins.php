@@ -23,7 +23,7 @@ foreach ($tmp as $k => $v) {
     'plugincode' => getSnippetContent($sources['source_core'] . '/elements/plugins/plugin.' . $v['file'] . '.php'),
     'static' => BUILD_PLUGIN_STATIC,
     'source' => 1,
-    'static_file' => STATIC_PATH . '/elements/plugins/plugin.' . $v['file'] . '.php'
+    'static_file' => PKG_STATIC_PATH . '/elements/plugins/plugin.' . $v['file'] . '.php'
   ), '', true, true);
 
   $events = array();
