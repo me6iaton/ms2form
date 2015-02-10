@@ -3,12 +3,36 @@
 $chunks = array();
 
 $tmp = array(
-  'tpl.ms2form.form.create' => array(
-    'file' => 'form_create',
+  'tpl.ms2form.create' => array(
+    'file' => 'create',
     'description' => '',
   ),
-  'tpl.ms2form.form.update' => array(
-    'file' => 'form_update',
+  'tpl.ms2form.update' => array(
+    'file' => 'update',
+    'description' => '',
+  ),
+  'tpl.ms2form.email.create' => array(
+    'file' => 'email_create',
+    'description' => '',
+  ),
+  'tpl.ms2form.file' => array(
+    'file' => 'file',
+    'description' => '',
+  ),
+  'tpl.ms2form.files' => array(
+    'file' => 'files',
+    'description' => '',
+  ),
+  'tpl.ms2form.image' => array(
+    'file' => 'image',
+    'description' => '',
+  ),
+  'tpl.ms2form.section.row' => array(
+    'file' => 'section_row',
+    'description' => '',
+  ),
+  'tpl.ms2form.tag.row' => array(
+    'file' => 'tag_row',
     'description' => '',
   ),
 );
