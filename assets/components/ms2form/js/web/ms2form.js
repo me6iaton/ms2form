@@ -218,11 +218,6 @@
         if(response.data.product){
           $('#ms2formCategories').select2('val',response.data.product);
         }
-        // add feedback category
-        // todo-me fix ms2form.url.param('category')
-        //if(ms2form.url.param('category')){
-        //  $('#ms2formCategories').select2('val',[ms2form.url.param('category')]);
-        //}
       }
       else {
         ms2form.Message.error(response.message);
@@ -242,12 +237,6 @@
         if(response.data.product){
           $('#ms2formTags').select2('val',response.data.product);
         }
-        // init old value
-        //if(window.location.search == '?template=16'){
-        //  $('#ms2formTags').select2('val',['media']);
-        //}else if (window.location.search == '?template=14'){
-        //  $('#ms2formTags').select2('val',['photo']);
-        //}
 
       }
       else {
@@ -370,30 +359,6 @@
     });
 
     // Forms listeners
-    //todo-me Forms listeners
-/*
-    $(document).on('change','#ms2formTemplate',function(e){
-      if ($(this).val() === '16') {
-        window.location.search = '?template=16';
-      }else{
-        if(window.location.search == '?template=16'){
-          window.location.search = '?template='+$(this).val();
-        }else if ($(this).val() === '14'){
-          if(ms2form.url.param('category')){
-            $('#ms2formTags').select2('val',['feedback','photo']);
-          }else{
-            $('#ms2formTags').select2('val',['photo']);
-          }
-        }else if ($(this).val() === '13'){
-          if(ms2form.url.param('category')){
-            $('#ms2formTags').select2('val',['feedback']);
-          }else{
-            $('#ms2formTags').select2('val',[]);
-          }
-        }
-      }
-    });
-    */
 
     $(document).on('click', '.ms2-file-delete', function(e) {
       e.preventDefault();
