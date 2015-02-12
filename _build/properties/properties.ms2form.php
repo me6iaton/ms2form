@@ -95,7 +95,7 @@ $tmp = array(
   ),
   'source' => array(
     'type' => 'numberfield',
-    'value' => 0, //todo-me source default snplet property
+    'value' => '',
   ),
   'tplFiles' => array(
     'type' => 'textfield',

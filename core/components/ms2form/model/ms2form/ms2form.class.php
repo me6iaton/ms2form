@@ -23,7 +23,9 @@ class ms2form {
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
-    $source_default = $this->modx->getOption('ms2_product_source_default', $config, 1);
+    if(empty($config['source'])){
+      $config['source'] = $this->modx->getOption('ms2_product_source_default');
+    }
     $connectorUrl = $assetsUrl . 'connector.php';
 
     $this->config = array_merge(array(
@@ -34,8 +36,6 @@ class ms2form {
     , 'connectorUrl' => $connectorUrl
     , 'actionUrl' => $actionUrl
     , 'modelPath' => $corePath . 'model/'
-    , 'source_default' => $source_default
-
     , 'corePath' => $corePath
 
     , 'json_response' => true
@@ -150,7 +150,7 @@ class ms2form {
     }
     $data['file'] = $_FILES['file'];
     $data['rank'] = $_REQUEST['rank'];
-    $data['source'] = $this->config['source_default'];
+    $data['source'] = $this->config['source'];
     /* @var modProcessorResponse $response */
     $response = $this->modx->runProcessor('web/gallery/upload', $data, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
     if ($response->isError()) {
@@ -250,8 +250,8 @@ class ms2form {
     if (!$this->authenticated || empty($this->config['allowFiles'])) {
       return $this->error('ticket_err_access_denied');
     }
-    $data['source'] = $this->config['source_default'];
-    // todo-me add change source_default in ms2form
+    $data['source'] = $this->config['source'];
+    // todo-me add change source in ms2form
     /** @var modProcessorResponse $response */
     $response = $this->modx->runProcessor('web/gallery/update_picasa_multiple', $data, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
     if ($response->isError()) {
@@ -268,7 +268,7 @@ class ms2form {
    * @return array
    */
   public function productSave(array $data) {
-    $source = $this->config['source_default'];
+    $source = $this->config['source'];
 
     $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
@@ -351,7 +351,6 @@ class ms2form {
       }
     }
 
-//		$product->updateProductImage();
 //		//TODO-me add ms2form email addQueue
     if ($bcc = $this->modx->getOption('ms2form.mail_bcc')) {
       $bcc = array_map('trim', explode(',', $bcc));
@@ -389,7 +388,7 @@ class ms2form {
     if (is_object($this->mediaSource) && $this->mediaSource instanceof modMediaSource) {
       return $this->mediaSource;
     } else {
-      if ($this->mediaSource = $this->modx->getObject('sources.modMediaSource', $this->config['source_default'])) {
+      if ($this->mediaSource = $this->modx->getObject('sources.modMediaSource', $this->config['source'])) {
         if (empty($ctx)) {
           $ctx = $this->config['ctx'];
         }

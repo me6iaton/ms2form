@@ -12,6 +12,8 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
   public $mediaSource;
   private $mediaSourceClassKey;
   private $productId;
+  /* @var msProduct $product */
+  private $product;
   private $files;
 
   /** {@inheritDoc} */
@@ -22,6 +24,10 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
     $this->productId = $this->getProperty('productId');
     if(!isset($this->productId)){
       return "not data property productId";
+    }
+
+    if (!$this->product = $this->modx->getObject('msProduct', $this->productId)) {
+      return $this->modx->lexicon('ms2_gallery_err_no_product');
     }
 
     if(!$this->files = $this->getProperty('files')){
@@ -75,6 +81,7 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
       }
       $item->save();
     }
+    $this->product->updateProductImage();
     return $this->success();
   }
 

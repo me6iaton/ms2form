@@ -103,7 +103,12 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
         return $this->failure($this->modx->lexicon('ms2_err_gallery_thumb'));
       } else {
         $this->product->updateProductImage();
-        return $this->success($url);
+
+        $ms2_product_thumbnail_size = $this->modx->getOption('ms2_product_thumbnail_size');
+        $product_file_arr = $product_file->toArray();
+        $product_file_arr['thumb'] = '/' . $properties['baseUrl']['value'] . $product_file->get('path') . $ms2_product_thumbnail_size . '/' . $filename;
+        $product_file_arr['mediaSourceClassKey'] = $this->mediaSource->get('class_key');
+        return $this->success("ok", $product_file_arr);
       }
     } else {
       return $this->failure($this->modx->lexicon('ms2_err_gallery_save') . ': ' . print_r($this->mediaSource->getErrors(), 1));
