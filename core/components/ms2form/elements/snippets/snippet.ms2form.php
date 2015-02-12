@@ -30,6 +30,9 @@ if (empty($tplImage)) {
 if (empty($templates)) {
   $templates = 0;
 }
+if (empty($source)) {
+  $source = $modx->getOption('ms2_product_source_default');
+}
 $ms2_product_thumbnail_size = $modx->getOption('ms2_product_thumbnail_size', $scriptProperties, $modx->getOption('ms2_product_thumbnail_size'));
 
 $pid = !empty($_REQUEST['pid']) ? (integer)$_REQUEST['pid'] : 0;
@@ -127,41 +130,34 @@ if ($templates = explode(',', $templates)) {
 //</editor-fold>
 
 
-// add multi upload files
 if (!empty($allowFiles)) {
+  /** @var modMediaSource $source */
+  if ($source = $modx->getObject('sources.modMediaSource', $source)) {
+    $sourceProperties = $source->getPropertyList();
+  }
   $q = $modx->newQuery('msProductFile');
   if (empty($pid)) {
-    $q->where(array('product_id' => 0, 'createdby' => $modx->user->id));
-    $q->andCondition(array('path' => '0/' . $ms2_product_thumbnail_size . '/'), null, 1);
-    $q->orCondition(array('path' => '0/'), null, 1);
-  } else {
-//		$q->where(array('product_id' => $pid,'createdby' => $modx->user->id));
-    //fix-me  'createdby' => $modx->user->id
-    $q->where(array('product_id' => $pid));
-    $q->andCondition(array('path' => $pid . '/' . $ms2_product_thumbnail_size . '/'), null, 1);
-    $q->orCondition(array('path' => $pid . '/'), null, 1);
-//		$q->where(array('product_id' => $pid, 'path'=> $pid.'/'.$ms2_product_thumbnail_size.'/'));
+    $q->where(array(
+      'product_id' => 0
+      ,'parent' => 0
+      ,'createdby' => $modx->user->id
+    ));
+
+  }else{
+    //todo-me
   }
   $q->sortby('createdon', 'ASC');
   $collection = $modx->getIterator('msProductFile', $q);
   $files = '';
-  $files_arr = array();
   /** @var msProductFile $item */
   foreach ($collection as $item) {
-    $item = $item->toArray();
-    /** @var array $item */
-//		$item['size'] = round($item['size'] / 1024, 2);
-    $itemThumb = new CallbackFilterIterator($collection, function (msProductFile $current) use ($item) {
-      if ($current->get('parent') == $item['id']) return true;
-    });
-    $itemThumb->rewind();
-    if ($itemThumb->current()) {
-      $item['thumb'] = $itemThumb->current()->get('url');
-    }
-    $tpl = $item['type'] == 'image'
-      ? $tplImage
-      : $tplFile;
-    $files .= $ms2form->getChunk($tpl, $item);
+      $item = $item->toArray();
+      $item['size'] = round($item['size'] / 1024, 2);
+      $item['thumb'] = '/'.$sourceProperties['baseUrl'].$item['path']. $ms2_product_thumbnail_size.'/'. $item['file'];
+      $tpl = $item['type'] == 'image'
+        ? $tplImage
+        : $tplFile;
+      $files .= $ms2form->getChunk($tpl, $item);
   }
   $data['files'] = $ms2form->getChunk($tplFiles, array(
     'files' => $files,

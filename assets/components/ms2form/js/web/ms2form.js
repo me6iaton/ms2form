@@ -25,14 +25,23 @@
       }
       curl(firstLibs).then(function(when,jqery) {
         var deferreds = [];
+
         if (!jQuery().ajaxForm)
-          deferreds.push(curl([ ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
+          deferreds.push(curl([ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
 
         if (!jQuery().jGrowl)
           deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jgrowl/jquery.jgrowl.min.js']));
 
         if (!jQuery().sisyphus)
           deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'sisyphus/sisyphus.js' ]));
+
+        if (typeof marked !== 'function') {
+          deferreds.push(curl([
+            ms2form.config.vendorUrl + 'marked/marked.min.js'
+          ]).then(function (marked) {
+            window.marked = marked
+          }));
+        }
 
         if(!jQuery().markdown){
           deferreds.push(curl([
@@ -42,26 +51,20 @@
             .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.ru.js']));
         }
 
-        if (typeof marked !== 'function'){
-          deferreds.push(curl([
-            ms2form.config.vendorUrl + 'marked/marked.min.js'
-          ]).then(function(marked){
-            window.marked = marked
-            }));
-        }
 
-        if(!jQuery().url){
-          // todo-me fix  ms2form curl -> lib/purl.js
-          deferreds.push(curl([ms2form.config.vendorUrl + 'purl/purl.js' ])
-            .then(function(purl){
-              purl();
-            }));
-        }
+        //if(!jQuery().url){
+        //  deferreds.push(curl([ms2form.config.vendorUrl + 'purl/purl.js' ])
+        //    .then(function(purl){
+        //      //purl();
+        //      //ms2form.url = $.url();
+        //    }));
+        //}
 
         if (!jQuery().select2)
           deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'select2/select2.min.js' ]));
 
         deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'plupload/js/plupload.full.min.js' ]).next([ 'js!' + ms2form.config.vendorUrl + 'plupload/js//i18n/ru.js']));
+
         when.all(deferreds).then(end)
       })
     },
@@ -149,6 +152,7 @@
       }
     }
   };
+
   ms2form.Message = {
     success: function(message) {
       if (message) {
@@ -170,8 +174,9 @@
       $.jGrowl('close');
     }
   };
+
   ms2form.initialize(function() {
-    ms2form.url = $.url();
+    //ms2form.url = $.url();
     //// set locale
     //if(ms2form.url.segment(1) === 'en'){
     //  ms2form.config.locale = 'en'
@@ -244,6 +249,7 @@
       }
     }, 'json');
 
+    // Uploader
     ms2form.Uploader = new plupload.Uploader({
       runtimes : 'html5,flash,silverlight,html4',
       browse_button : 'ticket-files-select',
@@ -359,7 +365,6 @@
     });
 
     // Forms listeners
-
     $(document).on('click', '.ms2-file-delete', function(e) {
       e.preventDefault();
       //NProgress.start();

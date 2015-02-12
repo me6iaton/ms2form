@@ -1,6 +1,4 @@
 <?php
-require_once MODX_CORE_PATH . 'components/gdriver/model/gdriver/gdrivermsproduct.trait.php';
-
 /**
  * Class ms2FormProductFileMoveMultipleProcessor
  *
@@ -8,7 +6,6 @@ require_once MODX_CORE_PATH . 'components/gdriver/model/gdriver/gdrivermsproduct
  *
  */
 class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
-  use gdriverMsProduct;
   public $classKey = 'msProductFile';
   public $permission = 'msproductfile_save';
   public $languageTopics = array('minishop2:default','minishop2:product');
@@ -47,57 +44,35 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
   }
   /** {@inheritDoc} */
   public function process() {
+    $this->mediaSource->renameContainer('0/' . $this->modx->user->id, $this->productId);
+    if(!$this->mediaSource->moveObject('0/' . $this->productId, '/')){
+      return $this->failure('error move path 0/'.$this->productId);
+    }
+
+    $subPath = '0/' . $this->modx->user->id . '/';
     $criteria = $this->modx->newQuery('msProductFile');
-    $criteria->where(['product_id' => 0]);
-    foreach ($this->files as $fileId) {
-      $criteria->orCondition(['id' => $fileId], null, 1);
-      $criteria->orCondition(['parent' => $fileId], null, 1);
-    }
-    $msProductFiles = $this->modx->getCollection('msProductFile', $criteria);
-    /** @var msProductFile $msProductFile */
-    foreach ($msProductFiles as $msProductFile) {
-      // rename files
-      if ($this->mediaSourceClassKey == 'gdriverMediaSource') {
-        if($msProductFile->get('productId') == 0){
-          $filename = preg_replace('/^\d+_/','',$msProductFile->get('file'));
-          $msProductFile->set('file', $filename);
-          $properties =  $msProductFile->get('properties');
-          if($msProductFile->get('parent') == 0){
-            $this->mediaSource->renameObject($properties['gdriveFileId'],$filename);
-            // replace image urls
-            $urlsReplaceFrom[] = $msProductFile->get('url');
-            $urlsReplaceTo[] =  $properties['urlGdrive'];
-
-            $msProductFile->set('url',$properties['urlGdrive']);
-          }
-        }
+    $criteria->where(array(
+      'product_id' => 0
+    , 'createdby' => $this->modx->user->id
+    ));
+    $msProductFiles = $this->modx->getIterator('msProductFile', $criteria);
+    /** @var msProductFile $item */
+    foreach ($msProductFiles as $item) {
+      $file = $item->get('file');
+      $path = $item->get('path');
+      $item->set('product_id', $this->productId);
+      $thumbSize = substr($path, strlen($subPath));
+      if($thumbSize){
+        $thumbPath = $this->productId . '/' . $thumbSize;
+        $item->set('path', $thumbPath);
+        $item->set('url', $this->mediaSource->getObjectUrl($thumbPath. $file));
       }else{
-        //todo-me add filesMove in fileMediaSource
-        return $this->error('filesMove in not fileMediaSource to-do');
+        $item->set('path', $this->productId . '/');
+        $item->set('url', $this->mediaSource->getObjectUrl($this->productId . '/' . $file));
       }
-      $msProductFile->set('product_id', $this->productId);
-      $msProductFile->save();
+      $item->save();
     }
-    // replace image urls
-    if(isset($urlsReplaceFrom) && isset($urlsReplaceTo))
-      $this->replaceImageUrl($this->productId, $urlsReplaceFrom,$urlsReplaceTo,false);
-
-    if ($this->mediaSourceClassKey == 'gdriverMediaSource') {
-      /** @var gdriverMediaSource $mediaSource */
-      $mediaSource = $this->mediaSource;
-      $mediaSource->properties['intervalUpdateThumbnails'] = 30;
-
-      $response = $this->addFilesToQueueMove($this->productId, $this->files, $mediaSource->get('id'), $mediaSource->properties['intervalUpdateThumbnails']);
-
-      if ($response) {
-        return $this->success();
-      } else {
-        return $this->error('ms2FormProductFileMoveMultipleProcessor: error addFilesToQueueMove');
-      }
-    } else {
-      //todo-me add filesMove in fileMediaSource
-      return $this->error('filesMove in not fileMediaSource to-do');
-    }
+    return $this->success();
   }
 
 }
