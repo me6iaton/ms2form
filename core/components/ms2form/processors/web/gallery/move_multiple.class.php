@@ -44,18 +44,21 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
   }
   /** {@inheritDoc} */
   public function process() {
+    $criteria = $this->modx->newQuery('msProductFile');
+    $criteria->where(array(
+      'product_id' => 0
+    , 'createdby' => $this->modx->user->id
+    ));
+    $msProductFiles = $this->modx->getCollection('msProductFile', $criteria);
+
+    if(empty($msProductFiles)){return $this->success();}
+
     $this->mediaSource->renameContainer('0/' . $this->modx->user->id, $this->productId);
     if(!$this->mediaSource->moveObject('0/' . $this->productId, '/')){
       return $this->failure('error move path 0/'.$this->productId);
     }
 
     $subPath = '0/' . $this->modx->user->id . '/';
-    $criteria = $this->modx->newQuery('msProductFile');
-    $criteria->where(array(
-      'product_id' => 0
-    , 'createdby' => $this->modx->user->id
-    ));
-    $msProductFiles = $this->modx->getIterator('msProductFile', $criteria);
     /** @var msProductFile $item */
     foreach ($msProductFiles as $item) {
       $file = $item->get('file');
