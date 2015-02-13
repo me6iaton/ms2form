@@ -26,6 +26,7 @@ class ms2formCategoryGetListProcessor  extends modObjectProcessor{
     $config = array(
       'hideUnsearchable' => '1',
       'parents' => $this->config['parents'],
+      'resources' => $this->config['resources'],
       'includeTVs' => $this->config['parentsIncludeTVs'],
       'sortby' => $this->config['parentsSortby'],
       'sortdir' => $this->config['parentsSortdir'],

@@ -52,43 +52,28 @@ $tmp = array(
   ),
   'parentsSortby' => array(
     'type' => 'textfield',
-    'value' => 'id',
+    'value' => 'pagetitle',
     'desc' => 'ms2form_prop_parents_sortby'
   ),
   'parentsSortdir' => array(
-    'type' => 'textfield',
+    'type' => 'list',
+    'options' => array(
+      array('text' => 'ASC', 'value' => 'ASC'),
+      array('text' => 'DESC', 'value' => 'DESC'),
+    ),
     'value' => 'ASC',
     'desc' => 'ms2form_prop_parents_sortdir'
   ),
-//  'resources' => array(
-//    'type' => 'textfield',
-//    'value' => '',
-//    'desc' => 'ms2form_prop_sections_resources'
-//  ),
+  'resources' => array(
+    'type' => 'textfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_sections_resources'
+  ),
   'permissions' => array(
     'type' => 'textfield',
     'value' => 'section_add_children',
     'desc' => 'ms2form_prop_sections_permissions'
   ),
-//  'sortby' => array(
-//    'type' => 'textfield',
-//    'value' => 'pagetitle',
-//    'desc' => 'ms2form_prop_sections_sortby'
-//  ),
-//  'sortdir' => array(
-//    'type' => 'list',
-//    'options' => array(
-//      array('text' => 'ASC', 'value' => 'ASC'),
-//      array('text' => 'DESC', 'value' => 'DESC'),
-//    ),
-//    'value' => 'ASC',
-//    'desc' => 'ms2form_prop_sections_sortdir'
-//  ),
-//  'context' => array(
-//    'type' => 'textfield',
-//    'value' => '',
-//    'desc' => 'ms2form_prop_sections_context',
-//  ),
   'allowFiles' => array(
     'type' => 'combo-boolean',
     'value' => true,
