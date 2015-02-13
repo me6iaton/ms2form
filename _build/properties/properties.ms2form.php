@@ -3,11 +3,11 @@
 $properties = array();
 
 $tmp = array(
-  'tplFormCreate' => array(
+  'tplCreate' => array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.create',
   ),
-  'tplFormUpdate' => array(
+  'tplUpdate' => array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.update',
   ),
@@ -19,7 +19,27 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.section.row',
   ),
-  'tplTicketEmailBcc' => array(
+  'tplTagRow' => array(
+    'type' => 'textfield',
+    'value' => 'tpl.ms2form.tag.row',
+  ),
+  'allowFiles' => array(
+    'type' => 'combo-boolean',
+    'value' => true,
+  ),
+  'tplFiles' => array(
+    'type' => 'textfield',
+    'value' => 'tpl.ms2form.files',
+  ),
+  'tplFile' => array(
+    'type' => 'textfield',
+    'value' => 'tpl.ms2form.file',
+  ),
+  'tplImage' => array(
+    'type' => 'textfield',
+    'value' => 'tpl.ms2form.image',
+  ),
+  'tplEmailBcc' => array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.email.bcc',
   ),
@@ -74,25 +94,9 @@ $tmp = array(
     'value' => 'section_add_children',
     'desc' => 'ms2form_prop_sections_permissions'
   ),
-  'allowFiles' => array(
-    'type' => 'combo-boolean',
-    'value' => true,
-  ),
   'source' => array(
     'type' => 'numberfield',
     'value' => '',
-  ),
-  'tplFiles' => array(
-    'type' => 'textfield',
-    'value' => 'tpl.ms2form.files',
-  ),
-  'tplFile' => array(
-    'type' => 'textfield',
-    'value' => 'tpl.ms2form.file',
-  ),
-  'tplImage' => array(
-    'type' => 'textfield',
-    'value' => 'tpl.ms2form.image',
   ),
 
 );

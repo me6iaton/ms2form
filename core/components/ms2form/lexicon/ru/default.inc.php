@@ -14,6 +14,8 @@ $_lang['ms2form_add_file_here'] = 'Перетащите файлы сюда';
 $_lang['ms2form_err_addFile'] = 'Ошибка при попытке записи файла';
 $_lang['ms2form_err_addFolder'] = 'Ошибка при попытке создании деректории';
 
+$_lang['ms2form_email_bcc'] = 'Новый ресурс у вас на сайте - "[[+pagetitle]]"';
+
 $_lang['ms2form_help_files'] = 'Первое загруженное изображение будет показано в заголовке поста.';
 $_lang['ms2form_help_embed'] = "вставте сюда ссылку с youtube или vimeo для отображения видео, список поддерживаемых сервисов <a target='_blank'
 href='https://github.com/starfishmod/jquery-oembed-all#current-3rd-party-sources-include'>здесь</a>";

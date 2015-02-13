@@ -11,8 +11,8 @@ $tmp = array(
     'file' => 'update',
     'description' => '',
   ),
-  'tpl.ms2form.email.create' => array(
-    'file' => 'email_create',
+  'tpl.ms2form.email.bcc' => array(
+    'file' => 'email_bcc',
     'description' => '',
   ),
   'tpl.ms2form.file' => array(

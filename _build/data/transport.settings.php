@@ -23,6 +23,26 @@ $tmp = array(
     'xtype' => 'textfield',
     'area' => 'ms2form.main',
   ),
+  'mail_bcc' => array(
+    'xtype' => 'textfield',
+    'value' => '1',
+    'area' => 'ms2form.mail',
+  ),
+  'mail_from' => array(
+    'xtype' => 'textfield',
+    'value' => '',
+    'area' => 'ms2form.mail',
+  ),
+  'mail_from_name' => array(
+    'xtype' => 'textfield',
+    'value' => '',
+    'area' => 'ms2form.mail',
+  ),
+  'mail_createdby' => array(
+    'xtype' => 'combo-boolean',
+    'value' => true,
+    'area' => 'ms2form.mail',
+  ),
 );
 
 

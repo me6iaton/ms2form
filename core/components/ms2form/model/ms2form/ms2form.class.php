@@ -343,17 +343,19 @@ class ms2form {
       }
     }
 
-//		//TODO-me add ms2form email addQueue
-    if ($bcc = $this->modx->getOption('ms2form.mail_bcc')) {
+
+    if ($bcc = $this->modx->getOption('ms2form_mail_bcc')) {
       $bcc = array_map('trim', explode(',', $bcc));
       if (!empty($bcc) && $resource = $this->modx->getObject('msProduct', $productId)) {
         $resource = $resource->toArray();
         foreach ($bcc as $uid) {
-          //if ($uid == $resource['createdby']) {continue;}
+          if(!$this->modx->getOption('ms2form_mail_createdby')){
+            if ($uid == $resource['createdby']) {continue;}
+          }
           $this->sendMail(
             $uid,
-            'shantambala.com - добавлен новый пост',
-            $this->getChunk($this->config['tplEmailCreate'], $resource, false)
+            $this->modx->lexicon('ms2form_email_bcc', $resource),
+            $this->getChunk($this->config['tplEmailBcc'], $resource, false)
           );
         }
       }

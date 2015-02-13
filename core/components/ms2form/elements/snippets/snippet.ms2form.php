@@ -9,24 +9,6 @@ if (!$modx->user->isAuthenticated()) {
   return $modx->lexicon('ticket_err_no_auth');
 }
 
-if (empty($tplFormCreate)) {
-  $tplFormCreate = 'tpl.ms2form.create';
-}
-if (empty($tplFormUpdate)) {
-  $tplFormUpdate = 'tpl.ms2form.update';
-}
-if (empty($tplTagRow)) {
-  $tplTagRow = 'tpl.ms2form.tag.row';
-}
-if (empty($tplFiles)) {
-  $tplFiles = 'tpl.ms2form.files';
-}
-if (empty($tplFile)) {
-  $tplFile = $ms2form->config['tplFile'] = 'tpl.ms2form.file';
-}
-if (empty($tplImage)) {
-  $tplImage = $ms2form->config['tplImage'] = 'tpl.ms2form.image';
-}
 if (empty($templates)) {
   $templates = 0;
 }
@@ -45,7 +27,7 @@ if (empty($parent)) {
 
 // Update of msProduct
 if (!empty($pid)) {
-  $tplWrapper = $tplFormUpdate;
+  $tplWrapper = $tplUpdate;
   /* @var msProduct $product */
   if ($product = $modx->getObject('msProduct', array('id' => $pid))) {
     if ($product->get('createdby') != $modx->user->id && !$modx->hasPermission('edit_document')) {
@@ -80,7 +62,7 @@ if (!empty($pid)) {
     return $modx->lexicon('ticket_err_id', array('id' => $pid));
   }
 } else {
-  $tplWrapper = $tplFormCreate;
+  $tplWrapper = $tplCreate;
 }
 // todo-me Get available sections for msProduct create
 
