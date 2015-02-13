@@ -304,11 +304,12 @@ class ms2form {
     $fields['source'] = $source;
 
     if (!empty($data['pid'])) {
-      $fields['id'] = (integer) $data['pid'];
+      error_log('$data["pid"]');
+/*      $fields['id'] = (integer) $data['pid'];
       $fields['context_key'] = $data['context_key'];
       $fields['alias'] =  $data['alias'];
       $response = $this->modx->runProcessor('mgr/product/update', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
-      $flagNew = false;
+      $flagNew = false;*/
     }else{
       $response = $this->modx->runProcessor('mgr/product/create', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = true;
@@ -329,27 +330,21 @@ class ms2form {
     $productId = $response->response['object']['id'];
 
     //msProductCategoreisMemberProcessor
-    $responseCategories = $this->modx->runProcessor('web/product/categories', array('productId' => $productId, 'categories' => $data['parents'], 'new' => $flagNew), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-    if ($responseCategories->isError()) {
-      return $this->error($responseCategories->getMessage());
+//    $responseCategories = $this->modx->runProcessor('web/product/categories', array('productId' => $productId, 'categories' => $data['parents'], 'new' => $flagNew), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+//    if ($responseCategories->isError()) {
+//      return $this->error($responseCategories->getMessage());
+//    }
+
+
+    // move msProductFiles
+    if ($data['files']) {
+      /** @var modProcessorResponse $responseMove */
+      $responseMove = $this->modx->runProcessor('web/gallery/move_multiple', array('productId' => $productId, 'files' => $data['files'], 'source' => $source), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+      if ($responseMove->isError()) {
+        return $this->error($responseMove->getMessage(), $responseMove->getFieldErrors());
+      }
     }
 
-    if (!empty($data['pid'])) {
-      /** @var modProcessorResponse $responseUpdate */
-      $responseUpdate = $this->modx->runProcessor('web/gallery/update_picasa_multiple', array('pid'=>$data['pid'],'files'=>null,'source'=>$source), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-      if ($responseUpdate->isError()) {
-        return $this->error($responseUpdate->getMessage(), $responseUpdate->getFieldErrors());
-      }
-    }else{
-      // move msProductFiles
-      if ($data['files']) {
-        /** @var modProcessorResponse $responseMove */
-        $responseMove = $this->modx->runProcessor('web/gallery/move_multiple', array('productId'=>$productId,'files'=>$data['files'],'source'=>$source), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-        if ($responseMove->isError()) {
-          return $this->error($responseMove->getMessage(), $responseMove->getFieldErrors());
-        }
-      }
-    }
 
 //		//TODO-me add ms2form email addQueue
     if ($bcc = $this->modx->getOption('ms2form.mail_bcc')) {

@@ -15,10 +15,10 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.preview',
   ),
-//  'tplSectionRow' => array(
-//    'type' => 'textfield',
-//    'value' => '@INLINE <option value="[[+id]]" [[+selected]]>[[+pagetitle]]</option>',
-//  ),
+  'tplSectionRow' => array(
+    'type' => 'textfield',
+    'value' => 'tpl.ms2form.section.row',
+  ),
   'tplTicketEmailBcc' => array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.email.bcc',
@@ -47,17 +47,17 @@ $tmp = array(
   ),
   'parentsIncludeTVs' => array(
     'type' => 'textfield',
-    'value' => 'dateBegin,dateEnd',
+    'value' => '',
     'desc' => 'ms2form_prop_parents_include_tvs'
   ),
   'parentsSortby' => array(
     'type' => 'textfield',
-    'value' => 'dateBegin',
+    'value' => 'id',
     'desc' => 'ms2form_prop_parents_sortby'
   ),
   'parentsSortdir' => array(
     'type' => 'textfield',
-    'value' => 'DESC',
+    'value' => 'ASC',
     'desc' => 'ms2form_prop_parents_sortdir'
   ),
 //  'resources' => array(

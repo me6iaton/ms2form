@@ -81,7 +81,7 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
       }
       $item->save();
     }
-    $this->product->updateProductImage();
+//    $this->product->updateProductImage();
     return $this->success();
   }
 

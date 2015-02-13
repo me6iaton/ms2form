@@ -35,7 +35,7 @@ class ms2formCategoryGetListProcessor  extends modObjectProcessor{
     $result['all'] = array_map(function($msCategory) {
       return array(
         'id' => $msCategory['id'],
-        'text' => $this->pdoFetch->getChunk($this->config['tplParentsRow'],$msCategory,false)
+        'text' => $this->pdoFetch->getChunk($this->config['tplSectionRow'],$msCategory,false)
       );
     }, $msCategories);
 

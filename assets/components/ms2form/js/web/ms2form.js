@@ -330,27 +330,11 @@
           }
         },
         UploadComplete : function(up, file, response) {
-          debugger;
           $(up.settings.browse_button).show();
           $('#' + up.settings.progress).hide();
           up.total.reset();
           up.splice();
           this.settings.form.find('[type="submit"]').attr('disabled', false);
-
-          // add file to Queue Update Picasa
-          var files = [];
-          form.find('.ticket-file').each(function(){
-            files.push($(this).attr('data-id'));
-          })
-          // add files to update queue
-          $.post(ms2form.config.actionUrl, {action: 'gallery/update_picasa', pid: pid, files: files ,form_key: form_key}, function(response,  textStatus, jqXHR) {
-            if (response.success) {
-              debugger;
-            }
-            else {
-              ms2form.Message.error(response.message);
-            }
-          }, 'json');
         },
         Error : function(up, err) {
           ms2form.Message.error(err.message);

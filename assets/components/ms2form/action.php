@@ -45,7 +45,6 @@ if ($modx->error->hasError() || !($ms2form instanceof ms2form)) {
 }
 switch ($action) {
   case 'gallery/upload': $response = $ms2form->fileUpload($_POST);break;
-  case 'gallery/update_picasa': $response = $ms2form->filesUpdatePicasa($_POST);break;
   case 'gallery/delete': $response = $ms2form->fileDelete($_POST['id']); break;
 
   case 'product/getlist_tag': $response = $ms2form->getListTag($_POST); break;
