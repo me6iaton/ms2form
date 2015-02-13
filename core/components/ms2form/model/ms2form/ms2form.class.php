@@ -330,11 +330,10 @@ class ms2form {
     $productId = $response->response['object']['id'];
 
     //msProductCategoreisMemberProcessor
-//    $responseCategories = $this->modx->runProcessor('web/product/categories', array('productId' => $productId, 'categories' => $data['parents'], 'new' => $flagNew), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-//    if ($responseCategories->isError()) {
-//      return $this->error($responseCategories->getMessage());
-//    }
-
+    $responseCategories = $this->modx->runProcessor('web/product/categories', array('productId' => $productId, 'categories' => $data['parents'], 'new' => $flagNew), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+    if ($responseCategories->isError()) {
+      return $this->error($responseCategories->getMessage());
+    }
 
     // move msProductFiles
     if ($data['files']) {
@@ -344,7 +343,6 @@ class ms2form {
         return $this->error($responseMove->getMessage(), $responseMove->getFieldErrors());
       }
     }
-
 
 //		//TODO-me add ms2form email addQueue
     if ($bcc = $this->modx->getOption('ms2form.mail_bcc')) {
