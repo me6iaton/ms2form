@@ -25,7 +25,6 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
     if (!$this->mediaSource) {
       return $this->modx->lexicon('ms2_gallery_err_no_source');
     }
-
     return true;
   }
 
@@ -68,13 +67,19 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
       $filename .= '.' . $extension;
     }
 
+    if($this->product->id == 0){
+      $path = $this->product->id . '/' . $this->modx->user->id . '/';
+    }else{
+      $path = $this->product->id . '/';
+    }
+
     /* @var msProductFile $product_file */
     $product_file = $this->modx->newObject('msProductFile', array(
       'product_id' => $this->product->id,
       'parent' => 0,
       'name' => $data['name'],
       'file' => $filename,
-      'path' => $this->product->id . '/' . $this->modx->user->id . '/',
+      'path' => $path,
       'source' => $this->mediaSource->get('id'),
       'type' => $type,
       'rank' => $this->modx->getCount('msProductFile', array('parent' => 0, 'product_id' => $this->product->id)),
@@ -102,7 +107,6 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
         $this->modx->log(modX::LOG_LEVEL_ERROR, 'Could not generate thumbnails for image with id = ' . $product_file->get('id') . '. ' . $generate);
         return $this->failure($this->modx->lexicon('ms2_err_gallery_thumb'));
       } else {
-//        $this->product->updateProductImage();
         $ms2_product_thumbnail_size = $this->modx->getOption('ms2_product_thumbnail_size');
         $product_file_arr = $product_file->toArray();
         $product_file_arr['thumb'] = '/' . $properties['baseUrl']['value'] . $product_file->get('path') . $ms2_product_thumbnail_size . '/' . $filename;

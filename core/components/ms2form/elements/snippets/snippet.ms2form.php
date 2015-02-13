@@ -96,7 +96,7 @@ if ($templates = explode(',', $templates)) {
           $selected = 'selected';
         }
       }
-//      $data['templates'] .= "<option $selected value=\"$template[0]\">$template[1]</option>";
+      $data['templates'] .= "<option $selected value=\"$template[0]\">$template[1]</option>";
     } else {
       if (!empty($pid)) {
         if ($product->template == $template) {
@@ -142,9 +142,13 @@ if (!empty($allowFiles)) {
       ,'parent' => 0
       ,'createdby' => $modx->user->id
     ));
-
   }else{
     //todo-me
+    $q->where(array(
+      'product_id' => $pid
+    , 'parent' => 0
+//    , 'createdby' => $modx->user->id
+    ));
   }
   $q->sortby('createdon', 'ASC');
   $collection = $modx->getIterator('msProductFile', $q);

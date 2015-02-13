@@ -304,12 +304,11 @@ class ms2form {
     $fields['source'] = $source;
 
     if (!empty($data['pid'])) {
-      error_log('$data["pid"]');
-/*      $fields['id'] = (integer) $data['pid'];
+      $fields['id'] = (integer) $data['pid'];
       $fields['context_key'] = $data['context_key'];
       $fields['alias'] =  $data['alias'];
       $response = $this->modx->runProcessor('mgr/product/update', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
-      $flagNew = false;*/
+      $flagNew = false;
     }else{
       $response = $this->modx->runProcessor('mgr/product/create', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = true;
@@ -336,7 +335,7 @@ class ms2form {
     }
 
     // move msProductFiles
-    if ($data['files']) {
+    if (empty($data['pid']) and $data['files']) {
       /** @var modProcessorResponse $responseMove */
       $responseMove = $this->modx->runProcessor('web/gallery/move_multiple', array('productId' => $productId, 'files' => $data['files'], 'source' => $source), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
       if ($responseMove->isError()) {
@@ -347,7 +346,7 @@ class ms2form {
 //		//TODO-me add ms2form email addQueue
     if ($bcc = $this->modx->getOption('ms2form.mail_bcc')) {
       $bcc = array_map('trim', explode(',', $bcc));
-      if (!empty($bcc) && $resource = $this->modx->getObject('msProduct', $response->response['object']['id'])) {
+      if (!empty($bcc) && $resource = $this->modx->getObject('msProduct', $productId)) {
         $resource = $resource->toArray();
         foreach ($bcc as $uid) {
           //if ($uid == $resource['createdby']) {continue;}
@@ -359,15 +358,12 @@ class ms2form {
         }
       }
     }
-    /** @var msProduct $response */
-//		$response-
-//		$this->modx->cacheManager->refresh();
-//		create Folder
-//		/* @var modProcessorResponse $response */
-//		$responseFolderUpload = $this->modx->runProcessor('web/gallery/folderUpload', array('id' => $resourceId), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-//		if ($responseFolderUpload->isError()){
-//			return $this->error($responseFolderUpload->getMessage());
-//		}
+
+
+    // updateProductImage
+    /* @var msProduct $product */
+    $product = $this->modx->getObject('msProduct', $productId);
+    $product->updateProductImage();
 
     if (empty($data['published'])) {
       $productId = $data['parent'];
