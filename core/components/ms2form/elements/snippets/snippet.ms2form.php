@@ -6,7 +6,7 @@ $ms2form = $modx->getService('ms2form', 'ms2form', $modx->getOption('ms2form_cor
 $ms2form->initialize($modx->context->key, $scriptProperties);
 
 if (!$modx->user->isAuthenticated()) {
-  return $modx->lexicon('ticket_err_no_auth');
+  return $modx->lexicon('ms2form_err_no_auth');
 }
 
 if (empty($templates)) {
@@ -31,7 +31,7 @@ if (!empty($pid)) {
   /* @var msProduct $product */
   if ($product = $modx->getObject('msProduct', array('id' => $pid))) {
     if ($product->get('createdby') != $modx->user->id && !$modx->hasPermission('edit_document')) {
-      return $modx->lexicon('ticket_err_wrong_user');
+      return $modx->lexicon('ms2form_err_wrong_user');
     }
     $charset = $modx->getOption('modx_charset');
     $allowedFields = array_map('trim', explode(',', $scriptProperties['allowedFields']));
@@ -57,7 +57,7 @@ if (!empty($pid)) {
     $data['alias'] = $product->alias;
     $data['context_key'] = $product->context_key;
   } else {
-    return $modx->lexicon('ticket_err_id', array('id' => $pid));
+    return $modx->lexicon('ms2form_err_id', array('id' => $pid));
   }
 } else {
   $tplWrapper = $tplCreate;

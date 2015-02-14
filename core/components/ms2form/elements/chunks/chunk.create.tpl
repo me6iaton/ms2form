@@ -1,8 +1,4 @@
 <form class="well create" method="post" action="" id="ms2form" role="form">
-  <span id="question" class="icon icon-question-circle"></span>
-
-  <div id="ticket-preview-placeholder"></div>
-
   <input type="hidden" name="pid" value="0">
   <input type="hidden" name="parent" value="[[+parent]]">
   <input type="hidden" name="published" value="1"/>
@@ -11,7 +7,7 @@
   <div class="form-group">
     <label>[[%ms2form_pagetitle]]</label>
     <span class="text-danger">*</span>
-    <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2form-pagetitle"/>
+    <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2formPagetitle"/>
   </div>
 
   [[+templates]]
@@ -19,7 +15,7 @@
   <div class="form-group">
     <label>[[%ms2form_sections]]</label>
     <br/>
-    <input type="hidden" class="form-control" id="ms2formCategories">
+    <input type="hidden" class="form-control" id="ms2formSections">
   </div>
   <div class="form-group">
     <label>[[%ms2form_tags]]</label>
@@ -28,38 +24,32 @@
   </div>
 
 
-  <div class="form-group popover-help" id="form-group-content">
+  <div class="form-group popover-help" id="formGroupContent">
     <input id="content" name="content" type="hidden" value="[[+content]]"/>
-
-    <p data-trigger="manual" class="popover-help" data-html="true" data-toggle="popover" data-placement="bottom"
-       data-content="[[%ms2form_help_editor]]"></p>
-
-    <div id="ms2form-editor">
+    <div id="ms2formEditor">
     </div>
   </div>
 
   <div class="form-group">
-    <div class="ticket-form-files popover-help" data-toggle="popover" data-placement="top"
-         data-content="[[%ms2form_help_files]]">
+    <div class="ticket-form-files">
       [[+files]]
     </div>
   </div>
 
   <div class="form-actions">
-    <input type="submit" class="btn btn-primary submit" value="[[%ticket_save]]" title="Ctrl + Shift + Enter"/>
+    <input type="submit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
   </div>
 </form>
 
 <!--pdotools_templates
 <div class="form-group">
-  <label>[[%ms2form_template]] [[+template]]</label>
+  <label>[[%ms2form_template]]</label>
   <br/>
-  <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
-          data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
+  <select class="form-control" name="template" id="ms2formTemplate">
     [[+templates]]
   </select>
 </div>
 -->
 <!--pdotools_!templates
-<input type="hidden" name = "template" value="[[+template]]">
+<input type="hidden" name="template" value="[[+template]]">
 -->

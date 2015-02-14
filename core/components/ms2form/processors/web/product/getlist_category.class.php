@@ -11,6 +11,8 @@ class ms2formCategoryGetListProcessor  extends modObjectProcessor{
   private $pdoFetch;
   private $pid;
   private $config;
+  public $languageTopics = array('ms2form:default');
+
   public function initialize() {
     $fqn = $this->modx->getOption('pdoFetch.class', null, 'pdotools.pdofetch', true);
     if (!$pdoClass = $this->modx->loadClass($fqn, '', false, true)) {return false;}

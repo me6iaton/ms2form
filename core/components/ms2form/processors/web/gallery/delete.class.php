@@ -3,13 +3,13 @@
 class ms2FormProductFileDeleteProcessor extends modObjectProcessor {
   public $classKey = 'msProductFile';
   public $permission = 'msproductfile_save';
-  public $languageTopics = array('minishop2:default', 'minishop2:product','tickets:default');
+  public $languageTopics = array('ms2form:default');
   public $mediaSource;
 
   /** {@inheritDoc} */
   public function initialize() {
     if (!$this->modx->hasPermission($this->permission)) {
-      return $this->modx->lexicon('access_denied');
+      return $this->modx->lexicon('ms2form_err_access_denied');
     }
     return true;
   }
@@ -31,7 +31,7 @@ class ms2FormProductFileDeleteProcessor extends modObjectProcessor {
       if ($mediaSource->initialize()) {
         $this->mediaSource = $mediaSource;
       }else{
-        return $this->failure($this->modx->lexicon('ms2_gallery_err_no_source'));
+        return $this->failure($this->modx->lexicon('ms2form_err_source_initialize'));
       }
       if (!$this->mediaSource->removeObject($file->get('path') . $file->get('file'))) {
         $this->modx->log(xPDO::LOG_LEVEL_ERROR,

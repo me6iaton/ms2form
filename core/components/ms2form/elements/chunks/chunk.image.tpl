@@ -5,9 +5,9 @@
 		</div>
 	</a>
 	<div class="ticket-file-meta">
-		<a href="#" class="ms2-file-delete">[[%ticket_file_delete]]</a>
+		<a href="#" class="ms2-file-delete">[[%ms2form_file_delete]]</a>
 		<br/>
-		<a href="#" class="ms2-file-insert">[[%ticket_file_insert]]</a>
+		<a href="#" class="ms2-file-insert">[[%ms2form_file_insert]]</a>
 	</div>
 	<div class="ticket-file-template">
 		<a href="[[+url]]" title="[[+name]]">

@@ -7,14 +7,44 @@ $_lang['ms2form_pagetitle'] = 'Title';
 $_lang['ms2form_template'] = 'Template';
 $_lang['ms2form_sections'] = 'Sections';
 $_lang['ms2form_tags'] = 'Tags';
+$_lang['ms2form_save'] = 'Save';
+$_lang['ms2form_uploaded_files'] = 'Uploaded files';
+
+$_lang['ms2form_email_bcc'] = 'New ticket on site - "[[+pagetitle]]"';
+
+$_lang['ms2form_file_select'] = 'Select files';
+$_lang['ms2form_add_file_here'] = 'drag and drop files here';
+$_lang['ms2form_file_delete'] = 'Delete';
+$_lang['ms2form_file_insert'] = 'Insert link';
+
+$_lang['ms2form_err_source_initialize'] = 'Could not initialize media source';
+$_lang['ms2form_gallery_err_no_source'] = 'Could not initialize media source';
+$_lang['ms2form_err_file_ns'] = 'Could not process specified file';
+$_lang['ms2form_err_file_ext'] = 'Wrong file extension';
+$_lang['ms2form_err_file_save'] = 'Could not upload file';
+$_lang['ms2form_err_file_owner'] = 'This file not belongs to you';
+$_lang['ms2form_err_file_exists'] = 'You already uploaded this file: "[[+file]]"';
+$_lang['ms2form_err_file_exists'] = 'File with the same name or content is already exists: "[[+file]]"';
+$_lang['ms2form_err_unknown'] = 'An unknown error occurred.';
+$_lang['ms2form_err_access_denied'] = 'Access denied';
+$_lang['ms2form_err_publish'] = 'You are not allowed to publish resources.';
+$_lang['ms2form_err_addFile'] = 'error add file';
+$_lang['ms2form_err_addFolder'] = 'error add folder';
+$_lang['ms2form_err_form'] = 'Form contains errors. </br> Please, fix it.';
+$_lang['ms2form_err_wrong_user'] = 'You trying to update a resource that is not yours.';
+$_lang['ms2form_err_id'] = 'The resource with specified id = [[+id]] not found.';
+$_lang['permission_denied'] = 'You do not have permissions for this action.';
+$_lang['field_required'] = 'This field is required.';
+$_lang['ms2form_message_close_all'] = 'close all';
+$_lang['ms2form_clear'] = 'Clear';
+
+
 
 $_lang['ticket_publishedon'] = 'Published On';
 $_lang['ticket_author'] = 'Author';
 $_lang['ticket_delete'] = 'Delete ticket';
 $_lang['ticket_delete_text'] = 'Are you sure you want to delete this ticket?';
 $_lang['ticket_create'] = 'Create ticket?';
-$_lang['ticket_disable_jevix'] = 'Disable Jevix';
-$_lang['ticket_disable_jevix_help'] = 'Display content of this page without Jevix sanitization. It is dangerous, any user, that creates the page can attack your site (XSS, LFI etc.).';
 $_lang['ticket_process_tags'] = 'Process MODX tags';
 $_lang['ticket_process_tags_help'] = 'By default tags in bracket displaying as is, without processing by parser. If you enable it - on this page can be run various snippets, chunks, etc.';
 $_lang['ticket_private'] = 'Private ticket';
@@ -25,27 +55,7 @@ $_lang['ticket_pagetitle'] = 'Title';
 $_lang['ticket_content'] = 'Content';
 $_lang['ticket_publish'] = 'Publish';
 $_lang['ticket_preview'] = 'Preview';
-$_lang['ticket_save'] = 'Save';
 $_lang['ticket_draft'] = 'Into drafts';
 $_lang['ticket_open'] = 'Open';
 $_lang['ticket_read_more'] = 'Read more';
 $_lang['ticket_saved'] = 'Saved!';
-
-$_lang['ms2form_add_file_here'] = 'drag and drop files here';
-$_lang['ms2form_file_select'] = 'Select files';
-
-$_lang['ms2form_err_addFile'] = 'ms2form_err_addFile';
-$_lang['ms2form_err_addFolder'] = 'ms2form_err_addFolder';
-$_lang['ms2form_err_form'] = 'Form contains errors. Please, fix it.';
-
-$_lang['ms2form_help_files'] = 'Первое загруженное изображение будет показано в заголовке поста.';
-$_lang['ms2form_help_embed'] = "вставте сюда ссылку с youtube или vimeo для отображения видео, список поддерживаемых сервисов <a target='_blank'
-href='https://github.com/starfishmod/jquery-oembed-all#current-3rd-party-sources-include'>здесь</a>";
-$_lang['ms2form_help_template'] = 'Определяет что будет показываться вначале поста, изображение, галерея изображений или видеозапись. Можно изменить после публикации';
-$_lang['ms2form_help_editor'] = "Используйте синтаксис  <a target='_blank'
-href='http://ru.wikipedia.org/wiki/Markdown'>markdown</a>, <a target='_blank'
-href='http://dikiy.com/files/markdown.pdf'>шпаргалка</a>. Нажав на кнопку Просмотр можно увидеть
- получившийся результат. Все ссылки в
- содержании  и комментариях, по возможности, заменяются на видеозаписи или другие обьекты из списка поддерживаемых <a
-  target='_blank'
-href='https://github.com/starfishmod/jquery-oembed-all#current-3rd-party-sources-include'>сервисов</a>";

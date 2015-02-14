@@ -10,6 +10,8 @@ class ms2FormProductGetTagsListProcessor  extends modObjectProcessor{
   /** @var pdoFetch $pdoFetch */
   private $pdoFetch;
   private $pid;
+  public $languageTopics = array('ms2form:default');
+
   public function initialize() {
     $fqn = $this->modx->getOption('pdoFetch.class', null, 'pdotools.pdofetch', true);
     if (!$pdoClass = $this->modx->loadClass($fqn, '', false, true)) {return false;}

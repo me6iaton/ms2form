@@ -4,7 +4,7 @@ require_once MODX_CORE_PATH . 'components/minishop2/processors/mgr/gallery/uploa
 class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
   /* @var msProduct $product */
   private $product = 0;
-  public $languageTopics = array('minishop2:default','minishop2:product');
+  public $languageTopics = array('ms2form:default','minishop2:default','minishop2:product');
   public $mediaSource;
 
   public function initialize() {

@@ -5,7 +5,8 @@
  *
  * @package ms2form
  */
-class ms2form {
+class ms2form
+{
   /* @var modX $modx */
   public $modx;
   /* @var pdoTools $pdoTools */
@@ -18,13 +19,13 @@ class ms2form {
    * @param modX $modx
    * @param array $config
    */
-  function __construct(modX &$modx, array $config = array()) {
+  function __construct(modX &$modx, array $config = array())
+  {
     $this->modx =& $modx;
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
-    $locale = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
-    if(empty($config['source'])){
+    if (empty($config['source'])) {
       $config['source'] = $this->modx->getOption('ms2_product_source_default');
     }
     $connectorUrl = $assetsUrl . 'connector.php';
@@ -44,8 +45,6 @@ class ms2form {
     , 'json_response' => true
     ), $config);
 
-//		$this->modx->addPackage('ms2form',$this->config['modelPath']);
-    $this->modx->lexicon->load('tickets:default');
     $this->modx->lexicon->load('ms2form:default');
 
     $this->authenticated = $this->modx->user->isAuthenticated($this->modx->context->get('key'));
@@ -59,7 +58,8 @@ class ms2form {
    *
    * @return boolean
    */
-  public function initialize($ctx = 'web', $scriptProperties = array()) {
+  public function initialize($ctx = 'web', $scriptProperties = array())
+  {
     $this->config = array_merge($this->config, $scriptProperties);
     if (!$this->pdoTools) {
       $this->loadPdoTools();
@@ -78,11 +78,11 @@ class ms2form {
           $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
             Ms2formConfig = {
               ctx: "' . $ctx . '"
-              ,cultureKey: "'. $this->config['cultureKey'].'"
+              ,cultureKey: "' . $this->config['cultureKey'] . '"
               ,vendorUrl: "' . $this->config['vendorUrl'] . '"
               ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
               ,actionUrl: "' . $this->config['actionUrl'] . '"
-              ,close_all_message: "' . $this->modx->lexicon('tickets_message_close_all') . '"
+              ,close_all_message: "' . $this->modx->lexicon('ms2form_message_close_all') . '"
             };
           ');
           $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
@@ -116,7 +116,8 @@ class ms2form {
    *
    * @return boolean
    */
-  public function loadPdoTools() {
+  public function loadPdoTools()
+  {
     if (!is_object($this->pdoTools) || !($this->pdoTools instanceof pdoTools)) {
       /** @var pdoFetch $pdoFetch */
       $fqn = $this->modx->getOption('pdoFetch.class', null, 'pdotools.pdofetch', true);
@@ -136,7 +137,8 @@ class ms2form {
    *
    * @return array $array Two nested arrays with placeholders and values
    */
-  public function makePlaceholders(array $array = array(), $prefix = '') {
+  public function makePlaceholders(array $array = array(), $prefix = '')
+  {
     if (!$this->pdoTools) {
       $this->loadPdoTools();
     }
@@ -150,9 +152,10 @@ class ms2form {
    *
    * @return array|string
    */
-  public function fileUpload($data) {
+  public function fileUpload($data)
+  {
     if (!$this->authenticated || empty($this->config['allowFiles'])) {
-      return $this->error('ticket_err_access_denied');
+      return $this->error('ms2form_err_access_denied');
     }
     $data['file'] = $_FILES['file'];
     $data['rank'] = $_REQUEST['rank'];
@@ -171,6 +174,27 @@ class ms2form {
   }
 
   /**
+   * Delete uploaded file
+   *
+   * @param $id
+   *
+   * @return array|string
+   */
+  public function fileDelete($id)
+  {
+    if (!$this->authenticated || empty($this->config['allowFiles'])) {
+      return $this->error('ms2form_err_access_denied');
+    }
+    /** @var modProcessorResponse $response */
+    $response = $this->modx->runProcessor('web/gallery/delete', array('id' => $id, 'source' => $this->config['source']), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+    if ($response->isError()) {
+      return $this->error($response->getMessage());
+    }
+
+    return $this->success('', array('id' => $id));
+  }
+
+  /**
    * This method returns an error
    *
    * @param string $message A lexicon key for error message
@@ -179,7 +203,8 @@ class ms2form {
    *
    * @return array|string $response
    */
-  public function error($message = '', $data = array(), $placeholders = array()) {
+  public function error($message = '', $data = array(), $placeholders = array())
+  {
     $response = array(
       'success' => false
     , 'message' => $this->modx->lexicon($message, $placeholders)
@@ -201,7 +226,8 @@ class ms2form {
    *
    * @return string The processed output of the Chunk.
    */
-  public function getChunk($name, array $properties = array(), $fastMode = false) {
+  public function getChunk($name, array $properties = array(), $fastMode = false)
+  {
     if (!$this->modx->parser) {
       $this->modx->getParser();
     }
@@ -221,7 +247,8 @@ class ms2form {
    *
    * @return array|string $response
    * */
-  public function success($message = '', $data = array(), $placeholders = array()) {
+  public function success($message = '', $data = array(), $placeholders = array())
+  {
     $response = array(
       'success' => true
     , 'message' => $this->modx->lexicon($message, $placeholders)
@@ -232,26 +259,6 @@ class ms2form {
       : $response;
   }
 
-  /**
-   * Delete uploaded file
-   *
-   * @param $id
-   *
-   * @return array|string
-   */
-  public function fileDelete($id) {
-    if (!$this->authenticated || empty($this->config['allowFiles'])) {
-      return $this->error('ticket_err_access_denied');
-    }
-    /** @var modProcessorResponse $response */
-    $response = $this->modx->runProcessor('web/gallery/delete', array('id' => $id, 'source' => $this->config['source']), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-    if ($response->isError()) {
-      return $this->error($response->getMessage());
-    }
-
-    return $this->success('', array('id' => $id));
-  }
-
 
   /**
    * Create Product through processor and redirect to it
@@ -260,7 +267,8 @@ class ms2form {
    *
    * @return array
    */
-  public function productSave(array $data) {
+  public function productSave(array $data)
+  {
     $source = $this->config['source'];
 
     $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
@@ -279,7 +287,7 @@ class ms2form {
       }
     }
     // fix empty tags bug
-    if(!$data['tags']){
+    if (!$data['tags']) {
       $fields['tags'] = array();
     }
 
@@ -297,12 +305,12 @@ class ms2form {
     $fields['source'] = $source;
 
     if (!empty($data['pid'])) {
-      $fields['id'] = (integer) $data['pid'];
+      $fields['id'] = (integer)$data['pid'];
       $fields['context_key'] = $data['context_key'];
-      $fields['alias'] =  $data['alias'];
+      $fields['alias'] = $data['alias'];
       $response = $this->modx->runProcessor('mgr/product/update', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = false;
-    }else{
+    } else {
       $response = $this->modx->runProcessor('mgr/product/create', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = true;
     }
@@ -310,7 +318,7 @@ class ms2form {
     if ($response->isError()) {
       $message = $response->getMessage();
       if (empty($message)) {
-        $message = $this->modx->lexicon('ticket_err_form');
+        $message = $this->modx->lexicon('ms2form_err_form');
       }
       $tmp = $response->getFieldErrors();
       $errors = array();
@@ -336,14 +344,16 @@ class ms2form {
       }
     }
 
-
+    // send email
     if ($bcc = $this->modx->getOption('ms2form_mail_bcc')) {
       $bcc = array_map('trim', explode(',', $bcc));
       if (!empty($bcc) && $resource = $this->modx->getObject('msProduct', $productId)) {
         $resource = $resource->toArray();
         foreach ($bcc as $uid) {
-          if(!$this->modx->getOption('ms2form_mail_createdby')){
-            if ($uid == $resource['createdby']) {continue;}
+          if (!$this->modx->getOption('ms2form_mail_createdby')) {
+            if ($uid == $resource['createdby']) {
+              continue;
+            }
           }
           $this->sendMail(
             $uid,
@@ -368,7 +378,8 @@ class ms2form {
     return $this->success('', array('redirect' => $redirect));
   }
 
-  public function initializeMediaSource($ctx = '') {
+  public function initializeMediaSource($ctx = '')
+  {
     if (is_object($this->mediaSource) && $this->mediaSource instanceof modMediaSource) {
       return $this->mediaSource;
     } else {
@@ -392,7 +403,8 @@ class ms2form {
    *
    * @return string String with html entities
    */
-  public function sanitizeString($string = '') {
+  public function sanitizeString($string = '')
+  {
     $string = htmlentities(trim($string), ENT_QUOTES, "UTF-8");
     $string = preg_replace('/^@.*\b/', '', $string);
 
@@ -401,40 +413,8 @@ class ms2form {
     return str_replace($arr1, $arr2, $string);
   }
 
-  /**
-   * Save file through processor
-   *
-   * @param string $resourceId
-   * @param string $folderId
-   * @param array $file
-   *
-   * @return array
-   */
-  public function fileSave($resourceId, $folderId, $file) {
-    $properties['id'] = $resourceId;
-    $properties['folderId'] = $folderId;
-    $properties['file'] = $file;
-
-    /* @var modProcessorResponse $response */
-    $response = $this->modx->runProcessor('web/gallery/upload', $properties, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-    if ($response->isError()) {
-      $message = $response->getMessage();
-      if (empty($message)) {
-        $message = $this->modx->lexicon('ticket_err_form');
-      } //todo-me $message $response Gallery
-      $tmp = $response->getFieldErrors();
-      $errors = array();
-      foreach ($tmp as $v) {
-        $errors[$v->field] = $v->message;
-      }
-      return $this->error($message, $errors);
-    } else {
-      $id = $response->response['object']['id'];
-      return $this->success("ok", array('id' => $id));
-    }
-  }
-
-  public function getListTag($data) {
+  public function getListTag($data)
+  {
     /** @var modProcessorResponse $response */
     $response = $this->modx->runProcessor('web/product/getlist_tag', $data, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
     if ($response->isError()) {
@@ -444,8 +424,9 @@ class ms2form {
     return $this->success('', $tags);
   }
 
-  public function getListCategory($data){
-    $data['config']=  $this->config;
+  public function getListCategory($data)
+  {
+    $data['config'] = $this->config;
     /** @var modProcessorResponse $response */
     $response = $this->modx->runProcessor('web/product/getlist_category', $data, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
     if ($response->isError()) {
@@ -455,7 +436,8 @@ class ms2form {
     return $this->success('', $tags);
   }
 
-  public function sendMail($uid, $subject, $body){
+  public function sendMail($uid, $subject, $body)
+  {
     /* @var modPHPMailer $mail */
     $mail = $this->modx->getService('mail', 'mail.modPHPMailer');
     $mail->setHTML(true);
@@ -466,13 +448,13 @@ class ms2form {
     $mail->set(modMail::MAIL_FROM_NAME, $this->modx->getOption('ms2form.mail_from_name', null, $this->modx->getOption('site_name'), true));
 
     /* get user and profile by user id */
-    if ($user = $this->modx->getObject('modUser',$uid)){
+    if ($user = $this->modx->getObject('modUser', $uid)) {
       $profile = $user->getOne('Profile');
       if (!$user->get('active') || $profile->get('blocked')) {
         return 'This user is not active.';
       }
       $email = $profile->get('email');
-    }else{
+    } else {
       return "can not get user $uid";
     }
 

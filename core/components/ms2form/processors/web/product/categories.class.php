@@ -3,12 +3,13 @@
 class msProductCategoreisMemberProcessor extends modObjectCreateProcessor {
   public $classKey = 'msCategoryMember';
   public $permission = 'msproduct_save';
+  public $languageTopics = array('ms2form:default');
 
 
   /** {@inheritDoc} */
   public function initialize() {
     if (!$this->modx->hasPermission($this->permission)) {
-      return $this->modx->lexicon('access_denied');
+      return $this->modx->lexicon('ms2form_err_access_denied');
     }
     return parent::initialize();
   }

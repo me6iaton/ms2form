@@ -78,7 +78,7 @@
         ms2form.product.content.val(ms2form.product.editor.parseContent());
 
         var parent =  $('input[name="parent"]', form).val();
-        var parents =  $.map($("#ms2formCategories").select2("data"), function(val){
+        var parents =  $.map($("#ms2formSections").select2("data"), function(val){
           return val.id
         });
 
@@ -167,20 +167,19 @@
 
   ms2form.initialize(function() {
 
-    var form = $('#comment-form');
-    if (!form.length) form = $('#ms2form');
+    var form = $('#ms2form');
     var pid = form.find('[name="pid"]').val();
     var form_key = form.find('[name="form_key"]').val();
 
     //  bootstrap-markdown init
     if (ms2form.config.enable_editor == true) {
       ms2form.product.content =  $('#content');
-      $("#ms2form-editor").append(ms2form.product.content.val());
-      $("#ms2form-editor").markdown({
+      $("#ms2formEditor").append(ms2form.product.content.val());
+      $("#ms2formEditor").markdown({
         resize: true
         ,language: ms2form.config.locale
       });
-      ms2form.product.editor = $('#form-group-content textarea').data('markdown');
+      ms2form.product.editor = $('#formGroupContent textarea').data('markdown');
     }
 
     $(document).on('click', '#question', function(e) {
@@ -200,13 +199,13 @@
     $.post(ms2form.config.actionUrl, {action: 'product/getlist_category', pid: pid, form_key: form_key}, function(response,  textStatus, jqXHR) {
       if (response.success) {
         categories = response.data.all;
-        $('#ms2formCategories').select2({
+        $('#ms2formSections').select2({
           multiple : true,
           placeholder : 'Категории',
           tags:  categories
         });
         if(response.data.product){
-          $('#ms2formCategories').select2('val',response.data.product);
+          $('#ms2formSections').select2('val',response.data.product);
         }
       }
       else {
@@ -352,7 +351,7 @@
     });
     $(document).on('click', '.ms2-file-insert', function(e) {
       e.preventDefault();
-      var $text = $('#form-group-content .md-input');
+      var $text = $('#formGroupContent .md-input');
       var srcImage = $(this).parents('.ticket-file').find('.ticket-file-link').attr('href');
       var template = '![]('+srcImage+')';
       $text.focus();

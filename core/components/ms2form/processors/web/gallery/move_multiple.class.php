@@ -8,7 +8,7 @@
 class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
   public $classKey = 'msProductFile';
   public $permission = 'msproductfile_save';
-  public $languageTopics = array('minishop2:default','minishop2:product');
+  public $languageTopics = array('ms2form:default');
   public $mediaSource;
   private $mediaSourceClassKey;
   private $productId;
@@ -17,7 +17,7 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
   /** {@inheritDoc} */
   public function initialize() {
     if (!$this->modx->hasPermission($this->permission)) {
-      return $this->modx->lexicon('access_denied');
+      return $this->modx->lexicon('ms2form_err_access_denied');
     }
     $this->productId = $this->getProperty('productId');
     if(!isset($this->productId)){
@@ -37,7 +37,7 @@ class ms2FormProductFileMoveMultipleProcessor extends modObjectProcessor {
     }
 
     if (!$this->mediaSource) {
-      return $this->modx->lexicon('ms2_gallery_err_no_source');
+      return $this->modx->lexicon('ms2form_err_source_initialize');
     }
     $this->mediaSourceClassKey = $this->mediaSource->get('class_key');
     return true;
