@@ -111,6 +111,7 @@ if (!empty($allowFiles)) {
     $q->where(array(
       'product_id' => $pid
     , 'parent' => 0
+    , 'createdby' => $modx->user->id
     ));
   }
   $q->sortby('createdon', 'ASC');
