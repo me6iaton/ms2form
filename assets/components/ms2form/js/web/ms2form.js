@@ -72,8 +72,6 @@
       editor: null,
       content: null,
       save : function(form, button) {
-        //NProgress.start();
-
         // save content
         ms2form.product.content.val(ms2form.product.editor.parseContent());
 
@@ -126,7 +124,6 @@
             return true;
           },
           success : function(response) {
-            //NProgress.done();
             $('#ms2form.create').sisyphus().manuallyReleaseData();
             if (response.success) {
               if (response.message) {
@@ -163,7 +160,6 @@
       if (message) {
         $.jGrowl(message, {theme: 'tickets-message-error'/*, sticky: true*/});
       }
-      //NProgress.done();
     }
     ,info: function(message) {
       if (message) {
@@ -351,7 +347,6 @@
     // Forms listeners
     $(document).on('click', '.ms2-file-delete', function(e) {
       e.preventDefault();
-      //NProgress.start();
       var $this = $(this);
       var $form = $this.parents('form');
       var $parent = $this.parents('.ticket-file');
@@ -360,7 +355,6 @@
 
       $.post(ms2form.config.actionUrl, {action: 'gallery/delete', id: id, form_key: form_key}, function(response,  textStatus, jqXHR) {
         if (response.success) {
-            //NProgress.done();
             $('.ticket-file[data-id="'+response.data.id+'"]').remove();
         }
         else {

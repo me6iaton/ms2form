@@ -83,7 +83,9 @@ class ms2form {
           ');
           $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
           $this->modx->regClientStartupScript($config_js, true);
-
+          if ($css = trim($this->modx->getOption('ms2form_frontend_css'))) {
+            $this->modx->regClientCSS($css);
+          }
           if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
             if (!empty($js) && preg_match('/\.js/i', $js)) {
               $jsCurl = '
@@ -297,7 +299,7 @@ class ms2form {
       }
     }
     if (!empty($errors)) {
-      return $this->error($this->modx->lexicon('ticket_err_form'), $errors);
+      return $this->error($this->modx->lexicon('ms2form_err_form'), $errors);
     }
 
     $fields['class_key'] = 'msProduct';

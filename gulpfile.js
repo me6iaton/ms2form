@@ -3,33 +3,41 @@
  */
 var gulp = require('gulp')
 ,concat = require('gulp-concat')
-//,clean = require("gulp-clean")
+  ,sass = require('gulp-sass')
+  , clean = require("gulp-clean");
+
 
 var paths = {
-  styles: [
-    './assets/components/ms2form/css/www/_custom.css'
-    ,'./assets/components/ms2form/vendor/jgrowl/jquery.jgrowl.min.css'
+  sass: [
+    './assets/components/ms2form/css/web/custom.sass'
+  ]
+  ,css: [
+    './assets/components/ms2form/vendor/jgrowl/jquery.jgrowl.min.css'
     ,'./assets/components/ms2form/vendor/select2/select2.css'
     ,'./assets/components/ms2form/vendor/select2/select2-bootstrap.css'
     ,'./assets/components/ms2form/vendor/bootstrap-markdown/css/bootstrap-markdown.min.css'
+    ,'./assets/components/ms2form/css/web/custom.css'
   ]
-  ,buildCss: './assets/components/ms2form/css/www/'
+  ,cssDest: './assets/components/ms2form/css/web/'
 };
 
 
+gulp.task('default', ['watch']);
+
 // A development task to run anytime a file changes
-gulp.task('default', ['styles']);
+gulp.task('watch', function () {
+  gulp.watch(paths.sass, ['css']);
+});
 
-// Delete the build directory
-
-gulp.task('cleanStyles', function() {
-  return gulp.src(paths.styles.build)
-  .pipe(clean());
+gulp.task('sass', function() {
+  return gulp.src(paths.sass)
+    .pipe(sass({indentedSyntax: true}))
+    .pipe(gulp.dest(paths.cssDest))
 });
 
 //Rename Styles
-gulp.task('styles', function() {
-  gulp.src(paths.styles)
+gulp.task('css', ['sass'], function() {
+  return gulp.src(paths.css)
     .pipe(concat('ms2form.css'))
-    .pipe(gulp.dest(paths.buildCss))
+    .pipe(gulp.dest(paths.cssDest))
 });
