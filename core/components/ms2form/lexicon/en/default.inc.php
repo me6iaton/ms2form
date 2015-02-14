@@ -3,16 +3,36 @@
  * Default English Lexicon Entries for ms2form
  */
 
+$_lang['ms2form_pagetitle'] = 'Title';
 $_lang['ms2form_template'] = 'Template';
-$_lang['ms2form_categories'] = 'Events';
+$_lang['ms2form_sections'] = 'Sections';
 $_lang['ms2form_tags'] = 'Tags';
-$_lang['ms2form_embed'] = 'Link to the embedded object';
-$_lang['ms2form_template_text'] = 'Post with text';
-$_lang['ms2form_template_gallery'] = 'Post with gallery';
-$_lang['ms2form_template_embed'] = 'Post with embedded object';
+
+$_lang['ticket_publishedon'] = 'Published On';
+$_lang['ticket_author'] = 'Author';
+$_lang['ticket_delete'] = 'Delete ticket';
+$_lang['ticket_delete_text'] = 'Are you sure you want to delete this ticket?';
+$_lang['ticket_create'] = 'Create ticket?';
+$_lang['ticket_disable_jevix'] = 'Disable Jevix';
+$_lang['ticket_disable_jevix_help'] = 'Display content of this page without Jevix sanitization. It is dangerous, any user, that creates the page can attack your site (XSS, LFI etc.).';
+$_lang['ticket_process_tags'] = 'Process MODX tags';
+$_lang['ticket_process_tags_help'] = 'By default tags in bracket displaying as is, without processing by parser. If you enable it - on this page can be run various snippets, chunks, etc.';
+$_lang['ticket_private'] = 'Private ticket';
+$_lang['ticket_private_help'] = 'If true, users will must be have permission "ticket_view_private" for reading this ticket.';
+$_lang['ticket_show_in_tree'] = 'Show in the tree';
+$_lang['ticket_show_in_tree_help'] = 'default they are not displayed in the resource tree MODX, so as not to burden him.';
+$_lang['ticket_pagetitle'] = 'Title';
+$_lang['ticket_content'] = 'Content';
+$_lang['ticket_publish'] = 'Publish';
+$_lang['ticket_preview'] = 'Preview';
+$_lang['ticket_save'] = 'Save';
+$_lang['ticket_draft'] = 'Into drafts';
+$_lang['ticket_open'] = 'Open';
+$_lang['ticket_read_more'] = 'Read more';
+$_lang['ticket_saved'] = 'Saved!';
 
 $_lang['ms2form_add_file_here'] = 'drag and drop files here';
-$_lang['ticket_file_select'] = 'Select files';
+$_lang['ms2form_file_select'] = 'Select files';
 
 $_lang['ms2form_err_addFile'] = 'ms2form_err_addFile';
 $_lang['ms2form_err_addFolder'] = 'ms2form_err_addFolder';

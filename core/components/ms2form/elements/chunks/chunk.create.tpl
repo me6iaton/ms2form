@@ -9,16 +9,15 @@
   <input type="hidden" name="hidemenu" value="0"/>
 
   <div class="form-group">
-    <label>[[%ticket_pagetitle]]</label>
+    <label>[[%ms2form_pagetitle]]</label>
     <span class="text-danger">*</span>
-    <input type="text" class="form-control" placeholder="[[%ticket_pagetitle]]" name="pagetitle" value="" maxlength="50"
-           id="ticket-pagetitle"/>
+    <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2form-pagetitle"/>
   </div>
 
   [[+templates]]
 
   <div class="form-group">
-    <label>[[%ms2form_categories]]</label>
+    <label>[[%ms2form_sections]]</label>
     <br/>
     <input type="hidden" class="form-control" id="ms2formCategories">
   </div>
@@ -52,15 +51,15 @@
 </form>
 
 <!--pdotools_templates
-  <div class="form-group">
-    <label>[[%ms2form_template]] [[+template]]</label>
-    <br/>
-    <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
-            data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
-      [[+templates]]
-    </select>
-  </div>
+<div class="form-group">
+  <label>[[%ms2form_template]] [[+template]]</label>
+  <br/>
+  <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
+          data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
+    [[+templates]]
+  </select>
+</div>
 -->
 <!--pdotools_!templates
-  <input type="hidden" name = "template" value="[[+template]]">
+<input type="hidden" name = "template" value="[[+template]]">
 -->
