@@ -23,6 +23,7 @@ class ms2form {
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
+    $locale = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
     if(empty($config['source'])){
       $config['source'] = $this->modx->getOption('ms2_product_source_default');
     }
@@ -37,6 +38,8 @@ class ms2form {
     , 'actionUrl' => $actionUrl
     , 'modelPath' => $corePath . 'model/'
     , 'corePath' => $corePath
+
+    , 'cultureKey' => $this->modx->getOption('cultureKey')
 
     , 'json_response' => true
     ), $config);
@@ -75,6 +78,7 @@ class ms2form {
           $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
             Ms2formConfig = {
               ctx: "' . $ctx . '"
+              ,cultureKey: "'. $this->config['cultureKey'].'"
               ,vendorUrl: "' . $this->config['vendorUrl'] . '"
               ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
               ,actionUrl: "' . $this->config['actionUrl'] . '"

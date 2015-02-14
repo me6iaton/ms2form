@@ -9,9 +9,9 @@
       tpanel : 1,
       thread_depth : 0,
       enable_editor : 1,
-      locale: 'ru'
+      locale: Ms2formConfig.cultureKey
     },
-    initialize : function(end) {
+    initialize : function(callback) {
       var firstLibs;
       if (typeof jQuery == "undefined"){
         firstLibs = [
@@ -23,17 +23,20 @@
           ms2form.config.vendorUrl + 'when/when'
         ]
       }
-      curl(firstLibs).then(function(when,jqery) {
+      curl(firstLibs).then(function(when) {
         var deferreds = [];
 
-        if (!jQuery().ajaxForm)
+        if (!jQuery().ajaxForm){
           deferreds.push(curl([ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
+        }
 
-        if (!jQuery().jGrowl)
+        if (!jQuery().jGrowl){
           deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jgrowl/jquery.jgrowl.min.js']));
+        }
 
-        if (!jQuery().sisyphus)
+        if (!jQuery().sisyphus){
           deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'sisyphus/sisyphus.js' ]));
+        }
 
         if (typeof marked !== 'function') {
           deferreds.push(curl([
@@ -48,24 +51,23 @@
             'js!' + ms2form.config.vendorUrl + 'he/he.js'
             , 'js!' + ms2form.config.vendorUrl + 'to-markdown/src/to-markdown.js'
           ]).next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/js/bootstrap-markdown.js'])
-            .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.ru.js']));
+            .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.' + ms2form.config.locale + '.js']));
         }
 
 
-        //if(!jQuery().url){
-        //  deferreds.push(curl([ms2form.config.vendorUrl + 'purl/purl.js' ])
-        //    .then(function(purl){
-        //      //purl();
-        //      //ms2form.url = $.url();
-        //    }));
-        //}
+        if (!jQuery().select2){
+          deferreds.push(curl(
+            [ 'js!' + ms2form.config.vendorUrl + 'select2/select2.min.js' ]
+          ).next([
+              'js!' + ms2form.config.vendorUrl + 'select2/select2_locale_' + ms2form.config.locale + '.js'
+            ]));
+        }
 
-        if (!jQuery().select2)
-          deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'select2/select2.min.js' ]));
+        if(typeof plupload == "undefined"){
+          deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'plupload/js/plupload.full.min.js' ]).next([ 'js!' + ms2form.config.vendorUrl + 'plupload/js/i18n/'+ ms2form.config.locale+'.js']));
+        }
 
-        deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'plupload/js/plupload.full.min.js' ]).next([ 'js!' + ms2form.config.vendorUrl + 'plupload/js//i18n/ru.js']));
-
-        when.all(deferreds).then(end)
+        when.all(deferreds).then(callback)
       })
     },
     product : {
@@ -164,18 +166,13 @@
   };
 
   ms2form.initialize(function() {
-    //ms2form.url = $.url();
-    //// set locale
-    //if(ms2form.url.segment(1) === 'en'){
-    //  ms2form.config.locale = 'en'
-    //}
 
     var form = $('#comment-form');
     if (!form.length) form = $('#ms2form');
     var pid = form.find('[name="pid"]').val();
     var form_key = form.find('[name="form_key"]').val();
 
-    //  markItUp init
+    //  bootstrap-markdown init
     if (ms2form.config.enable_editor == true) {
       ms2form.product.content =  $('#content');
       $("#ms2form-editor").append(ms2form.product.content.val());
