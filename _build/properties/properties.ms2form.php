@@ -11,10 +11,6 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.update',
   ),
-  'tplPreview' => array(
-    'type' => 'textfield',
-    'value' => 'tpl.ms2form.preview',
-  ),
   'tplSectionRow' => array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.section.row',
@@ -64,12 +60,10 @@ $tmp = array(
   'parentsIncludeTVs' => array(
     'type' => 'textfield',
     'value' => '',
-    'desc' => 'ms2form_prop_parents_include_tvs'
   ),
   'parentsSortby' => array(
     'type' => 'textfield',
     'value' => 'pagetitle',
-    'desc' => 'ms2form_prop_parents_sortby'
   ),
   'parentsSortdir' => array(
     'type' => 'list',
@@ -78,7 +72,6 @@ $tmp = array(
       array('text' => 'DESC', 'value' => 'DESC'),
     ),
     'value' => 'ASC',
-    'desc' => 'ms2form_prop_parents_sortdir'
   ),
   'resources' => array(
     'type' => 'textfield',

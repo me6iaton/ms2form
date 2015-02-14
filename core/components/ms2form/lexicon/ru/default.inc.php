@@ -39,7 +39,7 @@ $_lang['ms2form_clear'] = 'Очистить';
 $_lang['ms2form_message_close_all'] = 'закрыть все';
 
 
-$_lang['ticket_publishedon'] = 'Опубликован';
+/*$_lang['ticket_publishedon'] = 'Опубликован';
 $_lang['ticket_author'] = 'Автор';
 $_lang['ticket_delete'] = 'Удалить тикет';
 $_lang['ticket_delete_text'] = 'Вы уверены, что хотите удалить этот тикет?';
@@ -55,4 +55,4 @@ $_lang['ticket_publish'] = 'Опубликовать';
 $_lang['ticket_preview'] = 'Предпросмотр';
 $_lang['ticket_open'] = 'Открыть';
 $_lang['ticket_read_more'] = 'Читать дальше';
-$_lang['ticket_saved'] = 'Сохранено!';
+$_lang['ticket_saved'] = 'Сохранено!';*/

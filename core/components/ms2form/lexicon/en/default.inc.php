@@ -39,8 +39,7 @@ $_lang['ms2form_message_close_all'] = 'close all';
 $_lang['ms2form_clear'] = 'Clear';
 
 
-
-$_lang['ticket_publishedon'] = 'Published On';
+/*$_lang['ticket_publishedon'] = 'Published On';
 $_lang['ticket_author'] = 'Author';
 $_lang['ticket_delete'] = 'Delete ticket';
 $_lang['ticket_delete_text'] = 'Are you sure you want to delete this ticket?';
@@ -58,4 +57,4 @@ $_lang['ticket_preview'] = 'Preview';
 $_lang['ticket_draft'] = 'Into drafts';
 $_lang['ticket_open'] = 'Open';
 $_lang['ticket_read_more'] = 'Read more';
-$_lang['ticket_saved'] = 'Saved!';
+$_lang['ticket_saved'] = 'Saved!';*/
