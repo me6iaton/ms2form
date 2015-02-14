@@ -38,8 +38,6 @@ if (!empty($pid)) {
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
 
     $fields = array_keys($modx->getFieldMeta('msProduct'));
-//		$productData = $product->loadData();
-//		$categories = $product->getMany('Categories');
     foreach ($allowedFields as $field) {
       if (in_array($field, $fields)) {
         $value = $product->get($field);
@@ -125,11 +123,9 @@ if (!empty($allowFiles)) {
       ,'createdby' => $modx->user->id
     ));
   }else{
-    //todo-me
     $q->where(array(
       'product_id' => $pid
     , 'parent' => 0
-//    , 'createdby' => $modx->user->id
     ));
   }
   $q->sortby('createdon', 'ASC');

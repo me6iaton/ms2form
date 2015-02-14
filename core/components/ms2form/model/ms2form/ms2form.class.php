@@ -240,7 +240,7 @@ class ms2form {
       return $this->error('ticket_err_access_denied');
     }
     /** @var modProcessorResponse $response */
-    $response = $this->modx->runProcessor('web/gallery/delete', array('id' => $id), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+    $response = $this->modx->runProcessor('web/gallery/delete', array('id' => $id, 'source' => $this->config['source']), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
     if ($response->isError()) {
       return $this->error($response->getMessage());
     }
@@ -248,19 +248,6 @@ class ms2form {
     return $this->success('', array('id' => $id));
   }
 
-  public function filesUpdatePicasa($data) {
-    if (!$this->authenticated || empty($this->config['allowFiles'])) {
-      return $this->error('ticket_err_access_denied');
-    }
-    $data['source'] = $this->config['source'];
-    // todo-me add change source in ms2form
-    /** @var modProcessorResponse $response */
-    $response = $this->modx->runProcessor('web/gallery/update_picasa_multiple', $data, array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
-    if ($response->isError()) {
-      return $this->error($response->getMessage());
-    }
-    return $this->success('');
-  }
 
   /**
    * Create Product through processor and redirect to it

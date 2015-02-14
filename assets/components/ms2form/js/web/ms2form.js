@@ -75,11 +75,6 @@
         // save content
         ms2form.product.content.val(ms2form.product.editor.parseContent());
 
-        // ???
-        //var content = $('input[name="content"]', form);
-        //var pagetitle = $('input[name="pagetitle"]', form);
-        //var contentVal = content.val().replace(/\s+/g, '');
-        //var pagetitleVal = pagetitle.val();
         var parent =  $('input[name="parent"]', form).val();
         var parents =  $.map($("#ms2formCategories").select2("data"), function(val){
           return val.id
@@ -98,6 +93,7 @@
             parents.splice(parents.indexOf(parent), 1);
           }
         }
+
         $(form).ajaxSubmit({
           data : {
             action : 'product/save',
@@ -115,10 +111,6 @@
           button : button,
           dataType : 'json',
           beforeSubmit : function(formData, jqForm, options) {
-            // ???
-            //parents;
-            //contentVal = content.val().replace(/\s+/g, '');
-            //pagetitleVal = pagetitle.val();
             $(button).attr('disabled', 'disabled');
             $('.error', form).text('');
             return true;
@@ -281,7 +273,6 @@
       silverlight_xap_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.xap',
       init : {
         Init : function(up) {
-          //					debugger;
           if (this.runtime == 'html5') {
             var element = $(this.settings.drop_element);
             element.addClass('droppable');
@@ -309,10 +300,9 @@
           $('#' + up.settings.progress_bar).css('width', up.total.percent + '%');
         },
         FileUploaded : function(up, file, response) {
-          debugger;
           response = $.parseJSON(response.response);
           if (response.success) {
-            $("#ticket-files-list .note").hide();
+            $('#' + up.settings.filelist + ' .note').hide();
             // Successfull action
             var files = $('#' + up.settings.filelist);
             var clearfix = files.find('.clearfix');
@@ -367,11 +357,9 @@
       e.preventDefault();
       var $text = $('#form-group-content .md-input');
       var srcImage = $(this).parents('.ticket-file').find('.ticket-file-link').attr('href');
-//			var template = '<img class="img-responsive" src="'+srcImage+'">';
       var template = '![]('+srcImage+')';
       $text.focus();
       ms2form.product.editor.replaceSelection(template);
-//			$.markItUp({replaceWith: template});
       return false;
     });
     $(document).on('click', '.btn.preview', function(e){

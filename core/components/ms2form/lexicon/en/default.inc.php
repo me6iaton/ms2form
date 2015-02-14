@@ -12,6 +12,8 @@ $_lang['ms2form_template_gallery'] = 'Post with gallery';
 $_lang['ms2form_template_embed'] = 'Post with embedded object';
 
 $_lang['ms2form_add_file_here'] = 'drag and drop files here';
+$_lang['ticket_file_select'] = 'Select files';
+
 $_lang['ms2form_err_addFile'] = 'ms2form_err_addFile';
 $_lang['ms2form_err_addFolder'] = 'ms2form_err_addFolder';
 $_lang['ms2form_err_form'] = 'Form contains errors. Please, fix it.';

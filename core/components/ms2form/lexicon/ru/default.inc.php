@@ -11,6 +11,8 @@ $_lang['ms2form_template_gallery'] = 'Пост с галереей';
 $_lang['ms2form_template_embed'] = 'Пост с встраиваемым объектом';
 
 $_lang['ms2form_add_file_here'] = 'Перетащите файлы сюда';
+$_lang['ms2form_file_select'] = 'Выберите файлы';
+
 $_lang['ms2form_err_addFile'] = 'Ошибка при попытке записи файла';
 $_lang['ms2form_err_addFolder'] = 'Ошибка при попытке создании деректории';
 $_lang['ms2form_err_form'] = 'В форме содержатся ошибки. </br> Пожалуйста, исправьте их.';
