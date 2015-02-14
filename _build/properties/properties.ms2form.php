@@ -43,10 +43,6 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'tpl.ms2form.email.bcc',
   ),
-//  'tplTicketEmailSubscription' => array(
-//    'type' => 'textfield',
-//    'value' => 'tpl.ms2form.ticket.email.subscription',
-//  ),
   'allowedFields' => array(
     'type' => 'textfield',
     'value' => 'parent,pagetitle,content,published,template,hidemenu,tags',
@@ -87,7 +83,12 @@ $tmp = array(
   'resources' => array(
     'type' => 'textfield',
     'value' => '',
-    'desc' => 'ms2form_prop_sections_resources'
+    'desc' => 'ms2form_prop_resources'
+  ),
+  'templates' => array(
+    'type' => 'textfield',
+    'value' => '1',
+    'desc' => 'ms2form_prop_templates'
   ),
   'permissions' => array(
     'type' => 'textfield',

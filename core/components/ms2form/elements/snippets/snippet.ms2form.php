@@ -66,8 +66,8 @@ if (!empty($pid)) {
 
 
 // Get templates list
-$data['templates'] = "";
-if ($templates = explode(',', $templates)) {
+$templates = explode(',', $templates);
+if (count($templates) > 1 ) {
   foreach ($templates as $template) {
     $selected = '';
     if ($template = explode('==', $template)) {
@@ -87,29 +87,14 @@ if ($templates = explode(',', $templates)) {
     }
   }
 } else {
-  $data['templates'] .= "<option value='0'>0</option>";
+  if (!empty($pid)) {
+    $data['template'] = $product->template;
+  }else{
+    $data['template'] = $templates[0];
+  }
 }
 
-//<editor-fold desc=" Get modTemplate list">
-//if($templates = explode(',',$scriptProperties['templates']) or !$scriptProperties['templates']){
-//	/* @var xPDOQuery $query */
-//	$query = $this->modx->newQuery('modTemplate');
-//	if($templates){
-//		foreach ($templates as $templateId){
-//		$orConditions[]= array('id'=>$templateId);
-//		}
-//		$query->where($orConditions,xPDOQuery::SQL_OR);
-//	}
-//	$modTemplates = $this->modx->getCollection('msProductFile', $criteria);
-//	foreach ($modTemplates as $modTemplate){
-//		$templteOptions .= "<option value='14'>Блог пост с галлереей</option>";
-//	}
-//}else{
-//
-//}
-//</editor-fold>
-
-
+// Get files list
 if (!empty($allowFiles)) {
   /** @var modMediaSource $source */
   if ($source = $modx->getObject('sources.modMediaSource', $source)) {

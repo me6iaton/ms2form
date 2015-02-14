@@ -15,14 +15,7 @@
            id="ticket-pagetitle"/>
   </div>
 
-  <div class="form-group">
-    <label>[[%ms2form_template]]</label>
-    <br/>
-    <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
-            data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
-      [[+templates]]
-    </select>
-  </div>
+  [[+templates]]
 
   <div class="form-group">
     <label>[[%ms2form_categories]]</label>
@@ -57,3 +50,17 @@
     <input type="submit" class="btn btn-primary submit" value="[[%ticket_save]]" title="Ctrl + Shift + Enter"/>
   </div>
 </form>
+
+<!--pdotools_templates
+  <div class="form-group">
+    <label>[[%ms2form_template]] [[+template]]</label>
+    <br/>
+    <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
+            data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
+      [[+templates]]
+    </select>
+  </div>
+-->
+<!--pdotools_!templates
+  <input type="hidden" name = "template" value="[[+template]]">
+-->
