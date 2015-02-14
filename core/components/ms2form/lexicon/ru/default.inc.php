@@ -3,12 +3,8 @@
  * Default Russian Lexicon Entries for ms2form
  */
 $_lang['ms2form_template'] = 'Шаблон';
-$_lang['ms2form_categories'] = 'Категории';
+$_lang['ms2form_sections'] = 'Категории';
 $_lang['ms2form_tags'] = 'Теги';
-$_lang['ms2form_embed'] = 'Ссылка на встраиваемый обьект';
-$_lang['ms2form_template_text'] = 'Пост с текстом';
-$_lang['ms2form_template_gallery'] = 'Пост с галереей';
-$_lang['ms2form_template_embed'] = 'Пост с встраиваемым объектом';
 
 $_lang['ms2form_add_file_here'] = 'Перетащите файлы сюда';
 $_lang['ms2form_file_select'] = 'Выберите файлы';

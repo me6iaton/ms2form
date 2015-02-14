@@ -18,7 +18,7 @@
   [[+templates]]
 
   <div class="form-group">
-    <label>[[%ms2form_categories]]</label>
+    <label>[[%ms2form_sections]]</label>
     <br/>
     <input type="hidden" class="form-control" id="ms2formCategories">
   </div>
@@ -52,15 +52,15 @@
 </form>
 
 <!--pdotools_templates
-  <div class="form-group">
-    <label>[[%ms2form_template]] [[+template]]</label>
-    <br/>
-    <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
-            data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
-      [[+templates]]
-    </select>
-  </div>
+<div class="form-group">
+  <label>[[%ms2form_template]] [[+template]]</label>
+  <br/>
+  <select class="form-control popover-help" name="template" id="ms2formTemplate" data-html="true"
+          data-toggle="popover" data-placement="bottom" data-content="[[%ms2form_help_template]]">
+    [[+templates]]
+  </select>
+</div>
 -->
 <!--pdotools_!templates
-  <input type="hidden" name = "template" value="[[+template]]">
+<input type="hidden" name = "template" value="[[+template]]">
 -->

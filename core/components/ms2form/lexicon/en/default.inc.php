@@ -4,12 +4,8 @@
  */
 
 $_lang['ms2form_template'] = 'Template';
-$_lang['ms2form_categories'] = 'Events';
+$_lang['ms2form_sections'] = 'Sections';
 $_lang['ms2form_tags'] = 'Tags';
-$_lang['ms2form_embed'] = 'Link to the embedded object';
-$_lang['ms2form_template_text'] = 'Post with text';
-$_lang['ms2form_template_gallery'] = 'Post with gallery';
-$_lang['ms2form_template_embed'] = 'Post with embedded object';
 
 $_lang['ms2form_add_file_here'] = 'drag and drop files here';
 $_lang['ticket_file_select'] = 'Select files';
