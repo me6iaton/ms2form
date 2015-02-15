@@ -6,14 +6,19 @@
 
 $_lang['ms2form_prop_sortby'] = 'The field to sort by.';
 $_lang['ms2form_prop_sortdir'] = 'The direction to sort by';
-$_lang['ms2form_prop_parents'] = 'Container list, separated by commas, to search results. By default, the query is limited to the current parent. If set to 0, query not limited.';
-$_lang['ms2form_prop_parents_include_tvs'] = 'ms2form_prop_parents_include_tvs';
-$_lang['ms2form_prop_parents_sortby'] = 'ms2form_prop_parents_sortby';
-$_lang['ms2form_prop_parents_sortdir'] = 'ms2form_prop_parents_sortdir';
+$_lang['ms2form_prop_parent'] = 'Id основной категории для публикации ресурса. Обязательно для заполнения';
+$_lang['ms2form_prop_parents'] = 'Список id, через запятую,
+ родителей категорий в которых будет опубликован ресурс одновременно с основной категориией. По умолчанию выводятся все доступные категории';
+$_lang['ms2form_prop_parentsIncludeTVs'] = 'Список названий TV, через запятую, которые будут выводится вместе с дополнительными категориями';
+$_lang['ms2form_prop_parentsSortby'] = 'Поле для сортировки дополнительных категорий, можно использовать TV';
+$_lang['ms2form_prop_parentsSortdir'] = 'Направление сортировки дополнительных категорий';
+$_lang['ms2form_prop_resources'] = 'Список id, через запятую, категорий в которых будет опубликован ресурс одновременно с основной категориией. Альтернатива parents';
+$_lang['ms2form_prop_templates'] = 'Список id шаблонов для публикации ресурсов формата "1==Базовый,2==Дополнительный", можно указать только один id шаблона, по умолчанию используется шаблон с id рабным 1';
 
-$_lang['ms2form_prop_tplFormCreate'] = 'Chunk for creation of new ticket';
-$_lang['ms2form_prop_tplFormUpdate'] = 'Chunk for update existing ticket';
-$_lang['ms2form_prop_tplSectionRow'] = 'Chunk for template one section of form select';
+$_lang['ms2form_prop_tplCreate'] = 'Chunk for creation of new   resource';
+$_lang['ms2form_prop_tplUpdate'] = 'Chunk for update existing';
+$_lang['ms2form_prop_tplSectionRow'] = 'Chunk for section option';
+$_lang['ms2form_prop_tplTagRow'] = 'Chunk for tag';
 
 
 $_lang['ms2form_prop_tplTicketEmailBcc'] = 'Chunk for bcc notification about new comment.';
