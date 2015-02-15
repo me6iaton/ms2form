@@ -25,7 +25,9 @@ class ms2FormProductFileDeleteProcessor extends modObjectProcessor {
     elseif ($file->createdby != $this->modx->user->id) {
       return $this->failure($this->modx->lexicon('ms2form_err_file_owner'));
     }
+
     if($file->get('product_id') == 0){
+      // initializeMediaSource
       $mediaSource = $this->modx->getObject('sources.modMediaSource', $this->getProperty('source'));
       $mediaSource->set('ctx', $this->modx->context->key);
       if ($mediaSource->initialize()) {
@@ -33,6 +35,7 @@ class ms2FormProductFileDeleteProcessor extends modObjectProcessor {
       }else{
         return $this->failure($this->modx->lexicon('ms2form_err_source_initialize'));
       }
+      //remove files
       if (!$this->mediaSource->removeObject($file->get('path') . $file->get('file'))) {
         $this->modx->log(xPDO::LOG_LEVEL_ERROR,
           'Could not remove file at "' . $file->get('path') . $file->get('file') . '": ' . $this->mediaSource->errors['file']
@@ -47,6 +50,7 @@ class ms2FormProductFileDeleteProcessor extends modObjectProcessor {
           );
         }
       }
+      //remove objects
       $result = $this->modx->exec("DELETE FROM {$this->modx->getTableName('msProductFile')} WHERE `id` = {$id} OR `parent` = {$id};");
 
     }else{

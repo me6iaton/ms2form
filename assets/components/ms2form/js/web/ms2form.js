@@ -1,15 +1,16 @@
 (function() {
   var ms2form = {
     config : {
-      vendorUrl : Ms2formConfig.vendorUrl,
-      cssUrl : Ms2formConfig.cssUrl,
-      actionUrl : Ms2formConfig.actionUrl,
-      formBefore : 0,
-      close_all_message : Ms2formConfig.close_all_message,
-      tpanel : 1,
-      thread_depth : 0,
-      enable_editor : 1,
-      locale: Ms2formConfig.cultureKey
+      vendorUrl : Ms2formConfig.vendorUrl
+      ,cssUrl : Ms2formConfig.cssUrl
+      ,actionUrl : Ms2formConfig.actionUrl
+      ,formBefore : 0
+      ,close_all_message : Ms2formConfig.close_all_message
+      ,tpanel : 1
+      ,thread_depth : 0
+      ,enable_editor : 1
+      ,locale: Ms2formConfig.cultureKey
+      ,source: Ms2formConfig.source
     },
     initialize : function(callback) {
       var firstLibs;
@@ -254,15 +255,15 @@
       drop_element : 'ticket-files-list',
       url : ms2form.config.actionUrl,
       filters : {
-        max_file_size : 200000000,
+        max_file_size : ms2form.config.source.maxUploadSize,
         mime_types : [ {
           title : 'Files',
-          extensions : 'jpg,raw,webp,gif'
+          extensions : ms2form.config.source.allowedFileTypes
         } ]
       },
       resize : {
-        width : 2048,
-        height : 2048,
+        width : ms2form.config.source.maxUploadWidth,
+        height : ms2form.config.source.maxUploadHeight,
         quality : 100
       },
       flash_swf_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.swf',

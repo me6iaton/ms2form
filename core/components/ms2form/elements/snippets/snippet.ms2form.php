@@ -3,7 +3,7 @@
 /* @var ms2form $ms2form */
 
 $ms2form = $modx->getService('ms2form', 'ms2form', $modx->getOption('ms2form_core_path', null, $modx->getOption('core_path') . 'components/ms2form/') . 'model/ms2form/', $scriptProperties);
-$ms2form->initialize($modx->context->key, $scriptProperties);
+$ms2form->initialize($modx->context->key);
 
 if (!$modx->user->isAuthenticated()) {
   return $modx->lexicon('ms2form_err_no_auth');

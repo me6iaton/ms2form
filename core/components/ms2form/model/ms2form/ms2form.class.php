@@ -58,15 +58,15 @@ class ms2form
    *
    * @return boolean
    */
-  public function initialize($ctx = 'web', $scriptProperties = array())
+  public function initialize($ctx = 'web')
   {
-    $this->config = array_merge($this->config, $scriptProperties);
     if (!$this->pdoTools) {
       $this->loadPdoTools();
     }
     $this->pdoTools->setConfig($this->config);
 
     $this->config['ctx'] = $ctx;
+    $this->initializeMediaSource($this->config['ctx']);
     if (!empty($this->initialized[$ctx])) {
       return true;
     }
@@ -75,6 +75,7 @@ class ms2form
         break;
       default:
         if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
+          $sorceProperties = $this->mediaSource->properties;
           $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
             Ms2formConfig = {
               ctx: "' . $ctx . '"
@@ -83,6 +84,12 @@ class ms2form
               ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
               ,actionUrl: "' . $this->config['actionUrl'] . '"
               ,close_all_message: "' . $this->modx->lexicon('ms2form_message_close_all') . '"
+              ,source: {
+                allowedFileTypes: "' . $sorceProperties['allowedFileTypes']['value'] . '"
+                ,maxUploadWidth: "' . $sorceProperties['maxUploadWidth']['value'] . '"
+                ,maxUploadHeight: "' . $sorceProperties['maxUploadHeight']['value'] . '"
+                ,maxUploadSize: "' . $sorceProperties['maxUploadSize']['value'] . '"
+              }
             };
           ');
           $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
@@ -389,6 +396,7 @@ class ms2form
         }
         $this->mediaSource->set('ctx', $ctx);
         $this->mediaSource->initialize();
+        $this->mediaSource->properties = $this->mediaSource->getProperties();
         return $this->mediaSource;
       } else {
         return false;

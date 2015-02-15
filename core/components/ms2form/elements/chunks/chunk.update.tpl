@@ -25,6 +25,13 @@
     <input type="hidden" class="form-control" id="ms2formTags">
   </div>
 
+  <div class="form-group">
+    <label>Пример TV </label>
+    <br/> указать в параметре allowedFields=`parent,pagetitle,content,published,template,hidemenu,tags,tv1`
+    <br/>
+    <input type="text" value="[[+tv1]]" name="tv1" class="form-control">
+  </div>
+
 
   <div class="form-group popover-help" id="formGroupContent">
     <input id="content" name="content" type="hidden" value="[[+content]]"/>
