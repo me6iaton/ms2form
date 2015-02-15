@@ -28,7 +28,6 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
     return true;
   }
 
-
   /** {@inheritDoc} */
   public function process()
   {
@@ -118,6 +117,58 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
     }
   }
 
+  /**
+   * @return array|bool
+   */
+  public function handleFile()
+  {
+    $stream = $name = null;
+
+    $contentType = isset($_SERVER["HTTP_CONTENT_TYPE"]) ? $_SERVER["HTTP_CONTENT_TYPE"] : $_SERVER["CONTENT_TYPE"];
+
+    $file = $this->getProperty('file');
+    if (!empty($file) && is_string($file) && file_exists($file)) {
+      $tmp = explode('/', $file);
+      $name = end($tmp);
+      $stream = file_get_contents($file);
+    } elseif (strpos($contentType, "multipart") !== false) {
+      if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+        $name = $_FILES['file']['name'];
+        $stream = file_get_contents($_FILES['file']['tmp_name']);
+      }
+    } else {
+      $name = $this->getProperty('name', @$_REQUEST['name']);
+      $stream = file_get_contents('php://input');
+    }
+
+    if (!empty($stream)) {
+      $data = array(
+        'name' => $name,
+        'stream' => $stream,
+        'properties' => array(
+          'size' => strlen($stream),
+        )
+      );
+
+      $tf = tempnam(MODX_BASE_PATH, 'ms_');
+      file_put_contents($tf, $stream);
+      $tmp = getimagesize($tf);
+      if (is_array($tmp)) {
+        $data['properties'] = array_merge($data['properties'],
+          array(
+            'width' => $tmp[0],
+            'height' => $tmp[1],
+            'bits' => $tmp['bits'],
+            'mime' => $tmp['mime'],
+          )
+        );
+      }
+      unlink($tf);
+      return $data;
+    } else {
+      return false;
+    }
+  }
 }
 
 return 'ms2FormProductFileUploadProcessor';
