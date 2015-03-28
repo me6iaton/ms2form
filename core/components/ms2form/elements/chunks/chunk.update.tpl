@@ -9,7 +9,6 @@
   <div class="form-group">
     <label>[[%ms2form_pagetitle]]</label>
     <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="[[+pagetitle]]" maxlength="50" id="ms2form-pagetitle"/>
-    <span class="error"></span>
   </div>
 
   [[+templates]]
