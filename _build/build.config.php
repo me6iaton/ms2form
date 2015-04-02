@@ -53,7 +53,7 @@ if (!empty($_GET['development'])) {
   define('BUILD_PLUGIN_STATIC', false);
 } else {
   define('PKG_NAMESPACE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
-  define('PKG_CORE_PATH', MODX_BASE_PATH . 'core/components/' . PKG_NAME_LOWER . '/');
+  define('PKG_CORE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
   define('PKG_STATIC_PATH', 'core/components/' . PKG_NAME_LOWER);
   define('PKG_ASSETS_URL', '{assets_url}components/' . PKG_NAME_LOWER . '/');
   define('BUILD_CHUNK_STATIC', false);
