@@ -92,7 +92,11 @@ $tmp = array(
     'type' => 'numberfield',
     'value' => '',
   ),
-
+  'tags' => array(
+    'type' => 'combo-boolean',
+    'value' => true,
+    'desc' => 'ms2form_prop_tags'
+  ),
 );
 
 foreach ($tmp as $k => $v) {

@@ -31,3 +31,4 @@ $_lang['ms2form_prop_tplFiles'] = 'Container to display the uploader and the lis
 $_lang['ms2form_prop_tplFile'] = 'The chunk for uploaded file, that not an image.';
 $_lang['ms2form_prop_tplImage'] = 'The chunk for uploaded image.';
 $_lang['ms2form_prop_meta_tplFile'] = 'The chunk for file in the list.';
+$_lang['ms2form_prop_tags'] = 'Разрешить или запретить вывод тегов';

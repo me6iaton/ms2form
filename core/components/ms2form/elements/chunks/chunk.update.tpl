@@ -18,11 +18,8 @@
     <br/>
     <input type="hidden" class="form-control" id="ms2formSections">
   </div>
-  <div class="form-group">
-    <label>[[%ms2form_tags]]</label>
-    <br/>
-    <input type="hidden" class="form-control" id="ms2formTags">
-  </div>
+
+  [[+tags]]
 
   <div class="form-group">
     <label>Пример TV </label>
@@ -46,6 +43,14 @@
     <input type="submit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
   </div>
 </form>
+
+<!--pdotools_tags
+  <div class="form-group">
+    <label>[[%ms2form_tags]]</label>
+    <br/>
+    <input type="hidden" class="form-control" id="ms2formTags">
+  </div>
+-->
 
 <!--pdotools_templates
 <div class="form-group">
