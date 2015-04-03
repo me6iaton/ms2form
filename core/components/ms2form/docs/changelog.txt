@@ -1,13 +1,15 @@
 Changelog for ms2form.
 
-1.0.0-beta
+1.0.4-beta
 ==============
-- Opimized for MODX 2.3
-- Improved processors
-- Disabled plugin and system settings
-- Improved UI
-- Added grid actions
-- Added icons in menu
-- Added search in grid
-- Grid sorting
-- Enable and disable actions
+- редактор bootstrap-markdown http://www.codingdrama.com/bootstrap-markdown/
+- загрузка изображений в галерею перетаскиванием, запись превью на диск, настройка параметров через источник файлов
+- поддержка мультикатегорий
+- поддержка тегов
+- поддержка дополнительных TV
+- поддержка шаблонов
+
+1.0.5-beta
+==============
+- исправлена ошибка приводящая к некорректному значению настройки ms2form_core_path
+
