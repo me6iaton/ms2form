@@ -76,7 +76,8 @@
       content: null,
       save : function(form, button) {
         // save content
-        ms2form.product.content.val(ms2form.product.editor.parseContent());
+        var content = ms2form.product.editor.parseContent();
+        ms2form.product.content.val(content);
 
         var parent =  $('input[name="parent"]', form).val();
         var parents =  $.map($("#ms2formSections").select2("data"), function(val){
@@ -100,6 +101,7 @@
         $(form).ajaxSubmit({
           data : {
             action : 'product/save',
+            content: content,
             parent:  parent,
             parents:  parents,
             tags : $.map($("#ms2formTags").select2("data"), function(val){
