@@ -13,19 +13,11 @@
       ,source: Ms2formConfig.source
     },
     initialize : function(callback) {
-      var firstLibs;
-      if (typeof jQuery == "undefined"){
-        firstLibs = [
-          ms2form.config.vendorUrl + 'when/when'
-          ,'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
-        ];
-
-      } else{
-        firstLibs = [
-          ms2form.config.vendorUrl + 'when/when'
-        ]
-      }
-      curl(ms2form.config.vendorUrl + 'when/when').then(function(when) {
+      var firstLibs = [
+        ms2form.config.vendorUrl + 'when/when'
+        , 'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
+      ];
+      curl(firstLibs).then(function(when) {
         var deferreds = [];
 
         if (!jQuery().ajaxForm){
