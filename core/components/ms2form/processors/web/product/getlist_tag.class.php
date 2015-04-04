@@ -15,10 +15,9 @@ class ms2FormProductGetTagsListProcessor  extends modObjectProcessor{
   public function initialize() {
     $fqn = $this->modx->getOption('pdoFetch.class', null, 'pdotools.pdofetch', true);
     if (!$pdoClass = $this->modx->loadClass($fqn, '', false, true)) {return false;}
-    $this->pdoFetch = new $pdoClass( $this->modx, (empty($this->getProperties()))?  array() : $this->getProperties());
-
+    $properties = $this->getProperties();
+    $this->pdoFetch = new $pdoClass( $this->modx, (empty($properties))?  array() : $properties);
     $this->pid = $this->getProperty('pid');
-
     return true;
   }
   public function process(){
