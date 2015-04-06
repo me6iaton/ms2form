@@ -10,6 +10,8 @@ $_lang['ms2form_tags'] = 'Теги';
 $_lang['ms2form_save'] = 'Сохранить';
 $_lang['ms2form_uploaded_files'] = 'Загруженные файлы';
 
+$_lang['ms2form_published'] = 'Ресурс опубликован';
+
 $_lang['ms2form_email_bcc'] = 'Новый ресурс у вас на сайте - "[[+pagetitle]]"';
 
 $_lang['ms2form_add_file_here'] = 'Перетащите файлы сюда';

@@ -4,7 +4,7 @@
 define('PKG_NAME', 'ms2form');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
-define('PKG_VERSION', '1.0.7');
+define('PKG_VERSION', '1.0.8');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 

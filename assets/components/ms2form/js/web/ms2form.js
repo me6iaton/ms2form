@@ -118,10 +118,11 @@
             if (response.success) {
               if (response.message) {
                 ms2form.Message.success(response.message);
-                $(button).removeAttr('disabled');
               }else if (response.data.redirect) {
                 document.location.href = response.data.redirect;
               }
+              $(form).resetForm();
+              $(button).removeAttr('disabled');
             } else {
               // form error report
               $(button).removeAttr('disabled');

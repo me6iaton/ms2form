@@ -47,11 +47,10 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'parent,pagetitle,content',
   ),
-//  'redirectUnpublished' => array(
-//    'type' => 'numberfield',
-//    'value' => 0,
-//  ),
-//
+  'redirectPublished' => array(
+    'type' => 'textfield',
+    'value' => 'new',
+  ),
   'parents' => array(
     'type' => 'textfield',
     'value' => '',

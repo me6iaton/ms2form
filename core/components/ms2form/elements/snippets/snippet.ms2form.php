@@ -17,13 +17,13 @@ if (empty($source)) {
 }
 $ms2_product_thumbnail_size = $modx->getOption('ms2_product_thumbnail_size', $scriptProperties, $modx->getOption('ms2_product_thumbnail_size'));
 
-$pid = !empty($_REQUEST['pid']) ? (integer)$_REQUEST['pid'] : 0;
 $data = $scriptProperties;
 if (empty($parent)) {
   $data['parent'] = '0';
 } else {
   $data['parent'] = $parent;
 }
+$pid = !empty($_REQUEST['pid']) ? (integer)$_REQUEST['pid'] : 0;
 
 // Update of msProduct
 if (!empty($pid)) {

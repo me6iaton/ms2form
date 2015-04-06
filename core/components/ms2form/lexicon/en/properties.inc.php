@@ -32,3 +32,6 @@ $_lang['ms2form_prop_tplFile'] = 'The chunk for uploaded file, that not an image
 $_lang['ms2form_prop_tplImage'] = 'The chunk for uploaded image.';
 $_lang['ms2form_prop_meta_tplFile'] = 'The chunk for file in the list.';
 $_lang['ms2form_prop_tags'] = 'Разрешить или запретить вывод тегов';
+$_lang['ms2form_prop_redirectUnpublished'] = 'Вы можете указать, на какой документ отправлять пользователя при создании неопубликованного ресурса.';
+$_lang['ms2form_prop_redirectPublished'] = '[new|0|id] На какой документ отправлять пользователя при создании ресурса? new - на вновь созданный, 0 - не перенаправлять, id - на ресурс с указанным id';
+

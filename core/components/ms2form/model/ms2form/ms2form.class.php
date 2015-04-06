@@ -377,12 +377,20 @@ class ms2form
     $product = $this->modx->getObject('msProduct', $productId);
     $product->updateProductImage();
 
-    if (empty($data['published'])) {
-      $productId = $data['parent'];
+    //redirect
+    $successMessage = '';
+    $successData = array();
+    if($data['redirectPublished'] == '0'){
+      $successMessage = 'ms2form_published';
+    }else if ($data['redirectPublished'] == 'new'){
+      if (empty($data['published'])) {
+        $productId = $data['parent'];
+      }
+      $successData['redirect'] = $this->modx->makeUrl($productId, '', '', 'full');
+    } else if ($data['redirectPublished']){
+      $successData['redirect'] = $this->modx->makeUrl($data['redirectPublished'], '', '', 'full');
     }
-    $redirect = $this->modx->makeUrl($productId, '', '', 'full');
-
-    return $this->success('', array('redirect' => $redirect));
+    return $this->success($successMessage, $successData);
   }
 
   public function initializeMediaSource($ctx = '')
