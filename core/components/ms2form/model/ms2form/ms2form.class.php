@@ -281,7 +281,7 @@ class ms2form
     $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
-    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle', 'content')));
+    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
 
     $fields = array();
     foreach ($allowedFields as $field) {
