@@ -215,11 +215,18 @@
     $.post(ms2form.config.actionUrl, {action: 'product/getlist_tag', pid: pid}, function(response,  textStatus, jqXHR) {
       if (response.success) {
         tags = response.data.all;
-        $('#ms2formTags').select2({
-          multiple : true,
-          placeholder : 'Теги',
-          tags:  tags
-        });
+        var select2TagsConfig = {
+          multiple: true,
+          placeholder: 'Теги'
+        };
+        // check allow add new tags
+        if (form.find('#ms2formNewTags').val() === '1' ){
+          console.log(form.find('#ms2formNewTags').val());
+          select2TagsConfig.tags = tags
+        }else{
+          select2TagsConfig.data = tags
+        }
+        $('#ms2formTags').select2(select2TagsConfig);
         if(response.data.product){
           $('#ms2formTags').select2('val',response.data.product);
         }

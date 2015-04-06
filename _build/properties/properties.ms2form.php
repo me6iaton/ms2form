@@ -96,6 +96,11 @@ $tmp = array(
     'value' => true,
     'desc' => 'ms2form_prop_tags'
   ),
+  'newTags' => array(
+    'type' => 'combo-boolean',
+    'value' => true,
+    'desc' => 'ms2form_prop_newTags'
+  ),
 );
 
 foreach ($tmp as $k => $v) {
