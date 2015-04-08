@@ -50,11 +50,22 @@ $tmp = array(
   'redirectPublished' => array(
     'type' => 'textfield',
     'value' => 'new',
+    'desc' => 'ms2form_prop_redirectPublished'
+  ),
+  'parent' => array(
+    'type' => 'numberfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_parent'
   ),
   'parents' => array(
     'type' => 'textfield',
     'value' => '',
     'desc' => 'ms2form_prop_parents'
+  ),
+  'categoryMse2form' => array(
+    'type' => 'textfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_categoryMse2form'
   ),
   'parentsIncludeTVs' => array(
     'type' => 'textfield',

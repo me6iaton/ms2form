@@ -11,14 +11,24 @@
       ,enable_editor : 1
       ,locale: Ms2formConfig.cultureKey
       ,source: Ms2formConfig.source
-    },
-    initialize : function(callback) {
+      ,mse2Form: {
+        selector: '#ms2formCategoryMse2form'
+        ,queryVar: 'query'
+        ,pageId: '9'
+        ,minQuery: '3'
+      }
+    }
+    ,load: function(callback) {
       var firstLibs = [
         ms2form.config.vendorUrl + 'when/when'
         , 'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
       ];
       curl(firstLibs).then(function(when) {
         var deferreds = [];
+
+        if (!jQuery().autocomplete){
+          deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'msearch2/lib/jquery-ui-1.10.4.custom.min.js']));
+        }
 
         if (!jQuery().ajaxForm){
           deferreds.push(curl([ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
@@ -63,8 +73,8 @@
 
         when.all(deferreds).then(callback)
       })
-    },
-    product : {
+    }
+    ,product : {
       editor: null,
       content: null,
       save : function(form, button) {
@@ -139,6 +149,226 @@
         });
       }
     }
+    ,initialize: function(){
+      var form = $('#ms2form');
+      var pid = form.find('[name="pid"]').val();
+      var form_key = form.find('[name="form_key"]').val();
+
+      //  bootstrap-markdown init
+      if (ms2form.config.enable_editor == true) {
+        ms2form.product.content = $('#content');
+        $("#ms2formEditor").append(ms2form.product.content.val());
+        $("#ms2formEditor").markdown({
+          resize: true
+          , language: ms2form.config.locale
+        });
+        ms2form.product.editor = $('#formGroupContent textarea').data('markdown');
+      }
+
+      $(document).on('click', '#question', function (e) {
+        e.preventDefault();
+        $('.popover-help').popover('toggle');
+        return false;
+      });
+      $(document).on('click', '.popover', function (e) {
+        $(this).prev('.popover-help').popover('toggle');
+      });
+      $(document).on('click', '.popover a', function (e) {
+        e.stopPropagation();
+      });
+
+      // init list catecories product
+      var categories;
+      $.post(ms2form.config.actionUrl, {
+        action: 'product/getlist_category',
+        pid: pid,
+        form_key: form_key
+      }, function (response, textStatus, jqXHR) {
+        if (response.success) {
+          categories = response.data.all;
+          $('#ms2formSections').select2({
+            multiple: true,
+            placeholder: 'Категории',
+            tags: categories
+          });
+          if (response.data.product) {
+            $('#ms2formSections').select2('val', response.data.product);
+          }
+        }
+        else {
+          ms2form.Message.error(response.message);
+        }
+      }, 'json');
+
+      // init list tags products
+      var tags;
+      $.post(ms2form.config.actionUrl, {
+        action: 'product/getlist_tag',
+        pid: pid
+      }, function (response, textStatus, jqXHR) {
+        if (response.success) {
+          tags = response.data.all;
+          var select2TagsConfig = {
+            multiple: true,
+            placeholder: 'Теги'
+          };
+          // check allow add new tags
+          if (form.find('#ms2formNewTags').val() === '1') {
+            console.log(form.find('#ms2formNewTags').val());
+            select2TagsConfig.tags = tags
+          } else {
+            select2TagsConfig.data = tags
+          }
+          $('#ms2formTags').select2(select2TagsConfig);
+          if (response.data.product) {
+            $('#ms2formTags').select2('val', response.data.product);
+          }
+
+        }
+        else {
+          ms2form.Message.error(response.message);
+        }
+      }, 'json');
+
+      // Uploader
+      ms2form.Uploader = new plupload.Uploader({
+        runtimes: 'html5,flash,silverlight,html4',
+        browse_button: 'ticket-files-select',
+        //upload_button: document.getElementById('ticket-files-upload'),
+        container: 'ticket-files-container',
+        filelist: 'ticket-files-list',
+        progress: 'ticket-files-progress',
+        progress_bar: 'ticket-files-progress-bar',
+        progress_count: 'ticket-files-progress-count',
+        progress_percent: 'ticket-files-progress-percent',
+        form: form,
+
+        multipart_params: {
+          action: $('#' + this.container).data('action') || 'gallery/upload',
+          pid: pid,
+          form_key: form_key
+        },
+        drop_element: 'ticket-files-list',
+        url: ms2form.config.actionUrl,
+        filters: {
+          max_file_size: ms2form.config.source.maxUploadSize,
+          mime_types: [{
+            title: 'Files',
+            extensions: ms2form.config.source.allowedFileTypes
+          }]
+        },
+        resize: {
+          width: ms2form.config.source.maxUploadWidth,
+          height: ms2form.config.source.maxUploadHeight,
+          quality: 100
+        },
+        flash_swf_url: ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.swf',
+        silverlight_xap_url: ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.xap',
+        init: {
+          Init: function (up) {
+            if (this.runtime == 'html5') {
+              var element = $(this.settings.drop_element);
+              element.addClass('droppable');
+              element.on('dragover', function () {
+                if (!element.hasClass('dragover')) {
+                  element.addClass('dragover');
+                }
+              });
+              element.on('dragleave drop', function () {
+                element.removeClass('dragover');
+              });
+            }
+          },
+          PostInit: function (up) {
+          },
+          FilesAdded: function (up, files) {
+            this.settings.form.find('[type="submit"]').attr('disabled', true);
+            up.start();
+          },
+          UploadProgress: function (up, file) {
+            $(up.settings.browse_button).hide();
+            $('#' + up.settings.progress).show();
+            $('#' + up.settings.progress_count).text((up.total.uploaded + 1) + ' / ' + up.files.length);
+            $('#' + up.settings.progress_percent).text(up.total.percent + '%');
+            $('#' + up.settings.progress_bar).css('width', up.total.percent + '%');
+          },
+          FileUploaded: function (up, file, response) {
+            response = $.parseJSON(response.response);
+            if (response.success) {
+              $('#' + up.settings.filelist + ' .note').hide();
+              // Successfull action
+              var files = $('#' + up.settings.filelist);
+              var clearfix = files.find('.clearfix');
+              if (clearfix.length != 0) {
+                $(response.data.html).insertBefore(clearfix);
+              } else {
+                files.append(response.data.html);
+              }
+            } else {
+              ms2form.Message.error(response.message);
+            }
+          },
+          UploadComplete: function (up, file, response) {
+            $(up.settings.browse_button).show();
+            $('#' + up.settings.progress).hide();
+            up.total.reset();
+            up.splice();
+            this.settings.form.find('[type="submit"]').attr('disabled', false);
+          },
+          Error: function (up, err) {
+            ms2form.Message.error(err.message);
+          }
+        }
+      });
+      ms2form.Uploader.init();
+
+      // init form save sisyphus
+      $("#ms2form.create").sisyphus({
+        excludeFields: $('#ms2form .disable-sisyphus')
+      });
+
+      // Forms listeners
+      $(document).on('click', '.ms2-file-delete', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $form = $this.parents('form');
+        var $parent = $this.parents('.ticket-file');
+        var id = $parent.data('id');
+        var form_key = $form.find('[name="form_key"]').val();
+
+        $.post(ms2form.config.actionUrl, {
+          action: 'gallery/delete',
+          id: id,
+          form_key: form_key
+        }, function (response, textStatus, jqXHR) {
+          if (response.success) {
+            $('.ticket-file[data-id="' + response.data.id + '"]').remove();
+          }
+          else {
+            ms2form.Message.error(response.message);
+          }
+        }, 'json');
+        return false;
+      });
+      $(document).on('click', '.ms2-file-insert', function (e) {
+        e.preventDefault();
+        var $text = $('#formGroupContent .md-input');
+        var srcImage = $(this).parents('.ticket-file').find('.ticket-file-link').attr('href');
+        var template = '![](' + srcImage + ')';
+        $text.focus();
+        ms2form.product.editor.replaceSelection(template);
+        return false;
+      });
+      $(document).on('click', '.btn.preview', function (e) {
+        e.preventDefault();
+      })
+      $(document).on('submit', '#ms2form', function (e) {
+        e.preventDefault();
+        ms2form.product.save(this, $(this).find('[type="submit"]')[0]);
+        return false;
+      });
+      $('#btn-send').removeAttr('disabled');
+    }
   };
 
   ms2form.Message = {
@@ -162,215 +392,68 @@
     }
   };
 
-  ms2form.initialize(function() {
+  var mse2Config = {
+    actionUrl: "\/assets\/components\/msearch2\/action.php"
+  };
+  var mSearch2 = {};
+  mSearch2.Form = {
+    initialize: function (selector) {
+      var $this = $(selector);
+      var config = ms2form.config.mse2Form;
+      var cache = {};
 
-    var form = $('#ms2form');
-    var pid = form.find('[name="pid"]').val();
-    var form_key = form.find('[name="form_key"]').val();
-
-    //  bootstrap-markdown init
-    if (ms2form.config.enable_editor == true) {
-      ms2form.product.content =  $('#content');
-      $("#ms2formEditor").append(ms2form.product.content.val());
-      $("#ms2formEditor").markdown({
-        resize: true
-        ,language: ms2form.config.locale
-      });
-      ms2form.product.editor = $('#formGroupContent textarea').data('markdown');
-    }
-
-    $(document).on('click', '#question', function(e) {
-      e.preventDefault();
-      $('.popover-help').popover('toggle');
-      return false;
-    });
-    $(document).on('click', '.popover', function (e) {
-      $(this).prev('.popover-help').popover('toggle');
-    });
-    $(document).on('click', '.popover a', function (e) {
-      e.stopPropagation();
-    });
-
-    // init list catecories product
-    var categories;
-    $.post(ms2form.config.actionUrl, {action: 'product/getlist_category', pid: pid, form_key: form_key}, function(response,  textStatus, jqXHR) {
-      if (response.success) {
-        categories = response.data.all;
-        $('#ms2formSections').select2({
-          multiple : true,
-          placeholder : 'Категории',
-          tags:  categories
-        });
-        if(response.data.product){
-          $('#ms2formSections').select2('val',response.data.product);
-        }
-      }
-      else {
-        ms2form.Message.error(response.message);
-      }
-    }, 'json');
-
-    // init list tags products
-    var tags;
-    $.post(ms2form.config.actionUrl, {action: 'product/getlist_tag', pid: pid}, function(response,  textStatus, jqXHR) {
-      if (response.success) {
-        tags = response.data.all;
-        var select2TagsConfig = {
-          multiple: true,
-          placeholder: 'Теги'
-        };
-        // check allow add new tags
-        if (form.find('#ms2formNewTags').val() === '1' ){
-          console.log(form.find('#ms2formNewTags').val());
-          select2TagsConfig.tags = tags
-        }else{
-          select2TagsConfig.data = tags
-        }
-        $('#ms2formTags').select2(select2TagsConfig);
-        if(response.data.product){
-          $('#ms2formTags').select2('val',response.data.product);
-        }
-
-      }
-      else {
-        ms2form.Message.error(response.message);
-      }
-    }, 'json');
-
-    // Uploader
-    ms2form.Uploader = new plupload.Uploader({
-      runtimes : 'html5,flash,silverlight,html4',
-      browse_button : 'ticket-files-select',
-      //upload_button: document.getElementById('ticket-files-upload'),
-      container : 'ticket-files-container',
-      filelist : 'ticket-files-list',
-      progress : 'ticket-files-progress',
-      progress_bar : 'ticket-files-progress-bar',
-      progress_count : 'ticket-files-progress-count',
-      progress_percent : 'ticket-files-progress-percent',
-      form : form,
-
-      multipart_params : {
-        action : $('#' + this.container).data('action') || 'gallery/upload',
-        pid : pid,
-        form_key: form_key
-      },
-      drop_element : 'ticket-files-list',
-      url : ms2form.config.actionUrl,
-      filters : {
-        max_file_size : ms2form.config.source.maxUploadSize,
-        mime_types : [ {
-          title : 'Files',
-          extensions : ms2form.config.source.allowedFileTypes
-        } ]
-      },
-      resize : {
-        width : ms2form.config.source.maxUploadWidth,
-        height : ms2form.config.source.maxUploadHeight,
-        quality : 100
-      },
-      flash_swf_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.swf',
-      silverlight_xap_url : ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.xap',
-      init : {
-        Init : function(up) {
-          if (this.runtime == 'html5') {
-            var element = $(this.settings.drop_element);
-            element.addClass('droppable');
-            element.on('dragover', function() {
-              if (!element.hasClass('dragover')) {
-                element.addClass('dragover');
-              }
-            });
-            element.on('dragleave drop', function() {
-              element.removeClass('dragover');
-            });
+      $this.autocomplete({
+        source: function (request, callback) {
+          if (request.term in cache) {
+            callback(cache[request.term]);
+            return;
           }
-        },
-        PostInit : function(up) {
-        },
-        FilesAdded : function(up, files) {
-          this.settings.form.find('[type="submit"]').attr('disabled', true);
-          up.start();
-        },
-        UploadProgress : function(up, file) {
-          $(up.settings.browse_button).hide();
-          $('#' + up.settings.progress).show();
-          $('#' + up.settings.progress_count).text((up.total.uploaded + 1) + ' / ' + up.files.length);
-          $('#' + up.settings.progress_percent).text(up.total.percent + '%');
-          $('#' + up.settings.progress_bar).css('width', up.total.percent + '%');
-        },
-        FileUploaded : function(up, file, response) {
-          response = $.parseJSON(response.response);
-          if (response.success) {
-            $('#' + up.settings.filelist + ' .note').hide();
-            // Successfull action
-            var files = $('#' + up.settings.filelist);
-            var clearfix = files.find('.clearfix');
-            if (clearfix.length != 0) {
-              $(response.data.html).insertBefore(clearfix);
-            } else {
-              files.append(response.data.html);
+          var data = {
+            action: 'search'
+            , key: $this.data('key')
+            , pageId: config.pageId
+          };
+          data[config.queryVar] = request.term;
+          $.post(mse2Config.actionUrl, data, function (response) {
+            if (response.data.log) {
+              $('.mSearchFormLog').html(response.data.log);
             }
-          } else {
-            ms2form.Message.error(response.message);
+            else {
+              $('.mSearchFormLog').html('');
+            }
+            cache[request.term] = response.data.results;
+            callback(response.data.results)
+          }, 'json');
+        }
+        , minLength: config.minQuery || 3
+        , select: function (event, ui) {
+          if (ui.item.url) {
+            document.location.href = ui.item.url;
           }
-        },
-        UploadComplete : function(up, file, response) {
-          $(up.settings.browse_button).show();
-          $('#' + up.settings.progress).hide();
-          up.total.reset();
-          up.splice();
-          this.settings.form.find('[type="submit"]').attr('disabled', false);
-        },
-        Error : function(up, err) {
-          ms2form.Message.error(err.message);
+          else {
+            setTimeout(function () {
+              console.log('submit');
+              //form.submit();
+            }, 100);
+          }
         }
-      }
-    });
-    ms2form.Uploader.init();
+      })
+        .data("ui-autocomplete")._renderItem = function (ul, item) {
+        return $("<li></li>")
+          .data("item.autocomplete", item)
+          .addClass("mse2-ac-wrapper")
+          .append("<a class=\"mse2-ac-link\">" + item.label + "</a>")
+          .appendTo(ul);
+      };
+    }
+  };
 
-    // init form save sisyphus
-    $("#ms2form.create").sisyphus({
-      excludeFields: $('#ms2form .disable-sisyphus')
-    });
-
-    // Forms listeners
-    $(document).on('click', '.ms2-file-delete', function(e) {
-      e.preventDefault();
-      var $this = $(this);
-      var $form = $this.parents('form');
-      var $parent = $this.parents('.ticket-file');
-      var id = $parent.data('id');
-      var form_key = $form.find('[name="form_key"]').val();
-
-      $.post(ms2form.config.actionUrl, {action: 'gallery/delete', id: id, form_key: form_key}, function(response,  textStatus, jqXHR) {
-        if (response.success) {
-            $('.ticket-file[data-id="'+response.data.id+'"]').remove();
-        }
-        else {
-          ms2form.Message.error(response.message);
-        }
-      }, 'json');
-      return false;
-    });
-    $(document).on('click', '.ms2-file-insert', function(e) {
-      e.preventDefault();
-      var $text = $('#formGroupContent .md-input');
-      var srcImage = $(this).parents('.ticket-file').find('.ticket-file-link').attr('href');
-      var template = '![]('+srcImage+')';
-      $text.focus();
-      ms2form.product.editor.replaceSelection(template);
-      return false;
-    });
-    $(document).on('click', '.btn.preview', function(e){
-      e.preventDefault();
-    })
-    $(document).on('submit', '#ms2form', function(e) {
-      e.preventDefault();
-      ms2form.product.save(this, $(this).find('[type="submit"]')[0]);
-      return false;
-    });
-    $('#btn-send').removeAttr('disabled');
+  ms2form.load(function() {
+    ms2form.initialize();
+    // Initialize Form
+    if ($(ms2form.config.mse2Form.selector).length) {
+      mSearch2.Form.initialize(ms2form.config.mse2Form.selector);
+    }
   });
 
 })();

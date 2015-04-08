@@ -12,10 +12,12 @@
     <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2formPagetitle"/>
   </div>
 
+  [[+categoryMse2form]]
+
   [[+templates]]
 
   <div class="form-group">
-    <label>[[%ms2form_sections]]</label>
+    <label>[[%ms2form_categories]]</label>
     <br/>
     <input type="hidden" class="form-control" id="ms2formSections">
   </div>
@@ -46,6 +48,15 @@
     <input type="submit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
   </div>
 </form>
+
+
+<!--pdotools_categoryMse2form
+  <div class="form-group">
+    <label>[[%ms2form_category]]</label>
+    <span class="text-danger">*</span>
+    <input type="text" data-key=[[+mse2formKey]] id="ms2formCategoryMse2form" class="form-control disable-sisyphus" name="query" placeholder="[[%ms2form_search]]" value="" />
+  </div>
+-->
 
 <!--pdotools_tags
   <div class="form-group">

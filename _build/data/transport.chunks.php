@@ -35,6 +35,10 @@ $tmp = array(
     'file' => 'tag_row',
     'description' => '',
   ),
+  'tpl.ms2form.mSearch2.ac' => array(
+    'file' => 'mSearch2_ac',
+    'description' => '',
+  ),
 );
 
 // Save chunks for setup options

@@ -125,3 +125,38 @@
     display: none; }
   #ticket-files-list .ticket-file.deleted .ticket-file-restore {
     display: inline; }
+
+.mse2-ac-wrapper {
+  font-size: 12px;
+  padding: 2px 5px; }
+
+.mse2-ac-link {
+  padding: 0 !important;
+  font-size: 12px;
+  border: 1px solid transparent;
+  border-bottom-color: #efefef; }
+
+.mse2-ac-wrapper:last-child .mse2-ac-link {
+  border-color: transparent; }
+
+.mse2-ac-link.ui-state-focus {
+  background-image: none !important;
+  border-color: transparent !important;
+  margin: 0 !important; }
+
+.mse2-ac-item {
+  padding: 2px 5px; }
+  .mse2-ac-item:hover {
+    cursor: pointer; }
+  .mse2-ac-item .mse2-ac-weight {
+    display: inline-block;
+    float: right; }
+
+.form-group .input-sm {
+  width: 50%;
+  display: inline-block; }
+
+.ui-autocomplete-loading {
+  background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+
+/*.ui-autocomplete {height: 200px;overflow: auto;} */

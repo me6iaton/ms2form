@@ -5,10 +5,12 @@
 
 $_lang['ms2form_pagetitle'] = 'Title';
 $_lang['ms2form_template'] = 'Template';
-$_lang['ms2form_sections'] = 'Sections';
+$_lang['ms2form_category'] = 'Category';
+$_lang['ms2form_categories'] = 'Categories';
 $_lang['ms2form_tags'] = 'Tags';
 $_lang['ms2form_save'] = 'Save';
 $_lang['ms2form_uploaded_files'] = 'Uploaded files';
+$_lang['ms2form_search'] = 'Search category';
 
 $_lang['ms2form_published'] = 'Ресурс опубликован';
 
