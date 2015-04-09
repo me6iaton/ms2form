@@ -1,24 +1,37 @@
 (function() {
   var ms2form = {
     config : {
-      vendorUrl : Ms2formConfig.vendorUrl
-      ,cssUrl : Ms2formConfig.cssUrl
-      ,actionUrl : Ms2formConfig.actionUrl
-      ,formBefore : 0
-      ,close_all_message : Ms2formConfig.close_all_message
-      ,tpanel : 1
-      ,thread_depth : 0
-      ,enable_editor : 1
-      ,locale: Ms2formConfig.cultureKey
-      ,source: Ms2formConfig.source
-      ,mse2Form: {
-        selector: '#ms2formCategoryMse2form'
-        ,queryVar: 'query'
-        ,pageId: '9'
-        ,minQuery: '3'
+      selectors: {
+        formKey: '#ms2formFormKey'
+        ,mse2form: '#ms2formCategoryMse2form'
       }
+      ,actionUrl : Ms2formConfig.actionUrl
+      ,vendorUrl : Ms2formConfig.vendorUrl
+      ,locale: Ms2formConfig.cultureKey
+      ,enable_editor: 1
     }
-    ,load: function(callback) {
+    ,_loadConfig: function (actionUrl, callback){
+      var request = new XMLHttpRequest();
+      actionUrl = actionUrl + '?action=config/get&form_key='
+        + $(ms2form.config.selectors.formKey).val();
+      request.open('GET', actionUrl, true);
+
+      request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+          // Success!
+          var data = JSON.parse(request.responseText);
+          $.extend(ms2form.config, data);
+          callback();
+        } else {
+          console.error('We reached our target server, but it returned an error')
+        }
+      };
+      request.onerror = function () {
+        console.error('There was a connection error of some sort')
+      };
+      request.send();
+    }
+    ,_loadScripts: function(callback) {
       var firstLibs = [
         ms2form.config.vendorUrl + 'when/when'
         , 'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
@@ -74,80 +87,12 @@
         when.all(deferreds).then(callback)
       })
     }
-    ,product : {
-      editor: null,
-      content: null,
-      save : function(form, button) {
-        // save content
-        var content = ms2form.product.editor.parseContent();
-        ms2form.product.content.val(content);
-
-        var parent =  $('input[name="parent"]', form).val();
-        var parents =  $.map($("#ms2formSections").select2("data"), function(val){
-          return val.id
-        });
-
-        if(parent == '0'){
-          if(parents[0]){
-            parent = parents[0];
-            parents.splice(0, 1);
-          }else{
-            ms2form.Message.error('parent is empty');
-            return false;
-          }
-        } else {
-          if (parents.indexOf(parent) > -1) {
-            parents.splice(parents.indexOf(parent), 1);
-          }
-        }
-
-        $(form).ajaxSubmit({
-          data : {
-            action : 'product/save',
-            content: content,
-            parent:  parent,
-            parents:  parents,
-            tags : $.map($("#ms2formTags").select2("data"), function(val){
-              return val.text
-            }),
-            files: $(form).find('.ticket-file').map(function(){
-              return $(this).attr('data-id')
-            }).get()
-          },
-          url : ms2form.config.actionUrl,
-          form : form,
-          button : button,
-          dataType : 'json',
-          beforeSubmit : function(formData, jqForm, options) {
-            $(button).attr('disabled', 'disabled');
-            $('.error', form).text('');
-            return true;
-          },
-          success : function(response) {
-            $('#ms2form.create').sisyphus().manuallyReleaseData();
-            if (response.success) {
-              if (response.message) {
-                ms2form.Message.success(response.message);
-              }else if (response.data.redirect) {
-                document.location.href = response.data.redirect;
-              }
-              $(form).resetForm();
-              $(button).removeAttr('disabled');
-            } else {
-              // form error report
-              $(button).removeAttr('disabled');
-              ms2form.Message.error(response.message);
-              if (response.data) {
-                var i, message;
-                for (i in response.data) {
-                  message = response.data[i];
-                  $(form).find('[name="' + i + '"]').closest('.form-group').addClass('has-error');
-                }
-              }
-            }
-          }
-        });
-      }
+    ,load: function(callback){
+      ms2form._loadScripts(function(){
+        ms2form._loadConfig(ms2form.config.actionUrl, function(){
+          callback()
+        })
+      })
     }
     ,initialize: function(){
       var form = $('#ms2form');
@@ -369,6 +314,81 @@
       });
       $('#btn-send').removeAttr('disabled');
     }
+    ,product: {
+      editor: null,
+      content: null,
+      save: function (form, button) {
+        // save content
+        var content = ms2form.product.editor.parseContent();
+        ms2form.product.content.val(content);
+
+        var parent = $('input[name="parent"]', form).val();
+        var parents = $.map($("#ms2formSections").select2("data"), function (val) {
+          return val.id
+        });
+
+        if (parent == '0') {
+          if (parents[0]) {
+            parent = parents[0];
+            parents.splice(0, 1);
+          } else {
+            ms2form.Message.error('parent is empty');
+            return false;
+          }
+        } else {
+          if (parents.indexOf(parent) > -1) {
+            parents.splice(parents.indexOf(parent), 1);
+          }
+        }
+
+        $(form).ajaxSubmit({
+          data: {
+            action: 'product/save',
+            content: content,
+            parent: parent,
+            parents: parents,
+            tags: $.map($("#ms2formTags").select2("data"), function (val) {
+              return val.text
+            }),
+            files: $(form).find('.ticket-file').map(function () {
+              return $(this).attr('data-id')
+            }).get()
+          },
+          url: ms2form.config.actionUrl,
+          form: form,
+          button: button,
+          dataType: 'json',
+          beforeSubmit: function (formData, jqForm, options) {
+            $(button).attr('disabled', 'disabled');
+            $('.error', form).text('');
+            return true;
+          },
+          success: function (response) {
+            $('#ms2form.create').sisyphus().manuallyReleaseData();
+            if (response.success) {
+              if (response.message) {
+                ms2form.Message.success(response.message);
+              } else if (response.data.redirect) {
+                document.location.href = response.data.redirect;
+              }
+              $(form).resetForm();
+              $(button).removeAttr('disabled');
+            } else {
+              // form error report
+              $(button).removeAttr('disabled');
+              ms2form.Message.error(response.message);
+              if (response.data) {
+                var i, message;
+                for (i in response.data) {
+                  message = response.data[i];
+                  $(form).find('[name="' + i + '"]').closest('.form-group').addClass('has-error');
+                }
+              }
+            }
+          }
+        });
+      }
+    }
   };
 
   ms2form.Message = {
@@ -392,14 +412,11 @@
     }
   };
 
-  var mse2Config = {
-    actionUrl: "\/assets\/components\/msearch2\/action.php"
-  };
-  var mSearch2 = {};
-  mSearch2.Form = {
+  var mse2form = {
     initialize: function (selector) {
       var $this = $(selector);
-      var config = ms2form.config.mse2Form;
+      if (!$this.length) return;
+      var config = ms2form.config.categoryMse2form;
       var cache = {};
 
       $this.autocomplete({
@@ -414,8 +431,9 @@
             , pageId: config.pageId
           };
           data[config.queryVar] = request.term;
-          $.post(mse2Config.actionUrl, data, function (response) {
+          $.post(config.actionUrl, data, function (response) {
             if (response.data.log) {
+              //todo-me
               $('.mSearchFormLog').html(response.data.log);
             }
             else {
@@ -450,10 +468,8 @@
 
   ms2form.load(function() {
     ms2form.initialize();
-    // Initialize Form
-    if ($(ms2form.config.mse2Form.selector).length) {
-      mSearch2.Form.initialize(ms2form.config.mse2Form.selector);
-    }
+    // Initialize mse2form
+    mse2form.initialize(ms2form.config.selectors.mse2form);
   });
 
 })();

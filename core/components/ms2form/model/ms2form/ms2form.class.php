@@ -54,9 +54,8 @@ class ms2form
    * Initializes component into different contexts.
    *
    * @param string $ctx The context to load. Defaults to web.
-   * @param array $scriptProperties
    *
-   * @return boolean
+   * @return array
    */
   public function initialize($ctx = 'web')
   {
@@ -67,55 +66,69 @@ class ms2form
 
     $this->config['ctx'] = $ctx;
     $this->initializeMediaSource($this->config['ctx']);
-    if (!empty($this->initialized[$ctx])) {
-      return true;
-    }
-    switch ($ctx) {
-      case 'mgr':
-        break;
-      default:
-        if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
-          $sorceProperties = $this->mediaSource->properties;
-          $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
-            Ms2formConfig = {
-              ctx: "' . $ctx . '"
-              ,cultureKey: "' . $this->config['cultureKey'] . '"
-              ,vendorUrl: "' . $this->config['vendorUrl'] . '"
-              ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
-              ,actionUrl: "' . $this->config['actionUrl'] . '"
-              ,close_all_message: "' . $this->modx->lexicon('ms2form_message_close_all') . '"
-              ,source: {
-                allowedFileTypes: "' . $sorceProperties['allowedFileTypes']['value'] . '"
-                ,maxUploadWidth: "' . $sorceProperties['maxUploadWidth']['value'] . '"
-                ,maxUploadHeight: "' . $sorceProperties['maxUploadHeight']['value'] . '"
-                ,maxUploadSize: "' . $sorceProperties['maxUploadSize']['value'] . '"
-              }
-            };
-          ');
-          $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
-          $this->modx->regClientStartupScript($config_js, true);
-          if ($css = trim($this->modx->getOption('ms2form_frontend_css'))) {
-            $this->modx->regClientCSS($css);
-          }
-          if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
-            if (!empty($js) && preg_match('/\.js/i', $js)) {
-              $jsCurl = '
-                <script type="text/javascript">
-                if(typeof curl == "undefined") {
-                  document.write("<script src=\"' . $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js\" type=\"text/javascript\"><\/script>");
-                  }
-              </script>';
-              $jsCurl = preg_replace(array('/^\n/', '/\t{7}/'), '', $jsCurl);
 
-              $this->modx->regClientStartupScript($jsCurl, true);
-              $this->modx->regClientStartupScript($js);
-            }
-          }
-        }
-        $this->initialized[$ctx] = true;
-        break;
+    if (!empty($this->initialized[$ctx]) or ($ctx == 'mgr') or (MODX_API_MODE )) {
+      return $this->config;
     }
-    return true;
+
+    $sorceProperties = $this->mediaSource->properties;
+    $this->config['source'] = array(
+      'id' => $this->config['source']
+    , 'allowedFileTypes' => $sorceProperties['allowedFileTypes']['value']
+    , 'maxUploadWidth' => $sorceProperties['maxUploadWidth']['value']
+    , 'maxUploadHeight' => $sorceProperties['maxUploadHeight']['value']
+    , 'maxUploadSize' => $sorceProperties['maxUploadSize']['value']
+    );
+    $this->config['close_all_message'] = $this->modx->lexicon('ms2form_message_close_all');
+    $this->config['cssUrl'] = $this->config['cssUrl'] . 'web/';
+
+    //msearchform
+    //todo-me add check categoryMse2form
+    $mse2FormConfig = array(
+      'autocomplete' => 'results'
+      ,'queryVar' => 'query'
+      ,'minQuery' => 3
+      ,'fields' => 'pagetitle:1'
+      ,'pageId' => $this->modx->resource->id
+      ,'tplForm' => 'tpl.ms2form.mSearch2.form'
+      ,'tpl' => 'tpl.ms2form.mSearch2.ac'
+      ,'element' => 'mSearch2'
+      ,'limit' => 5
+      ,'onlyIndex' => false
+      ,'actionUrl' => '/assets/components/msearch2/action.php'
+    );
+    $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['categoryMse2form'], true));
+    $mse2FormHash = sha1(serialize($mse2FormConfig));
+    $this->config['categoryMse2form'] = $mse2FormConfig;
+    $this->config['mse2formKey'] = $mse2FormHash;
+    $_SESSION['mSearch2'][$mse2FormHash] = $mse2FormConfig;
+
+    // ms2form
+    $hash = sha1(serialize($this->config));
+    $this->config['formKey'] = $hash;
+    $_SESSION['ms2form'][$hash] = $this->config;
+
+    $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
+        Ms2formConfig = {
+          vendorUrl: "' . $this->config['vendorUrl'] . '"
+          ,actionUrl: "' . $this->config['actionUrl'] . '"
+          ,cultureKey: "' . $this->config['cultureKey'] . '"
+        };
+      ');
+    $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
+    $this->modx->regClientStartupScript($config_js, true);
+    if ($css = trim($this->modx->getOption('ms2form_frontend_css'))) {
+      $this->modx->regClientCSS($css);
+    }
+    if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
+      if (!empty($js) && preg_match('/\.js/i', $js)) {
+        $jsCurl = $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js';
+        $this->modx->regClientStartupScript($jsCurl);
+        $this->modx->regClientStartupScript($js);
+      }
+    }
+    $this->initialized[$ctx] = true;
+    return $this->config;
   }
 
   /**

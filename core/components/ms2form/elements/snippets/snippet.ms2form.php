@@ -2,12 +2,14 @@
 /* @var array $scriptProperties */
 /* @var ms2form $ms2form */
 
-$ms2form = $modx->getService('ms2form', 'ms2form', $modx->getOption('ms2form_core_path', null, $modx->getOption('core_path') . 'components/ms2form/') . 'model/ms2form/', $scriptProperties);
-$ms2form->initialize($modx->context->key);
-
 if (!$modx->user->isAuthenticated()) {
   return $modx->lexicon('ms2form_err_no_auth');
 }
+
+$ms2form = $modx->getService('ms2form', 'ms2form', $modx->getOption('ms2form_core_path', null, $modx->getOption('core_path') . 'components/ms2form/') . 'model/ms2form/', $scriptProperties);
+$config = $ms2form->initialize($modx->context->key);
+
+$data = $config;
 
 if (empty($templates)) {
   $templates = 0;
@@ -17,7 +19,6 @@ if (empty($source)) {
 }
 $ms2_product_thumbnail_size = $modx->getOption('ms2_product_thumbnail_size', $scriptProperties, $modx->getOption('ms2_product_thumbnail_size'));
 
-$data = $scriptProperties;
 if (empty($parent)) {
   $data['parent'] = '0';
 } else {
@@ -132,30 +133,7 @@ if (!empty($allowFiles)) {
   ));
 }
 
-//msearchform
-//todo-me add check categoryMse2form
-$mse2FormConfig = array(
-  'autocomplete' =>  'results'
-  ,'queryVar' => 'query'
-  ,'minQuery' =>  3
-  ,'fields' => 'pagetitle:1'
-  ,'pageId' => $modx->resource->id
-  ,'tplForm' => 'tpl.ms2form.mSearch2.form'
-  ,'tpl' => 'tpl.ms2form.mSearch2.ac'
-  ,'element' => 'mSearch2'
-  ,'limit' => 5
-  ,'onlyIndex' => false
-);
-$mse2FormConfig = array_merge($mse2FormConfig, json_decode($scriptProperties['categoryMse2form'],true));
-$hash = sha1(serialize($mse2FormConfig));
-$_SESSION['mSearch2'][$hash] = $mse2FormConfig;
-$data['mse2formKey'] = $hash;
-
 //output
 $output = $ms2form->getChunk($tplWrapper, $data);
-$key = md5($modx->toJSON($ms2form->config));
-$_SESSION['ms2form'][$key] = $ms2form->config;
-
-$output = str_ireplace('</form>', "\n<input type=\"hidden\" name=\"form_key\" value=\"{$key}\" />\n</form>", $output);
 
 return $output;

@@ -1,4 +1,5 @@
 <form class="well create" method="post" action="" id="ms2form" role="form">
+  <input type="hidden" id="ms2formFormKey" name="form_key" value="[[+formKey]]">
   <input type="hidden" name="pid" value="0">
   <input type="hidden" name="parent" value="[[+parent]]">
   <input type="hidden" name="published" value="1"/>
@@ -12,7 +13,7 @@
     <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2formPagetitle"/>
   </div>
 
-  [[+categoryMse2form]]
+  [[+categoryMse2form.element]]
 
   [[+templates]]
 
@@ -50,7 +51,7 @@
 </form>
 
 
-<!--pdotools_categoryMse2form
+<!--pdotools_categoryMse2form.element
   <div class="form-group">
     <label>[[%ms2form_category]]</label>
     <span class="text-danger">*</span>

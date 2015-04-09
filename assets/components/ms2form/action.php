@@ -44,6 +44,7 @@ if ($modx->error->hasError() || !($ms2form instanceof ms2form)) {
   die('Error');
 }
 switch ($action) {
+  case 'config/get': $response = $_SESSION['ms2form'][$_REQUEST['form_key']]; break;
   case 'gallery/upload': $response = $ms2form->fileUpload($_POST);break;
   case 'gallery/delete': $response = $ms2form->fileDelete($_POST['id']); break;
 
