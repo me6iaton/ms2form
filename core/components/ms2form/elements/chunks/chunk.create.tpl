@@ -46,7 +46,7 @@
   </div>
 
   <div class="form-actions">
-    <input type="submit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
+    <input type="submit" id="ms2formSubmit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
   </div>
 </form>
 
@@ -55,7 +55,7 @@
   <div class="form-group">
     <label>[[%ms2form_category]]</label>
     <span class="text-danger">*</span>
-    <input type="text" data-key=[[+mse2formKey]] id="ms2formCategoryMse2form" class="form-control disable-sisyphus" name="query" placeholder="[[%ms2form_search]]" value="" />
+    <input type="text" data-key=[[+mse2formKey]] id="ms2formCategoryMse2form" class="form-control disable-sisyphus" name="[[+categoryMse2form.queryVar]]" placeholder="[[%ms2form_search]]" value="" />
   </div>
 -->
 

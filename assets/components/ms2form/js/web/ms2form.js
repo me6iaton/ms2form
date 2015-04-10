@@ -101,8 +101,8 @@
 
       //  bootstrap-markdown init
       if (ms2form.config.enable_editor == true) {
-        ms2form.product.content = $('#content');
-        $("#ms2formEditor").append(ms2form.product.content.val());
+        ms2form.product.$content = $('#content');
+        $("#ms2formEditor").append(ms2form.product.$content.val());
         $("#ms2formEditor").markdown({
           resize: true
           , language: ms2form.config.locale
@@ -141,7 +141,7 @@
           }
         }
         else {
-          ms2form.Message.error(response.message);
+          ms2form.message.error(response.message);
         }
       }, 'json');
 
@@ -159,7 +159,6 @@
           };
           // check allow add new tags
           if (form.find('#ms2formNewTags').val() === '1') {
-            console.log(form.find('#ms2formNewTags').val());
             select2TagsConfig.tags = tags
           } else {
             select2TagsConfig.data = tags
@@ -171,7 +170,7 @@
 
         }
         else {
-          ms2form.Message.error(response.message);
+          ms2form.message.error(response.message);
         }
       }, 'json');
 
@@ -250,7 +249,7 @@
                 files.append(response.data.html);
               }
             } else {
-              ms2form.Message.error(response.message);
+              ms2form.message.error(response.message);
             }
           },
           UploadComplete: function (up, file, response) {
@@ -261,7 +260,7 @@
             this.settings.form.find('[type="submit"]').attr('disabled', false);
           },
           Error: function (up, err) {
-            ms2form.Message.error(err.message);
+            ms2form.message.error(err.message);
           }
         }
       });
@@ -290,7 +289,7 @@
             $('.ticket-file[data-id="' + response.data.id + '"]').remove();
           }
           else {
-            ms2form.Message.error(response.message);
+            ms2form.message.error(response.message);
           }
         }, 'json');
         return false;
@@ -314,25 +313,69 @@
       });
       $('#btn-send').removeAttr('disabled');
     }
+    ,form: null
+    ,button: null
     ,product: {
       editor: null,
       content: null,
+      $content: null,
+      parent: null,
+      parents: null,
       save: function (form, button) {
-        // save content
-        var content = ms2form.product.editor.parseContent();
-        ms2form.product.content.val(content);
+        ms2form.form = form;
+        ms2form.button = button;
+        // set content
+        this._setContent();
 
-        var parent = $('input[name="parent"]', form).val();
+        // set parent
+        if (!this._setParents()) return;
+
+        // mse2form processing
+        var $mse2form = $(ms2form.config.selectors.mse2form);
+        if($mse2form.length){
+          var categoryId = $mse2form.data('id');
+          if(categoryId){
+            this.parent = categoryId;
+            this._ajaxSubmit()
+          }else{
+            var categoryTitle = $mse2form.val();
+            var data = {
+              action: 'category/create'
+              , form_key: ms2form.config.formKey
+              , parent: ms2form.config.parent
+              , pagetitle: categoryTitle
+            };
+            data[ms2form.config.categoryMse2form.queryVar] = categoryTitle;
+            $.post(ms2form.config.actionUrl, data)
+              .done(function (response) {
+                response = JSON.parse(response);
+                if (response.success) {
+                  ms2form.product.parent = response.data.id;
+                  ms2form.product._ajaxSubmit()
+                }
+              })
+              .fail(ms2form.product._error);
+          }
+        }else{
+          this._ajaxSubmit()
+        }
+      }
+      ,_setContent: function() {
+        var content = ms2form.product.editor.parseContent();
+        this.$content.val(content);
+        this.content = content;
+      }
+      ,_setParents: function (){
+        var parent = $('input[name="parent"]',ms2form.form).val();
         var parents = $.map($("#ms2formSections").select2("data"), function (val) {
           return val.id
         });
-
         if (parent == '0') {
           if (parents[0]) {
             parent = parents[0];
             parents.splice(0, 1);
           } else {
-            ms2form.Message.error('parent is empty');
+            ms2form.message.error('parent is empty');
             return false;
           }
         } else {
@@ -340,77 +383,90 @@
             parents.splice(parents.indexOf(parent), 1);
           }
         }
-
-        $(form).ajaxSubmit({
+        this.parent = parent;
+        this.parents = parents;
+        return true
+      }
+      ,_ajaxSubmit: function (){
+        $(ms2form.form).ajaxSubmit({
           data: {
             action: 'product/save',
-            content: content,
-            parent: parent,
-            parents: parents,
+            content: ms2form.product.content,
+            parent: ms2form.product.parent,
+            parents: ms2form.product.parents,
             tags: $.map($("#ms2formTags").select2("data"), function (val) {
               return val.text
             }),
-            files: $(form).find('.ticket-file').map(function () {
+            files: $(ms2form.form).find('.ticket-file').map(function () {
               return $(this).attr('data-id')
             }).get()
           },
           url: ms2form.config.actionUrl,
-          form: form,
-          button: button,
+          form: ms2form.form,
+          button: ms2form.button,
           dataType: 'json',
           beforeSubmit: function (formData, jqForm, options) {
-            $(button).attr('disabled', 'disabled');
-            $('.error', form).text('');
+            $(ms2form.button).attr('disabled', 'disabled');
+            $('.error', ms2form.form).text('');
             return true;
           },
-          success: function (response) {
-            $('#ms2form.create').sisyphus().manuallyReleaseData();
-            if (response.success) {
-              if (response.message) {
-                ms2form.Message.success(response.message);
-              } else if (response.data.redirect) {
-                document.location.href = response.data.redirect;
-              }
-              $(form).resetForm();
-              $(button).removeAttr('disabled');
-            } else {
-              // form error report
-              $(button).removeAttr('disabled');
-              ms2form.Message.error(response.message);
-              if (response.data) {
-                var i, message;
-                for (i in response.data) {
-                  message = response.data[i];
-                  $(form).find('[name="' + i + '"]').closest('.form-group').addClass('has-error');
-                }
-              }
-            }
-          }
+          success: ms2form.product._success,
+          error: ms2form.product._error
         });
+      }
+      ,_success: function (response){
+        $('#ms2form.create').sisyphus().manuallyReleaseData();
+        if (response.success) {
+          if (response.message) {
+            ms2form.message.success(response.message);
+          } else if (response.data.redirect) {
+            document.location.href = response.data.redirect;
+          }
+          $(ms2form.form).resetForm();
+          $(ms2form.button).removeAttr('disabled');
+        } else {
+          ms2form.product._error(response)
+        }
+      }
+      ,_error: function (response){
+        if(!response.message){
+          response = JSON.parse(response.responseText);
+        }
+        // form error report
+        $(ms2form.button).removeAttr('disabled');
+        ms2form.message.error(response.message);
+        console.error(response.data);
+        if (response.data) {
+          var i, message;
+          for (i in response.data) {
+            message = response.data[i];
+            $(ms2form.form).find('[name="' + i + '"]').closest('.form-group').addClass('has-error');
+          }
+        }
+      }
+    }
+    ,message: {
+      success: function (message) {
+        if (message) {
+          $.jGrowl(message, {theme: 'tickets-message-success'});
+        }
+      }
+      ,error: function (message) {
+        if (message) {
+          $.jGrowl(message, {theme: 'tickets-message-error'/*, sticky: true*/});
+        }
+      }
+      ,info: function (message) {
+        if (message) {
+          $.jGrowl(message, {theme: 'tickets-message-info'});
+        }
+      }
+      ,close: function () {
+        $.jGrowl('close');
       }
     }
   };
 
-  ms2form.Message = {
-    success: function(message) {
-      if (message) {
-        $.jGrowl(message, {theme: 'tickets-message-success'});
-      }
-    }
-    ,error: function(message) {
-      if (message) {
-        $.jGrowl(message, {theme: 'tickets-message-error'/*, sticky: true*/});
-      }
-    }
-    ,info: function(message) {
-      if (message) {
-        $.jGrowl(message, {theme: 'tickets-message-info'});
-      }
-    }
-    ,close: function() {
-      $.jGrowl('close');
-    }
-  };
 
   var mse2form = {
     initialize: function (selector) {
@@ -433,11 +489,7 @@
           data[config.queryVar] = request.term;
           $.post(config.actionUrl, data, function (response) {
             if (response.data.log) {
-              //todo-me
-              $('.mSearchFormLog').html(response.data.log);
-            }
-            else {
-              $('.mSearchFormLog').html('');
+              ms2form.message.info(response.data.log)
             }
             cache[request.term] = response.data.results;
             callback(response.data.results)
@@ -445,14 +497,16 @@
         }
         , minLength: config.minQuery || 3
         , select: function (event, ui) {
-          if (ui.item.url) {
-            document.location.href = ui.item.url;
+          if (ui.item.id) {
+            $this.data('id', ui.item.id); // save msCategory Id
+            $this.data('title', ui.item.value);
+            console.log('save msCategory Id');
           }
-          else {
-            setTimeout(function () {
-              console.log('submit');
-              //form.submit();
-            }, 100);
+        }
+        , change: function (event, ui){
+          if($this.val() != $this.data('title')){
+            console.log('remove msCategory Id');
+            $this.removeData('id'); // remove msCategory Id
           }
         }
       })
@@ -463,12 +517,18 @@
           .append("<a class=\"mse2-ac-link\">" + item.label + "</a>")
           .appendTo(ul);
       };
+      // event listeners
+      $(document).on('keypress', ms2form.config.selectors.mse2form, function (e) {
+        if (e.which == 13) {
+          e.preventDefault();
+          return false;
+        }
+      });
     }
   };
 
   ms2form.load(function() {
     ms2form.initialize();
-    // Initialize mse2form
     mse2form.initialize(ms2form.config.selectors.mse2form);
   });
 

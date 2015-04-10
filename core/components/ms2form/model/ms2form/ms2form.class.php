@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The base class for ms2form.
  *
@@ -83,25 +82,26 @@ class ms2form
     $this->config['cssUrl'] = $this->config['cssUrl'] . 'web/';
 
     //msearchform
-    //todo-me add check categoryMse2form
-    $mse2FormConfig = array(
-      'autocomplete' => 'results'
-      ,'queryVar' => 'query'
-      ,'minQuery' => 3
-      ,'fields' => 'pagetitle:1'
-      ,'pageId' => $this->modx->resource->id
-      ,'tplForm' => 'tpl.ms2form.mSearch2.form'
-      ,'tpl' => 'tpl.ms2form.mSearch2.ac'
-      ,'element' => 'mSearch2'
-      ,'limit' => 5
-      ,'onlyIndex' => false
-      ,'actionUrl' => '/assets/components/msearch2/action.php'
-    );
-    $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['categoryMse2form'], true));
-    $mse2FormHash = sha1(serialize($mse2FormConfig));
-    $this->config['categoryMse2form'] = $mse2FormConfig;
-    $this->config['mse2formKey'] = $mse2FormHash;
-    $_SESSION['mSearch2'][$mse2FormHash] = $mse2FormConfig;
+    if(!empty($this->config['categoryMse2form'])){
+      $mse2FormConfig = array(
+        'autocomplete' => 'results'
+      , 'queryVar' => 'query'
+      , 'minQuery' => 3
+      , 'fields' => 'pagetitle:1'
+      , 'pageId' => $this->modx->resource->id
+      , 'tplForm' => 'tpl.ms2form.mSearch2.form'
+      , 'tpl' => 'tpl.ms2form.mSearch2.ac'
+      , 'element' => 'mSearch2'
+      , 'limit' => 5
+      , 'onlyIndex' => false
+      , 'actionUrl' => '/assets/components/msearch2/action.php'
+      );
+      $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['categoryMse2form'], true));
+      $mse2FormHash = sha1(serialize($mse2FormConfig));
+      $this->config['categoryMse2form'] = $mse2FormConfig;
+      $this->config['mse2formKey'] = $mse2FormHash;
+      $_SESSION['mSearch2'][$mse2FormHash] = $mse2FormConfig;
+    }
 
     // ms2form
     $hash = sha1(serialize($this->config));
@@ -231,6 +231,7 @@ class ms2form
     , 'data' => $data
     );
     $this->modx->log(modX::LOG_LEVEL_ERROR, $response['message']);
+    header('HTTP/1.1 400 Bad Request');
 
     return $this->config['json_response']
       ? $this->modx->toJSON($response)
@@ -279,9 +280,8 @@ class ms2form
       : $response;
   }
 
-
   /**
-   * Create Product through processor and redirect to it
+   * Create Product through processor and redirect
    *
    * @param array $data section, pagetitle, text, etc
    *
@@ -295,6 +295,10 @@ class ms2form
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+    if($this->config['categoryMse2form']['queryVar']){
+      $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
+      $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
+    }
 
     $fields = array();
     foreach ($allowedFields as $field) {
@@ -324,6 +328,7 @@ class ms2form
     $fields['class_key'] = 'msProduct';
     $fields['source'] = $source;
 
+    //update or create product
     if (!empty($data['pid'])) {
       $fields['id'] = (integer)$data['pid'];
       $fields['context_key'] = $data['context_key'];
@@ -334,6 +339,7 @@ class ms2form
       $response = $this->modx->runProcessor('mgr/product/create', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = true;
     }
+
     /* @var modProcessorResponse $response */
     if ($response->isError()) {
       $message = $response->getMessage();
@@ -404,6 +410,74 @@ class ms2form
       $successData['redirect'] = $this->modx->makeUrl($data['redirectPublished'], '', '', 'full');
     }
     return $this->success($successMessage, $successData);
+  }
+
+  /**
+   * Create msCategory through processor
+   *
+   * @param array $data section, pagetitle, text, etc
+   *
+   * @return array
+   */
+  public function categoryCreate (array $data){
+    $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
+    $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
+    $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
+    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+    if ($this->config['categoryMse2form']['queryVar']) {
+      $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
+      $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
+    }
+    $fields = array();
+    foreach ($allowedFields as $field) {
+      if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
+        $value = $data[$field];
+        if ($field !== 'content') {
+          $value = $this->sanitizeString($value);
+        }
+        $fields[$field] = $value;
+      }
+    }
+    $errors = array();
+    foreach ($requiredFields as $v) {
+      if (empty($fields[$v])) {
+        $errors[$v] = $this->modx->lexicon('field_required');
+      }
+    }
+    if (!empty($errors)) {
+      return $this->error($this->modx->lexicon('ms2form_err_form'), $errors);
+    }
+
+    $fields['class_key'] = 'msCategory';
+    $fields['content'] = $this->modx->getOption('ms2_category_content_default');
+
+    //check of existence
+    $category = $this->modx->getObject('modResource', array(
+      'parent' => $fields['parent']
+      ,'pagetitle' => $fields['pagetitle']
+    ));
+    if($category){
+      return $this->success('', array('id' => $category->get('id')));
+    }
+
+    $response = $this->modx->runProcessor('resource/create', $fields);
+
+    /* @var modProcessorResponse $response */
+    if ($response->isError()) {
+      $message = $response->getMessage();
+      if (empty($message)) {
+        $message = $this->modx->lexicon('ms2form_err_form');
+      }
+      $tmp = $response->getFieldErrors();
+      $errors = array();
+      foreach ($tmp as $v) {
+        $errors[$v->field] = $v->message;
+      }
+      return $this->error($message, $errors);
+    }
+    $categoryId = $response->response['object']['id'];
+
+    return $this->success('', array('id'=> $categoryId));
   }
 
   public function initializeMediaSource($ctx = '')

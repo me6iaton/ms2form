@@ -52,6 +52,7 @@ switch ($action) {
   case 'product/getlist_category': $response = $ms2form->getListCategory($_POST); break;
   case 'product/update':
   case 'product/save': $response = $ms2form->productSave($_POST); break;
+  case 'category/create': $response = $ms2form->categoryCreate($_POST); break;
   default:
     $message = $_REQUEST['action'] != $action ? 'tickets_err_register_globals' : 'tickets_err_unknown';
     $response = $modx->toJSON(array('success' => false, 'message' => $modx->lexicon($message)));
