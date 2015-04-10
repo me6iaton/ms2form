@@ -453,7 +453,7 @@
       }
       ,error: function (message) {
         if (message) {
-          $.jGrowl(message, {theme: 'tickets-message-error'/*, sticky: true*/});
+          $.jGrowl(message, {theme: 'tickets-message-error'/*git add, sticky: true*/});
         }
       }
       ,info: function (message) {
