@@ -112,6 +112,15 @@ $tmp = array(
     'value' => true,
     'desc' => 'ms2form_prop_newTags'
   ),
+  'editor' => array(
+    'type' => 'list',
+    'options' => array(
+      array('text' => 'bootstrap-markdown', 'value' => 'bootstrap-markdown'),
+      array('text' => 'quill', 'value' => 'quill'),
+    ),
+    'value' => 'quill',
+    'desc' => 'ms2form_prop_editor'
+  ),
 );
 
 foreach ($tmp as $k => $v) {

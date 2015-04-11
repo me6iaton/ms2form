@@ -25,6 +25,7 @@
     "to-markdown": "~0.0.3",
     "marked": "~0.3.3",
     "when": "~3.7.2",
-    "jquery-form": "git@github.com:me6iaton/form.git#37d3844230e3d7fc9a53eccbd420b7c1f63668b0"
+    "jquery-form": "git@github.com:me6iaton/form.git#37d3844230e3d7fc9a53eccbd420b7c1f63668b0",
+    "quill": "~0.19.10"
   }
 }
