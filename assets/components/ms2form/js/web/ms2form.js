@@ -6,6 +6,7 @@
         ,mse2form: '#ms2formCategoryMse2form'
       }
       ,actionUrl : Ms2formConfig.actionUrl
+      ,assetsUrl : Ms2formConfig.assetsUrl
       ,vendorUrl : Ms2formConfig.vendorUrl
       ,locale: Ms2formConfig.cultureKey
       ,enable_editor: 1
@@ -32,19 +33,27 @@
       request.send();
     }
     ,_loadScripts: function(callback) {
-      var firstLibs = [
-        ms2form.config.vendorUrl + 'when/when'
-        , 'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
-      ];
+      var firstLibs;
+      if (typeof jQuery == "undefined") {
+        firstLibs = [
+          ms2form.config.vendorUrl + 'when/when'
+          , 'js!' + ms2form.config.vendorUrl + 'jquery/jquery.min.js'
+        ];
+
+      } else {
+        firstLibs = [
+          ms2form.config.vendorUrl + 'when/when'
+        ]
+      }
       curl(firstLibs).then(function(when) {
         var deferreds = [];
 
         if (!jQuery().autocomplete){
-          deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'msearch2/lib/jquery-ui-1.10.4.custom.min.js']));
+          deferreds.push(curl(['js!' + ms2form.config.assetsUrl + '/js/web/msearch2/lib/jquery-ui-1.10.4.custom.min.js']));
         }
 
         if (!jQuery().ajaxForm){
-          deferreds.push(curl([ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
+          deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
         }
 
         if (!jQuery().jGrowl){
@@ -70,7 +79,6 @@
           ]).next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/js/bootstrap-markdown.js'])
             .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.' + ms2form.config.locale + '.js']));
         }
-
 
         if (!jQuery().select2){
           deferreds.push(curl(
@@ -453,7 +461,10 @@
       }
       ,error: function (message) {
         if (message) {
-          $.jGrowl(message, {theme: 'tickets-message-error'/*git add, sticky: true*/});
+          $.jGrowl(message, {
+            theme: 'tickets-message-error'
+            //, sticky: true
+          });
         }
       }
       ,info: function (message) {

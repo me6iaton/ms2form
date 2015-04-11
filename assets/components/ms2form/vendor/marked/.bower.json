@@ -29,6 +29,5 @@
   },
   "_source": "git://github.com/chjj/marked.git",
   "_target": "~0.3.3",
-  "_originalSource": "marked",
-  "_direct": true
+  "_originalSource": "marked"
 }

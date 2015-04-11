@@ -42,6 +42,5 @@
   },
   "_source": "git://github.com/cujojs/when.git",
   "_target": "~3.7.2",
-  "_originalSource": "when",
-  "_direct": true
+  "_originalSource": "when"
 }

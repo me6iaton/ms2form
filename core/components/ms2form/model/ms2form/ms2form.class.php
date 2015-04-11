@@ -111,6 +111,7 @@ class ms2form
     $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
         Ms2formConfig = {
           vendorUrl: "' . $this->config['vendorUrl'] . '"
+          ,assetsUrl: "' . $this->config['assetsUrl'] . '"
           ,actionUrl: "' . $this->config['actionUrl'] . '"
           ,cultureKey: "' . $this->config['cultureKey'] . '"
         };
