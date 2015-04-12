@@ -35,8 +35,7 @@
 
   <div class="form-group popover-help" id="formGroupContent">
     <input id="content" name="content" type="hidden" value="[[+content]]"/>
-    <div id="ms2formEditor">
-    </div>
+    [[$tpl.ms2form.editor.[[+editor]]]]
   </div>
 
   <div class="form-group">

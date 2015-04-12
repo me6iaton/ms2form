@@ -5,14 +5,15 @@
       ,assetsUrl : Ms2formConfig.assetsUrl
       ,vendorUrl : Ms2formConfig.vendorUrl
       ,locale: Ms2formConfig.cultureKey
-      ,enable_editor: 1
+      ,editor: Ms2formConfig.editor
     }
     ,selectors: {
       form: '#ms2form'
       , formKey: '#ms2formFormKey'
-      , content: '#content'
       , mse2form: '#ms2formCategoryMse2form'
+      , content: '#content'
       , editor: '#ms2formEditor'
+      , editorToolbar: '#ms2formEditorToolbar'
       , tags: '#ms2formTags'
       , categories: '#ms2formSections'
       , tagsNew: '#ms2formNewTags'
@@ -87,20 +88,30 @@
           deferreds.push(curl([ 'js!' + ms2form.config.vendorUrl + 'sisyphus/sisyphus.js' ]));
         }
 
-        if (typeof marked !== 'function') {
-          deferreds.push(curl([
-            ms2form.config.vendorUrl + 'marked/marked.min.js'
-          ]).then(function (marked) {
-            window.marked = marked
-          }));
+        //editor load
+        if(ms2form.config.editor == 'bootstrap-markdown'){
+          if (typeof marked !== 'function') {
+            deferreds.push(curl([
+              ms2form.config.vendorUrl + 'marked/marked.min.js'
+            ]).then(function (marked) {
+              window.marked = marked
+            }));
+          }
+          if (!jQuery().markdown) {
+            deferreds.push(curl([
+              'js!' + ms2form.config.vendorUrl + 'he/he.js'
+              , 'js!' + ms2form.config.vendorUrl + 'to-markdown/src/to-markdown.js'
+            ]).next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/js/bootstrap-markdown.js'])
+              .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.' + ms2form.config.locale + '.js']));
+          }
         }
-
-        if(!jQuery().markdown){
-          deferreds.push(curl([
-            'js!' + ms2form.config.vendorUrl + 'he/he.js'
-            , 'js!' + ms2form.config.vendorUrl + 'to-markdown/src/to-markdown.js'
-          ]).next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/js/bootstrap-markdown.js'])
-            .next(['js!' + ms2form.config.vendorUrl + 'bootstrap-markdown/locale/bootstrap-markdown.' + ms2form.config.locale + '.js']));
+        else if(ms2form.config.editor == 'quill'){
+          if (typeof Quill == "undefined"){
+            deferreds.push(curl([ms2form.config.vendorUrl + 'quill/dist/quill.js'])
+              .then(function(quill){
+                ms2form.editor.constructor = quill;
+              }));
+          }
         }
 
         if (!jQuery().select2){
@@ -125,27 +136,61 @@
         })
       })
     }
-    ,editor: {
-      initialize: function(name){
+    , editor: {
+      initialize: function (name) {
         ms2form.product.$content = $(ms2form.selectors.content);
-        $(ms2form.selectors.editor).append(ms2form.product.$content.val());
-        $(ms2form.selectors.editor).markdown({
-          resize: true
-          , language: ms2form.config.locale
-        });
-        ms2form.editor._instanse = $('#formGroupContent textarea').data('markdown');
+        jQuery.extend(this, this._editors[name]);
+        this.init();
       }
-      ,insertFile: function(element){
-        var $text = $('#formGroupContent .md-input');
-        var srcImage = $(element).parents(ms2form.selectors.file).find(ms2form.selectors.fileLink).attr('href');
-        var template = '![](' + srcImage + ')';
-        $text.focus();
-        ms2form.editor._instanse.replaceSelection(template);
-      }
-      ,getContent: function(){
+      , insertFile: function (element) {}
+      , getContent: function () {}
+      , _editors: {
+        bootstrapMarkdown: {
+          init: function () {
+            //todo-me create ms2form.selectors.editor
+            $(ms2form.selectors.editor).append(ms2form.product.$content.val());
+            $(ms2form.selectors.editor).markdown({
+              resize: true
+              , language: ms2form.config.locale
+            });
+            ms2form.editor._inst = $('#formGroupContent textarea').data('markdown');
+          }
+          , insertFile: function (element) {
+            var $text = $('#formGroupContent .md-input');
+            var srcImage = $(element).parents(ms2form.selectors.file).find(ms2form.selectors.fileLink).attr('href');
+            var template = '![](' + srcImage + ')';
+            $text.focus();
+            ms2form.editor._inst.replaceSelection(template);
+          }
+          , getContent: function () {
+            return this._inst.parseContent()
+          }
+        }
+        , quill: {
+          init: function () {
+            this._inst = new this.constructor(ms2form.selectors.editor, {
+              modules: {
+                'toolbar': {container: ms2form.selectors.editorToolbar}
+                , 'image-tooltip': true
+                , 'link-tooltip': true
+              },
+              theme: 'snow'
+            });
+          }
+          , insertFile: function (element) {
+            var srcImage = $(element).parents(ms2form.selectors.file).find(ms2form.selectors.fileLink).attr('href');
+            this._inst.focus();
+            var index = this._inst.getSelection().end;
+            this._inst.insertEmbed(index, 'image', srcImage);
+          }
+          , getContent: function () {
+            return this._inst.getHTML()
 
+          }
+        }
       }
-      ,_instanse: null
+      , constructor: null
+      , _inst: null
     }
     ,initialize: function(){
       var form = $(ms2form.selectors.form);
@@ -153,8 +198,8 @@
       var form_key = form.find('[name="form_key"]').val();
 
       //  content editor init
-      if (ms2form.config.enable_editor == true) {
-        ms2form.editor.initialize();
+      if (ms2form.config.editor !== '0') {
+        ms2form.editor.initialize(ms2form.config.editor);
       }
 
       $(document).on('click', '#question', function (e) {
@@ -575,5 +620,5 @@
     ms2form.initialize();
     mse2form.initialize(ms2form.selectors.mse2form);
   });
-
+  window.ms2form = ms2form;
 })();

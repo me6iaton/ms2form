@@ -115,7 +115,8 @@ $tmp = array(
   'editor' => array(
     'type' => 'list',
     'options' => array(
-      array('text' => 'bootstrap-markdown', 'value' => 'bootstrap-markdown'),
+      array('text' => '0', 'value' => '0'),
+      array('text' => 'bootstrapMarkdown', 'value' => 'bootstrapMarkdown'),
       array('text' => 'quill', 'value' => 'quill'),
     ),
     'value' => 'quill',

@@ -114,6 +114,7 @@ class ms2form
           ,assetsUrl: "' . $this->config['assetsUrl'] . '"
           ,actionUrl: "' . $this->config['actionUrl'] . '"
           ,cultureKey: "' . $this->config['cultureKey'] . '"
+          ,editor: "' . $this->config['editor'] . '"
         };
       ');
     $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";

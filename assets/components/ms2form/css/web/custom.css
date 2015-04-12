@@ -160,3 +160,17 @@
   background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 
 /*.ui-autocomplete {height: 200px;overflow: auto;} */
+.quill-wrapper {
+  background-color: #fff;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  box-shadow: 0px 0px 10px #ccc;
+  min-width: 320px;
+  width: 100%; }
+  .quill-wrapper .toolbar {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc; }
+  .quill-wrapper .editor {
+    height: auto !important; }
+    .quill-wrapper .editor .ql-editor {
+      min-height: 300px; }
