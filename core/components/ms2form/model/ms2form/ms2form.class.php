@@ -222,12 +222,16 @@ class ms2form
   public function error($message = '', $data = array(), $placeholders = array())
   {
     header('HTTP/1.1 400 Bad Request');
+    $messageTranslation = $this->modx->lexicon($message, $placeholders);
+    if($messageTranslation){
+      $message = $messageTranslation;
+    }
     $response = array(
       'success' => false
-    , 'message' => $this->modx->lexicon($message, $placeholders)
+    , 'message' => $message
     , 'data' => $data
     );
-    $this->modx->log(modX::LOG_LEVEL_ERROR, $response['message']);
+    $this->modx->log(modX::LOG_LEVEL_ERROR, $message);
     return $this->config['json_response']
       ? $this->modx->toJSON($response)
       : $response;
