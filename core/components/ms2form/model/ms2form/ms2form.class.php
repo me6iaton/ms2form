@@ -292,8 +292,10 @@ class ms2form
 
     $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
+    $allowedFields = array_diff($allowedFields, array(''));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+    $requiredFields = array_diff($requiredFields, array(''));
     if(!empty($this->config['categoryMse2form'])){
       $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
       $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
