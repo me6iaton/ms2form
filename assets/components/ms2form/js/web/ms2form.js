@@ -13,6 +13,8 @@
       , mse2form: '#ms2formCategoryMse2form'
       , content: '#content'
       , editor: '#ms2formEditor'
+      , editorId: 'ms2formEditor'
+      , editorContainer: '#formGroupContent'
       , editorToolbar: '#ms2formEditorToolbar'
       , tags: '#ms2formTags'
       , categories: '#ms2formSections'
@@ -89,7 +91,7 @@
         }
 
         //editor load
-        if(ms2form.config.editor == 'bootstrap-markdown'){
+        if(ms2form.config.editor == 'bootstrapMarkdown'){
           if (typeof marked !== 'function') {
             deferreds.push(curl([
               ms2form.config.vendorUrl + 'marked/marked.min.js'
@@ -144,10 +146,13 @@
       }
       , insertFile: function (element) {}
       , getContent: function () {}
+      , constructor: null
       , _editors: {
         bootstrapMarkdown: {
           init: function () {
-            //todo-me create ms2form.selectors.editor
+            $(ms2form.selectors.editorContainer).append(
+              '<div id="'+ms2form.selectors.editorId+'"></div>'
+            );
             $(ms2form.selectors.editor).append(ms2form.product.$content.val());
             $(ms2form.selectors.editor).markdown({
               resize: true
@@ -189,7 +194,6 @@
           }
         }
       }
-      , constructor: null
       , _inst: null
     }
     ,initialize: function(){

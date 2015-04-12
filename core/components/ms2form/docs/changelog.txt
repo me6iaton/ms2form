@@ -31,4 +31,4 @@ Changelog for ms2form.
 
 1.2.0-beta
 ==============
-- нывый редактор http://quilljs.com
+- новый редактор http://quilljs.com
