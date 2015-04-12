@@ -518,17 +518,18 @@
         if(!response.message){
           response = JSON.parse(response.responseText);
         }
-        // form error report
-        $(ms2form.button).removeAttr('disabled');
-        ms2form.message.error(response.message);
+        var message = response.message;
         console.error(response.data);
         if (response.data) {
-          var i, message;
+          var i;
           for (i in response.data) {
-            message = response.data[i];
             $(ms2form.form).find('[name="' + i + '"]').closest('.form-group').addClass('has-error');
           }
+          message = response.message + '<br>' + JSON.stringify(response.data)
         }
+        ms2form.message.error(message);
+        // form error report
+        $(ms2form.button).removeAttr('disabled');
       }
     }
     ,message: {
@@ -555,7 +556,6 @@
       }
     }
   };
-
 
   var mse2form = {
     initialize: function (selector) {
@@ -620,5 +620,7 @@
     ms2form.initialize();
     mse2form.initialize(ms2form.selectors.mse2form);
   });
+
+  //todo-me delete this
   window.ms2form = ms2form;
 })();
