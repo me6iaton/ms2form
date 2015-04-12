@@ -71,13 +71,7 @@ class ms2form
     }
 
     $sorceProperties = $this->mediaSource->properties;
-    $this->config['source'] = array(
-      'id' => $this->config['source']
-    , 'allowedFileTypes' => $sorceProperties['allowedFileTypes']['value']
-    , 'maxUploadWidth' => $sorceProperties['maxUploadWidth']['value']
-    , 'maxUploadHeight' => $sorceProperties['maxUploadHeight']['value']
-    , 'maxUploadSize' => $sorceProperties['maxUploadSize']['value']
-    );
+    $this->config['sourceProperties'] = $sorceProperties;
     $this->config['close_all_message'] = $this->modx->lexicon('ms2form_message_close_all');
     $this->config['cssUrl'] = $this->config['cssUrl'] . 'web/';
 
@@ -227,14 +221,13 @@ class ms2form
    */
   public function error($message = '', $data = array(), $placeholders = array())
   {
+    header('HTTP/1.1 400 Bad Request');
     $response = array(
       'success' => false
     , 'message' => $this->modx->lexicon($message, $placeholders)
     , 'data' => $data
     );
     $this->modx->log(modX::LOG_LEVEL_ERROR, $response['message']);
-    header('HTTP/1.1 400 Bad Request');
-
     return $this->config['json_response']
       ? $this->modx->toJSON($response)
       : $response;

@@ -22,7 +22,7 @@
       , fileInsert: '.ms2-file-insert'
       , fileDelete: '.ms2-file-delete'
       , sisyphus: '#ms2form.create'
-      , sisyphusDisable: '#ms2form .disable-sisyphus'
+      , sisyphusDisable: '#ms2form .disable-sisyphus, #ms2form :hidden'
       , uploader: {
         browse_button: 'ticket-files-select'
         //, upload_button: document.getElementById('ticket-files-upload')
@@ -195,7 +195,7 @@
     ,initialize: function(){
       var form = $(ms2form.selectors.form);
       var pid = form.find('[name="pid"]').val();
-      var form_key = form.find('[name="form_key"]').val();
+      var form_key = ms2form.config.formKey;
 
       //  content editor init
       if (ms2form.config.editor !== '0') {
@@ -241,7 +241,8 @@
       var tags;
       $.post(ms2form.config.actionUrl, {
         action: 'product/getlist_tag',
-        pid: pid
+        pid: pid,
+        form_key: form_key
       }, function (response, textStatus, jqXHR) {
         if (response.success) {
           tags = response.data.all;
@@ -286,15 +287,15 @@
         },
         url: ms2form.config.actionUrl,
         filters: {
-          max_file_size: ms2form.config.source.maxUploadSize,
+          max_file_size: ms2form.config.sourceProperties.maxUploadSize.value,
           mime_types: [{
             title: 'Files',
-            extensions: ms2form.config.source.allowedFileTypes
+            extensions: ms2form.config.sourceProperties.allowedFileTypes.value
           }]
         },
         resize: {
-          width: ms2form.config.source.maxUploadWidth,
-          height: ms2form.config.source.maxUploadHeight,
+          width: ms2form.config.sourceProperties.maxUploadWidth.value,
+          height: ms2form.config.sourceProperties.maxUploadHeight.value,
           quality: 100
         },
         flash_swf_url: ms2form.config.vendorUrl + 'lib/plupload/js/Moxie.swf',
@@ -369,7 +370,6 @@
         var $form = $this.parents('form');
         var $parent = $this.parents(ms2form.selectors.file);
         var id = $parent.data('id');
-        var form_key = $form.find('[name="form_key"]').val();
 
         $.post(ms2form.config.actionUrl, {
           action: 'gallery/delete',

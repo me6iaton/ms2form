@@ -16,8 +16,6 @@ if (file_exists($productionIndex)){
   require_once $developmentIndex;
 }
 
-
-
 $modx->getService('error', 'error.modError');
 $modx->getRequest();
 $modx->setLogLevel(modX::LOG_LEVEL_ERROR);
@@ -32,9 +30,10 @@ if ($ctx != 'web') {
 $properties = array();
 if (!empty($_REQUEST['form_key']) && isset($_SESSION['ms2form'][$_REQUEST['form_key']])) {
   $properties = $_SESSION['ms2form'][$_REQUEST['form_key']];
-}
-elseif (!empty($_SESSION['ms2form'])) {
-  $properties = $_SESSION['ms2form'];
+} else{
+  $message = 'Error missing $_REQUEST[form_key] or not find this in session data';
+  $modx->log(modX::LOG_LEVEL_ERROR, $message);
+  die($message);
 }
 
 /* @var ms2form $ms2form */
