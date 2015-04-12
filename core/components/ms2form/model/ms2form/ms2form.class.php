@@ -294,7 +294,7 @@ class ms2form
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
-    if($this->config['categoryMse2form']['queryVar']){
+    if(!empty($this->config['categoryMse2form'])){
       $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
       $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
     }
@@ -423,7 +423,7 @@ class ms2form
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
-    if ($this->config['categoryMse2form']['queryVar']) {
+    if (!empty($this->config['categoryMse2form'])) {
       $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
       $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
     }
