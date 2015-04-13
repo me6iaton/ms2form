@@ -4,23 +4,28 @@ $settings = array();
 
 $tmp = array(
   'core_path' => array(
-    'value' => PKG_CORE_PATH,
     'xtype' => 'textfield',
+    'value' => PKG_CORE_PATH,
     'area' => 'ms2form.main',
   ),
   'assets_url' => array(
-    'value' => PKG_ASSETS_URL,
     'xtype' => 'textfield',
+    'value' => PKG_ASSETS_URL,
     'area' => 'ms2form.main',
   ),
   'frontend_css' => array(
-    'value' => PKG_ASSETS_URL . 'css/web/ms2form.css',
     'xtype' => 'textfield',
+    'value' => PKG_ASSETS_URL . 'css/web/ms2form.css',
     'area' => 'ms2form.main',
   ),
   'frontend_js' => array(
-    'value' => PKG_ASSETS_URL . 'js/web/ms2form.js',
     'xtype' => 'textfield',
+    'value' => PKG_ASSETS_URL . 'js/web/ms2form.js',
+    'area' => 'ms2form.main',
+  ),
+  'disable_htmlpurifier' => array(
+    'xtype' => 'combo-boolean',
+    'value' => false,
     'area' => 'ms2form.main',
   ),
   'mail_bcc' => array(

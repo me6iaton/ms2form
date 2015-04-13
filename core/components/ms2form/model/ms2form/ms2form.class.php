@@ -24,6 +24,7 @@ class ms2form
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
+    $disableHtmlpurifier = $this->modx->getOption('ms2form_disable_htmlpurifier');
     if (empty($config['source'])) {
       $config['source'] = $this->modx->getOption('ms2_product_source_default');
     }
@@ -33,14 +34,12 @@ class ms2form
       'assetsUrl' => $assetsUrl
     , 'cssUrl' => $assetsUrl . 'css/'
     , 'vendorUrl' => $assetsUrl . 'vendor/'
-
     , 'connectorUrl' => $connectorUrl
     , 'actionUrl' => $actionUrl
     , 'modelPath' => $corePath . 'model/'
     , 'corePath' => $corePath
-
     , 'cultureKey' => $this->modx->getOption('cultureKey')
-
+    , 'disableHtmlpurifier' => $disableHtmlpurifier
     , 'json_response' => true
     ), $config);
 
@@ -328,6 +327,14 @@ class ms2form
 
     $fields['class_key'] = 'msProduct';
     $fields['source'] = $source;
+
+    //filter content
+    if(!$this->config['disableHtmlpurifier']){
+      require_once $this->config['corePath'] . '/vendor/autoload.php';
+      $purifierConfig = HTMLPurifier_Config::createDefault();
+      $purifier = new HTMLPurifier($purifierConfig);
+      $fields['content'] = $purifier->purify($fields['content']);
+    }
 
     //update or create product
     if (!empty($data['pid'])) {
