@@ -67,31 +67,33 @@ if (!empty($pid)) {
 
 
 // Get templates list
-$templates = explode(',', $templates);
-if (count($templates) > 1 ) {
-  foreach ($templates as $template) {
-    $selected = '';
-    if ($template = explode('==', $template)) {
-      if (!empty($pid)) {
-        if ($product->template == $template[0]) {
-          $selected = 'selected';
+if(!$data['template']){
+  $templates = explode(',', $data['templates']);
+  if (count($templates) > 1) {
+    foreach ($templates as $template) {
+      $selected = '';
+      if ($template = explode('==', $template)) {
+        if (!empty($pid)) {
+          if ($product->template == $template[0]) {
+            $selected = 'selected';
+          }
         }
-      }
-      $data['templates'] .= "<option $selected value=\"$template[0]\">$template[1]</option>";
-    } else {
-      if (!empty($pid)) {
-        if ($product->template == $template) {
-          $selected = 'selected';
+        $data['templates'] .= "<option $selected value=\"$template[0]\">$template[1]</option>";
+      } else {
+        if (!empty($pid)) {
+          if ($product->template == $template) {
+            $selected = 'selected';
+          }
         }
+        $data['templates'] .= "<option $selected value=\"$template\">$template</option>";
       }
-      $data['templates'] .= "<option $selected value=\"$template\">$template</option>";
     }
-  }
-} else {
-  if (!empty($pid)) {
-    $data['template'] = $product->template;
-  }else{
-    $data['template'] = $templates[0];
+  } else {
+    if (!empty($pid)) {
+      $data['template'] = $product->template;
+    } else {
+      $data['template'] = $templates[0];
+    }
   }
 }
 

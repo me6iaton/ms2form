@@ -14,7 +14,10 @@ $_lang['ms2form_prop_parentsIncludeTVs'] = 'Список названий TV, ч
 $_lang['ms2form_prop_parentsSortby'] = 'Поле для сортировки дополнительных категорий, можно использовать TV';
 $_lang['ms2form_prop_parentsSortdir'] = 'Направление сортировки дополнительных категорий';
 $_lang['ms2form_prop_resources'] = 'Список id, через запятую, категорий в которых будет опубликован ресурс одновременно с основной категориией. Альтернатива parents';
+$_lang['ms2form_prop_template'] = 'id шаблона для публикации ресурса, эта настройка отключает настройку templates';
 $_lang['ms2form_prop_templates'] = 'Список id шаблонов для публикации ресурсов формата "1==Базовый,2==Дополнительный", можно указать только один id шаблона, по умолчанию используется шаблон с id равным 1';
+
+
 
 $_lang['ms2form_prop_tplCreate'] = 'Chunk for creation of new   resource';
 $_lang['ms2form_prop_tplUpdate'] = 'Chunk for update existing';

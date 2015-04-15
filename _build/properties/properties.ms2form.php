@@ -88,6 +88,11 @@ $tmp = array(
     'value' => '',
     'desc' => 'ms2form_prop_resources'
   ),
+  'template' => array(
+    'type' => 'numberfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_template'
+  ),
   'templates' => array(
     'type' => 'textfield',
     'value' => '1',
