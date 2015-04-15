@@ -417,9 +417,9 @@ class ms2form
       if (empty($data['published'])) {
         $productId = $data['parent'];
       }
-      $successData['redirect'] = $this->modx->makeUrl($productId, '', '', 'full');
+      $successData['redirect'] = $this->modx->makeUrl($productId, '', '', $this->config['redirectScheme']);
     } else if ($data['redirectPublished']){
-      $successData['redirect'] = $this->modx->makeUrl($data['redirectPublished'], '', '', 'full');
+      $successData['redirect'] = $this->modx->makeUrl($data['redirectPublished'], '', '', $this->config['redirectScheme']);
     }
     return $this->success($successMessage, $successData);
   }

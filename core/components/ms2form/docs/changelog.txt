@@ -1,9 +1,11 @@
 Changelog for ms2form.
 
-1.2.1-beta
+1.2.3-beta
 ==============
 - новый редактор http://quilljs.com
 - добавлена фильтрация контента с помощью HTML Purifier
+- новый параметр template в сниплете ms2form
+- новый параметр redirectScheme в сниплете ms2form
 
 1.1.2-beta
 ==============

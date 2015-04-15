@@ -52,6 +52,11 @@ $tmp = array(
     'value' => 'new',
     'desc' => 'ms2form_prop_redirectPublished'
   ),
+  'redirectScheme' => array(
+    'type' => 'textfield',
+    'value' => '-1',
+    'desc' => 'ms2form_prop_redirectScheme'
+  ),
   'parent' => array(
     'type' => 'numberfield',
     'value' => '',

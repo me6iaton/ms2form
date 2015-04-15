@@ -38,5 +38,6 @@ $_lang['ms2form_prop_tags'] = 'Разрешить или запретить вы
 $_lang['ms2form_prop_newTags'] = 'Разрешить или запретить добавлять новые теги';
 $_lang['ms2form_prop_redirectUnpublished'] = 'Вы можете указать, на какой документ отправлять пользователя при создании неопубликованного ресурса.';
 $_lang['ms2form_prop_redirectPublished'] = '[new|0|id] На какой документ отправлять пользователя при создании ресурса? new - на вновь созданный, 0 - не перенаправлять, id - на ресурс с указанным id';
+$_lang['ms2form_prop_redirectScheme'] = 'The scheme indicates in what format the redirect URL is generated. http://rtfm.modx.com/revolution/2.x/developing-in-modx/other-development-resources/class-reference/modx/modx.makeurl';
 $_lang['ms2form_prop_categoryMse2form'] = '[json] Разрешить создавать новые категории и использовать форму Msearch2 для автодополнения. Json строка с парараметрами сниппета mSearchForm ';
 $_lang['ms2form_prop_editor'] = 'Тип редактора контента. 0 - отключить редактор';
