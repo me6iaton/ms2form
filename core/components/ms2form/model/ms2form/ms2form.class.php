@@ -304,7 +304,11 @@ class ms2form
     foreach ($allowedFields as $field) {
       if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
         $value = $data[$field];
-        if ($field !== 'content' && $field !== 'tags') {
+        if(is_array($value)){
+          foreach($value as $key => $item){
+            $value[$key] = $this->sanitizeString($item);
+          }
+        }else if($field !== 'content'){
           $value = $this->sanitizeString($value);
         }
         $fields[$field] = $value;
