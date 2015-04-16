@@ -4,7 +4,7 @@
 define('PKG_NAME', 'ms2form');
 define('PKG_NAME_LOWER', strtolower(PKG_NAME));
 
-define('PKG_VERSION', '1.2.3');
+define('PKG_VERSION', '1.2.4');
 define('PKG_RELEASE', 'beta');
 define('PKG_AUTO_INSTALL', true);
 
@@ -39,9 +39,9 @@ define('BUILD_SETTING_UPDATE', true);
 define('BUILD_CHUNK_UPDATE', true);
 define('BUILD_SNIPPET_UPDATE', true);
 //define('BUILD_EVENT_UPDATE', true);
-//define('BUILD_POLICY_UPDATE', true);
-//define('BUILD_POLICY_TEMPLATE_UPDATE', true);
-//define('BUILD_PERMISSION_UPDATE', true);
+define('BUILD_POLICY_UPDATE', true);
+define('BUILD_POLICY_TEMPLATE_UPDATE', true);
+define('BUILD_PERMISSION_UPDATE', true);
 
 if (!empty($_GET['development'])) {
   define('PKG_NAMESPACE_PATH', '{base_path}' . PKG_NAME .'/core/components/' . PKG_NAME_LOWER . '/');
@@ -62,6 +62,7 @@ if (!empty($_GET['development'])) {
 }
 
 $BUILD_RESOLVERS = array(
+  'policy',
   'setup',
   'chunks',
 );
