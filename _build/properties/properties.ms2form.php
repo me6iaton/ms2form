@@ -117,10 +117,10 @@ $tmp = array(
     'value' => true,
     'desc' => 'ms2form_prop_tags'
   ),
-  'newTags' => array(
+  'tagsNew' => array(
     'type' => 'combo-boolean',
     'value' => true,
-    'desc' => 'ms2form_prop_newTags'
+    'desc' => 'ms2form_prop_tagsNew'
   ),
   'editor' => array(
     'type' => 'list',

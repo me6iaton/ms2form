@@ -5,7 +5,7 @@
   <input type="hidden" name="published" value="1"/>
   <input type="hidden" name="hidemenu" value="0"/>
   <input type="hidden" name="redirectPublished" value="[[+redirectPublished]]"/>
-  <input type="hidden" id="ms2formNewTags" value="[[+newTags]]"/>
+  <input type="hidden" id="ms2formTagsNew" value="[[+tagsNew]]"/>
 
   <div class="form-group">
     <label>[[%ms2form_pagetitle]]</label>

@@ -18,7 +18,7 @@
       , editorToolbar: '#ms2formEditorToolbar'
       , tags: '#ms2formTags'
       , categories: '#ms2formSections'
-      , tagsNew: '#ms2formNewTags'
+      , tagsNew: '#ms2formTagsNew'
       , file: '.ticket-file'
       , fileLink: '.ticket-file-link'
       , fileInsert: '.ms2-file-insert'

@@ -1,6 +1,6 @@
 Changelog for ms2form.
 
-1.2.5-beta
+1.2.6-beta
 ==============
 - новый редактор http://quilljs.com
 - добавлена фильтрация контента с помощью HTML Purifier
@@ -22,7 +22,7 @@ Changelog for ms2form.
 - исправлена ошибка обработки поля content в ms2form.js
 - поле content теперь может быть необязательным для заполнения
 - добавлено новое свойство redirectPublished
-- добавлено новое свойство newTags
+- добавлено новое свойство tagsNew
 
 1.0.5-beta
 ==============
