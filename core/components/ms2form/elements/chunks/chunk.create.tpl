@@ -13,7 +13,7 @@
     <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2formPagetitle"/>
   </div>
 
-  [[+categoryMse2form.element]]
+  [[+parentMse2form.element]]
 
   [[+templates]]
 
@@ -50,11 +50,11 @@
 </form>
 
 
-<!--pdotools_categoryMse2form.element
+<!--pdotools_parentMse2form.element
   <div class="form-group">
     <label>[[%ms2form_category]]</label>
     <span class="text-danger">*</span>
-    <input type="text" data-key=[[+mse2formKey]] id="ms2formCategoryMse2form" class="form-control disable-sisyphus" name="[[+categoryMse2form.queryVar]]" placeholder="[[%ms2form_search]]" value="" />
+    <input type="text" data-key=[[+mse2formKey]] id="ms2formParentMse2form" class="form-control disable-sisyphus" name="[[+parentMse2form.queryVar]]" placeholder="[[%ms2form_search]]" value="" />
   </div>
 -->
 

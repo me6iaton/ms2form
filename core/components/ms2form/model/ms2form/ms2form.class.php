@@ -75,7 +75,7 @@ class ms2form
     $this->config['cssUrl'] = $this->config['cssUrl'] . 'web/';
 
     //msearchform
-    if(!empty($this->config['categoryMse2form'])){
+    if(!empty($this->config['parentMse2form'])){
       $mse2FormConfig = array(
         'autocomplete' => 'results'
       , 'queryVar' => 'query'
@@ -89,9 +89,9 @@ class ms2form
       , 'onlyIndex' => false
       , 'actionUrl' => '/assets/components/msearch2/action.php'
       );
-      $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['categoryMse2form'], true));
+      $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['parentMse2form'], true));
       $mse2FormHash = sha1(serialize($mse2FormConfig));
-      $this->config['categoryMse2form'] = $mse2FormConfig;
+      $this->config['parentMse2form'] = $mse2FormConfig;
       $this->config['mse2formKey'] = $mse2FormHash;
       $_SESSION['mSearch2'][$mse2FormHash] = $mse2FormConfig;
     }
@@ -295,9 +295,9 @@ class ms2form
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
     $requiredFields = array_diff($requiredFields, array(''));
-    if(!empty($this->config['categoryMse2form'])){
-      $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
-      $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
+    if(!empty($this->config['parentMse2form'])){
+      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
+      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
     }
 
     $fields = array();
@@ -436,9 +436,9 @@ class ms2form
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
     $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
-    if (!empty($this->config['categoryMse2form'])) {
-      $allowedFields[] = $this->config['categoryMse2form']['queryVar'];
-      $requiredFields[] = $this->config['categoryMse2form']['queryVar'];
+    if (!empty($this->config['parentMse2form'])) {
+      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
+      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
     }
     $fields = array();
     foreach ($allowedFields as $field) {

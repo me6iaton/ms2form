@@ -67,10 +67,10 @@ $tmp = array(
     'value' => '',
     'desc' => 'ms2form_prop_parents'
   ),
-  'categoryMse2form' => array(
+  'parentMse2form' => array(
     'type' => 'textfield',
     'value' => '',
-    'desc' => 'ms2form_prop_categoryMse2form'
+    'desc' => 'ms2form_prop_parentMse2form'
   ),
   'parentsIncludeTVs' => array(
     'type' => 'textfield',

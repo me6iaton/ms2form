@@ -10,7 +10,7 @@
     ,selectors: {
       form: '#ms2form'
       , formKey: '#ms2formFormKey'
-      , mse2form: '#ms2formCategoryMse2form'
+      , mse2form: '#ms2formParentMse2form'
       , content: '#content'
       , editor: '#ms2formEditor'
       , editorId: 'ms2formEditor'
@@ -144,10 +144,10 @@
         jQuery.extend(this, this._editors[name]);
         this.init();
       }
-      , insertFile: function (element) {}
-      , getContent: function () {}
-      , constructor: null
-      , _editors: {
+      ,insertFile: function (element) {}
+      ,getContent: function () {}
+      ,constructor: null
+      ,_editors: {
         bootstrapMarkdown: {
           init: function () {
             $(ms2form.selectors.editorContainer).append(
@@ -171,7 +171,7 @@
             return this._inst.parseContent()
           }
         }
-        , quill: {
+        ,quill: {
           init: function () {
             this._inst = new this.constructor(ms2form.selectors.editor, {
               modules: {
@@ -435,7 +435,7 @@
               , parent: ms2form.config.parent
               , pagetitle: categoryTitle
             };
-            data[ms2form.config.categoryMse2form.queryVar] = categoryTitle;
+            data[ms2form.config.parentMse2form.queryVar] = categoryTitle;
             $.post(ms2form.config.actionUrl, data)
               .done(function (response) {
                 response = JSON.parse(response);
@@ -565,7 +565,7 @@
     initialize: function (selector) {
       var $this = $(selector);
       if (!$this.length) return;
-      var config = ms2form.config.categoryMse2form;
+      var config = ms2form.config.parentMse2form;
       var cache = {};
 
       $this.autocomplete({
