@@ -1,55 +1,25 @@
-## ms2form
+## ms2form 
 
-ms2form is a base Extra template that is useful when wanting to create a new
-Extra for MODx Revolution. One can git archive from this repository to start
-with all the file structure for beginning MODx Extra development pre-setup.
+Пекет для MODX Revolution
 
-## How to Export
+Выводит форму для создания и редактирования продукта minishop2 пользователем из фронтэнда. 
 
-First, clone this repository somewhere on your development machine:
+### Возможности
 
-`git clone http://github.com/splittingred/ms2form.git ./`
+- Создание продуктов minishop2 из фронтэнда.
+- Редактирование существующих minishop2 продуктов с фронтенда, с проверкой прав.  
+- Поддержка нескольких редакторов [quill](http://quilljs.com/) и [bootstrap-markdown](http://www.codingdrama.com/bootstrap-markdown/).
+- Автоматическое создание новой категории в которой будет опубликован продукт, интеграция с msearch2 для автодополнения.
+- Загрузка изображений в галерею продукта перетаскиванием, запись превью на диск, настройка параметров через источник файлов.
+- Поддержка мультикатегорий
+- Поддержка тегов
+- Поддержка дополнительных TV
+- Возможность выбора шаблона из фронтэнда.
+- Фильтрация контента с помощью HTML Purifier.
 
-Then, create the target directory where you want to create the file.
+### [Документация](http://docs.modx.pro/components/minishop2/other-additions/ms2form)
 
-Then, navigate to the directory ms2form is now in, and do this:
-
-`git archive HEAD | (cd /path/where/I/want/my/new/repo/ && tar -xvf -)`
-
-(Windows users can just do git archive HEAD and extract the tar file to wherever
-they want.)
-
-Then you can git init or whatever in that directory, and your files will be located
-there!
-
-## Configuration
-
-Now, you'll want to change references to ms2form in the files in your
-new copied-from-ms2form repo to whatever name of your new Extra will be. Once
-you've done that, you can create some System Settings:
-
-- 'mynamespace.core_path' - Point to /path/to/my/extra/core/components/extra/
-- 'mynamespace.assets_url' - /path/to/my/extra/assets/components/extra/
-
-Then clear the cache. This will tell the Extra to look for the files located
-in these directories, allowing you to develop outside of the MODx webroot!
-
-## Information
-
-Note that if you git archive from this repository, you may not need all of its
-functionality. This Extra contains files and the setup to do the following:
-
-- Integrates a custom table of "Items"
-- A snippet listing Items sorted by name and templated with a chunk
-- A custom manager page to manage Items on
-
-If you do not require all of this functionality, simply remove it and change the
-appropriate code.
-
-Also, you'll want to change all the references of 'ms2form' to whatever the
-name of your component is.
-
-## Copyright Information
+### Copyright Information
 
 ms2form is distributed as GPL (as MODx Revolution is), but the copyright owner
 (Shaun McCormick) grants all users of ms2form the ability to modify, distribute
