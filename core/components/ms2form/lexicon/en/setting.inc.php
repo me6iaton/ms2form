@@ -25,4 +25,4 @@ $_lang['setting_ms2form_mail_createdby'] = 'Send to the creator';
 $_lang['setting_ms2form_mail_createdby_desc'] = 'Send email to the creator of the resource';
 
 $_lang['setting_ms2form_mail_bcc'] = 'Admin notifications';
-$_lang['setting_ms2form_mail_bcc_desc'] = 'Specify a comma-separated list of <b>id</b> of administrators you want to send messages about new ticket and comments.';
+$_lang['setting_ms2form_mail_bcc_desc'] = 'Specify a comma-separated list of <b>id</b> of administrators you want to send messages about new resource.';
