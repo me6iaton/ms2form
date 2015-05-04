@@ -19,6 +19,8 @@
 
 ### [Документация](http://docs.modx.pro/components/minishop2/other-additions/ms2form)
 
+### [Форма для пожертвования](http://yasobe.ru/na/ms2form)
+
 ### Copyright Information
 
 ms2form is distributed as GPL (as MODx Revolution is), but the copyright owner
