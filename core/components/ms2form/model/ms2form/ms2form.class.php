@@ -118,8 +118,8 @@ class ms2form
     if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
       if (!empty($js) && preg_match('/\.js/i', $js)) {
         $jsCurl = $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js';
-        $this->modx->regClientStartupScript($jsCurl);
-        $this->modx->regClientStartupScript($js);
+        $this->modx->regClientScript($jsCurl);
+        $this->modx->regClientScript($js);
       }
     }
     $this->initialized[$ctx] = true;
