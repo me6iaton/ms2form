@@ -34,14 +34,15 @@ if (!empty($pid)) {
     if ($product->get('createdby') != $modx->user->id && !$modx->hasPermission('edit_document')) {
       return $modx->lexicon('ms2form_err_wrong_user');
     }
+    $productData = $product->toArray();
     $charset = $modx->getOption('modx_charset');
     $allowedFields = array_map('trim', explode(',', $scriptProperties['allowedFields']));
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
 
-    $fields = array_keys($modx->getFieldMeta('msProduct'));
+    $fields = $product->getAllFieldsNames();
     foreach ($allowedFields as $field) {
       if (in_array($field, $fields)) {
-        $value = $product->get($field);
+        $value = $productData[$field];
       } else {
         $tvId = (int)trim($field, 'tv');
         $value = $product->getTVValue($tvId);
@@ -57,6 +58,8 @@ if (!empty($pid)) {
     $data['published'] = $product->published;
     $data['alias'] = $product->alias;
     $data['context_key'] = $product->context_key;
+    $data['tags'] = $scriptProperties['tags'];
+    $data['template'] = $scriptProperties['template'];
   } else {
     return $modx->lexicon('ms2form_err_id', array('id' => $pid));
   }
