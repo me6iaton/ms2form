@@ -46,6 +46,7 @@ switch ($action) {
   case 'config/get': $response = $_SESSION['ms2form'][$_REQUEST['form_key']]; break;
   case 'gallery/upload': $response = $ms2form->fileUpload($_POST);break;
   case 'gallery/delete': $response = $ms2form->fileDelete($_POST['id']); break;
+  case 'gallery/sort': $response = $ms2form->fileSort($_POST['rank']);break;
 
   case 'product/getlist_tag': $response = $ms2form->getListTag($_POST); break;
   case 'product/getlist_category': $response = $ms2form->getListCategory($_POST); break;

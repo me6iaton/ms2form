@@ -210,6 +210,25 @@ class ms2form
   }
 
   /**
+   * Delete uploaded file
+   *
+   * @param $rank
+   *
+   * @return array|string
+   */
+  public function fileSort($rank) {
+  	if (!$this->authenticated || empty($this->config['allowFiles'])) {
+  		return $this->error('ms2form_err_access_denied');
+  	}
+  	/** @var modProcessorResponse $response */
+  	$response = $this->modx->runProcessor('web/gallery/sort', array('rank' => $rank), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+  	if ($response->isError()) {
+  		return $this->error($response->getMessage());
+  	}
+  	return $this->success();
+  }
+
+  /**
    * This method returns an error
    *
    * @param string $message A lexicon key for error message
