@@ -210,7 +210,7 @@ class ms2form
   }
 
   /**
-   * Delete uploaded file
+   * Sort uploaded files
    *
    * @param $rank
    *
@@ -450,66 +450,66 @@ class ms2form
    *
    * @return array
    */
-  public function categoryCreate (array $data){
-    $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
-    $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
-    $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
-    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
-    if (!empty($this->config['parentMse2form'])) {
-      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
-      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
-    }
-    $fields = array();
-    foreach ($allowedFields as $field) {
-      if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
-        $value = $data[$field];
-        if ($field !== 'content') {
-          $value = $this->sanitizeString($value);
-        }
-        $fields[$field] = $value;
-      }
-    }
-    $errors = array();
-    foreach ($requiredFields as $v) {
-      if (empty($fields[$v])) {
-        $errors[$v] = $this->modx->lexicon('field_required');
-      }
-    }
-    if (!empty($errors)) {
-      return $this->error($this->modx->lexicon('ms2form_err_form'), $errors);
-    }
-
-    $fields['class_key'] = 'msCategory';
-    $fields['content'] = $this->modx->getOption('ms2_category_content_default');
-
-    //check of existence
-    $category = $this->modx->getObject('modResource', array(
-      'parent' => $fields['parent']
-      ,'pagetitle' => $fields['pagetitle']
-    ));
-    if($category){
-      return $this->success('', array('id' => $category->get('id')));
-    }
-
-    $response = $this->modx->runProcessor('resource/create', $fields);
-
-    /* @var modProcessorResponse $response */
-    if ($response->isError()) {
-      $message = $response->getMessage();
-      if (empty($message)) {
-        $message = $this->modx->lexicon('ms2form_err_form');
-      }
-      $tmp = $response->getFieldErrors();
-      $errors = array();
-      foreach ($tmp as $v) {
-        $errors[$v->field] = $v->message;
-      }
-      return $this->error($message, $errors);
-    }
-    $categoryId = $response->response['object']['id'];
-
-    return $this->success('', array('id'=> $categoryId));
-  }
+//  public function categoryCreate (array $data){
+//    $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
+//    $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
+//    $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
+//    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+//    if (!empty($this->config['parentMse2form'])) {
+//      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
+//      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
+//    }
+//    $fields = array();
+//    foreach ($allowedFields as $field) {
+//      if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
+//        $value = $data[$field];
+//        if ($field !== 'content') {
+//          $value = $this->sanitizeString($value);
+//        }
+//        $fields[$field] = $value;
+//      }
+//    }
+//    $errors = array();
+//    foreach ($requiredFields as $v) {
+//      if (empty($fields[$v])) {
+//        $errors[$v] = $this->modx->lexicon('field_required');
+//      }
+//    }
+//    if (!empty($errors)) {
+//      return $this->error($this->modx->lexicon('ms2form_err_form'), $errors);
+//    }
+//
+//    $fields['class_key'] = 'msCategory';
+//    $fields['content'] = $this->modx->getOption('ms2_category_content_default');
+//
+//    //check of existence
+//    $category = $this->modx->getObject('modResource', array(
+//      'parent' => $fields['parent']
+//      ,'pagetitle' => $fields['pagetitle']
+//    ));
+//    if($category){
+//      return $this->success('', array('id' => $category->get('id')));
+//    }
+//
+//    $response = $this->modx->runProcessor('resource/create', $fields);
+//
+//    /* @var modProcessorResponse $response */
+//    if ($response->isError()) {
+//      $message = $response->getMessage();
+//      if (empty($message)) {
+//        $message = $this->modx->lexicon('ms2form_err_form');
+//      }
+//      $tmp = $response->getFieldErrors();
+//      $errors = array();
+//      foreach ($tmp as $v) {
+//        $errors[$v->field] = $v->message;
+//      }
+//      return $this->error($message, $errors);
+//    }
+//    $categoryId = $response->response['object']['id'];
+//
+//    return $this->success('', array('id'=> $categoryId));
+//  }
 
   public function initializeMediaSource($ctx = '')
   {
