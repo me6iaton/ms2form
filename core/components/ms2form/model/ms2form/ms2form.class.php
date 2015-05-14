@@ -118,8 +118,8 @@ class ms2form
     if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
       if (!empty($js) && preg_match('/\.js/i', $js)) {
         $jsCurl = $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js';
-        $this->modx->regClientStartupScript($jsCurl);
-        $this->modx->regClientStartupScript($js);
+        $this->modx->regClientScript($jsCurl);
+        $this->modx->regClientScript($js);
       }
     }
     $this->initialized[$ctx] = true;
@@ -207,6 +207,25 @@ class ms2form
     }
 
     return $this->success('', array('id' => $id));
+  }
+
+  /**
+   * Delete uploaded file
+   *
+   * @param $rank
+   *
+   * @return array|string
+   */
+  public function fileSort($rank) {
+  	if (!$this->authenticated || empty($this->config['allowFiles'])) {
+  		return $this->error('ms2form_err_access_denied');
+  	}
+  	/** @var modProcessorResponse $response */
+  	$response = $this->modx->runProcessor('web/gallery/sort', array('rank' => $rank), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+  	if ($response->isError()) {
+  		return $this->error($response->getMessage());
+  	}
+  	return $this->success();
   }
 
   /**

@@ -120,7 +120,7 @@ if (!empty($allowFiles)) {
     , 'createdby' => $modx->user->id
     ));
   }
-  $q->sortby('createdon', 'ASC');
+  $q->sortby('rank', 'ASC');
   $collection = $modx->getIterator('msProductFile', $q);
   $files = '';
   /** @var msProductFile $item */

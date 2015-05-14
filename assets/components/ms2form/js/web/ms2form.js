@@ -78,6 +78,10 @@
           deferreds.push(curl(['js!' + ms2form.config.assetsUrl + '/js/web/msearch2/lib/jquery-ui-1.10.4.custom.min.js']));
         }
 
+        if (!jQuery().sortable){
+          deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jquery-ui-sortable/jquery-ui-1.10.4.sortable.min.js']));
+        }
+
         if (!jQuery().ajaxForm){
           deferreds.push(curl(['js!' + ms2form.config.vendorUrl + 'jquery-form/jquery.form.js' ]));
         }
@@ -365,6 +369,29 @@
       // init form save sisyphus
       $(ms2form.selectors.sisyphus).sisyphus({
         excludeFields: $(ms2form.selectors.sisyphusDisable)
+      });
+      
+      //Sort files
+      $('#' + ms2form.selectors.uploader.filelist).sortable({
+          items: ms2form.selectors.file,
+          update: function( event, ui ) {
+              var rank = {};
+              $('#' + ms2form.selectors.uploader.filelist).find(ms2form.selectors.file).each(function(i){
+                  rank[i] = $(this).data('id');
+              });
+              
+              var data = {
+                  action: 'gallery/sort'
+                  , rank: rank
+                  , form_key: ms2form.config.formKey
+              };
+
+              $.post(ms2form.config.actionUrl, data, function(response) {
+                  if (!response.success) {
+                      ms2form.message.error(response.message);
+                  }
+              }, 'json');
+          }
       });
 
       // Forms listeners
