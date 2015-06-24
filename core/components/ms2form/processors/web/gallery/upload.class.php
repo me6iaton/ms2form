@@ -72,6 +72,11 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
       $path = $this->product->id . '/';
     }
 
+    // fix ios pupupload file name bug
+    if ($filename == "image.jpg") {
+      $filename = $hash . '.' . $extension;
+    }
+
     /* @var msProductFile $product_file */
     $product_file = $this->modx->newObject('msProductFile', array(
       'product_id' => $this->product->id,
@@ -140,7 +145,6 @@ class ms2FormProductFileUploadProcessor extends msProductFileUploadProcessor {
       $name = $this->getProperty('name', @$_REQUEST['name']);
       $stream = file_get_contents('php://input');
     }
-
     if (!empty($stream)) {
       $data = array(
         'name' => $name,
