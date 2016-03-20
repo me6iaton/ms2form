@@ -35,6 +35,14 @@ $tmp = array(
     'file' => 'tag_row',
     'description' => '',
   ),
+  'tpl.ms2form.mSearch2.ac' => array(
+    'file' => 'mSearch2_ac',
+    'description' => '',
+  ),
+  'tpl.ms2form.editor.quill' => array(
+    'file' => 'editor_quill',
+    'description' => '',
+  ),
 );
 
 // Save chunks for setup options

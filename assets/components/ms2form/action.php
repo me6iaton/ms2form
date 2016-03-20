@@ -16,8 +16,6 @@ if (file_exists($productionIndex)){
   require_once $developmentIndex;
 }
 
-
-
 $modx->getService('error', 'error.modError');
 $modx->getRequest();
 $modx->setLogLevel(modX::LOG_LEVEL_ERROR);
@@ -32,9 +30,10 @@ if ($ctx != 'web') {
 $properties = array();
 if (!empty($_REQUEST['form_key']) && isset($_SESSION['ms2form'][$_REQUEST['form_key']])) {
   $properties = $_SESSION['ms2form'][$_REQUEST['form_key']];
-}
-elseif (!empty($_SESSION['ms2form'])) {
-  $properties = $_SESSION['ms2form'];
+} else{
+  $message = 'Error missing $_REQUEST[form_key] or not find this in session data';
+  $modx->log(modX::LOG_LEVEL_ERROR, $message);
+  die($message);
 }
 
 /* @var ms2form $ms2form */
@@ -44,13 +43,16 @@ if ($modx->error->hasError() || !($ms2form instanceof ms2form)) {
   die('Error');
 }
 switch ($action) {
+  case 'config/get': $response = $_SESSION['ms2form'][$_REQUEST['form_key']]; break;
   case 'gallery/upload': $response = $ms2form->fileUpload($_POST);break;
   case 'gallery/delete': $response = $ms2form->fileDelete($_POST['id']); break;
+  case 'gallery/sort': $response = $ms2form->fileSort($_POST['rank']);break;
 
   case 'product/getlist_tag': $response = $ms2form->getListTag($_POST); break;
   case 'product/getlist_category': $response = $ms2form->getListCategory($_POST); break;
   case 'product/update':
   case 'product/save': $response = $ms2form->productSave($_POST); break;
+  case 'category/create': $response = $ms2form->categoryCreate($_POST); break;
   default:
     $message = $_REQUEST['action'] != $action ? 'tickets_err_register_globals' : 'tickets_err_unknown';
     $response = $modx->toJSON(array('success' => false, 'message' => $modx->lexicon($message)));

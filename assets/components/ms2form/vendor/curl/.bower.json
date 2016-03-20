@@ -21,6 +21,5 @@
   },
   "_source": "git://github.com/cujojs/curl.git",
   "_target": "~0.8.12",
-  "_originalSource": "curl",
-  "_direct": true
+  "_originalSource": "curl"
 }

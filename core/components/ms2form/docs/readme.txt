@@ -1,10 +1,13 @@
 --------------------
 ms2form
 --------------------
-Author: John Doe <john@doe.com>
+Author: Anton Mamrashev <me6iaton@gmail.com>
 --------------------
 
-A basic Extra for MODx Revolution.
+Выводит форму для создания и редактирования продукта minishop2 пользователем из фронтэнда.
+
+Donation
+http://yasobe.ru/na/ms2form
 
 Feel free to suggest ideas/improvements/bugs on GitHub:
-http://github.com/username/ms2form/issues
+http://github.com/me6iaton/ms2form/issues

@@ -47,15 +47,30 @@ $tmp = array(
     'type' => 'textfield',
     'value' => 'parent,pagetitle,content',
   ),
-//  'redirectUnpublished' => array(
-//    'type' => 'numberfield',
-//    'value' => 0,
-//  ),
-//
+  'redirectPublished' => array(
+    'type' => 'textfield',
+    'value' => 'new',
+    'desc' => 'ms2form_prop_redirectPublished'
+  ),
+  'redirectScheme' => array(
+    'type' => 'textfield',
+    'value' => '-1',
+    'desc' => 'ms2form_prop_redirectScheme'
+  ),
+  'parent' => array(
+    'type' => 'numberfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_parent'
+  ),
   'parents' => array(
     'type' => 'textfield',
     'value' => '',
     'desc' => 'ms2form_prop_parents'
+  ),
+  'parentMse2form' => array(
+    'type' => 'textfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_parentMse2form'
   ),
   'parentsIncludeTVs' => array(
     'type' => 'textfield',
@@ -78,6 +93,11 @@ $tmp = array(
     'value' => '',
     'desc' => 'ms2form_prop_resources'
   ),
+  'template' => array(
+    'type' => 'numberfield',
+    'value' => '',
+    'desc' => 'ms2form_prop_template'
+  ),
   'templates' => array(
     'type' => 'textfield',
     'value' => '1',
@@ -92,7 +112,26 @@ $tmp = array(
     'type' => 'numberfield',
     'value' => '',
   ),
-
+  'tags' => array(
+    'type' => 'combo-boolean',
+    'value' => true,
+    'desc' => 'ms2form_prop_tags'
+  ),
+  'tagsNew' => array(
+    'type' => 'combo-boolean',
+    'value' => true,
+    'desc' => 'ms2form_prop_tagsNew'
+  ),
+  'editor' => array(
+    'type' => 'list',
+    'options' => array(
+      array('text' => '0', 'value' => '0'),
+      array('text' => 'bootstrapMarkdown', 'value' => 'bootstrapMarkdown'),
+      array('text' => 'quill', 'value' => 'quill'),
+    ),
+    'value' => 'quill',
+    'desc' => 'ms2form_prop_editor'
+  ),
 );
 
 foreach ($tmp as $k => $v) {

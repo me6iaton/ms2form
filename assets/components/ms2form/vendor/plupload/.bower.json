@@ -1,15 +1,14 @@
 {
   "name": "plupload",
   "homepage": "https://github.com/moxiecode/plupload",
-  "version": "2.1.2",
-  "_release": "2.1.2",
+  "version": "2.1.4",
+  "_release": "2.1.4",
   "_resolution": {
     "type": "version",
-    "tag": "v2.1.2",
-    "commit": "764bb47f136a3e427a9f3e2ce2319516aded8e7f"
+    "tag": "v2.1.4",
+    "commit": "bcbd89e0b468e79a3c68762acf0ac3852a341713"
   },
   "_source": "git://github.com/moxiecode/plupload.git",
   "_target": "~2.1.2",
-  "_originalSource": "plupload",
-  "_direct": true
+  "_originalSource": "plupload"
 }

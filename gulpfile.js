@@ -16,6 +16,8 @@ var paths = {
     ,'./assets/components/ms2form/vendor/select2/select2.css'
     ,'./assets/components/ms2form/vendor/select2/select2-bootstrap.css'
     ,'./assets/components/ms2form/vendor/bootstrap-markdown/css/bootstrap-markdown.min.css'
+    ,'./assets/components/ms2form/vendor/quill/dist/quill.snow.css'
+    ,'./assets/components/ms2form/css/web/jquery-ui-1.10.4.custom.css'
     ,'./assets/components/ms2form/css/web/custom.css'
   ]
   ,cssDest: './assets/components/ms2form/css/web/'

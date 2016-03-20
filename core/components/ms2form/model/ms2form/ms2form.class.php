@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The base class for ms2form.
  *
@@ -25,6 +24,7 @@ class ms2form
     $corePath = $this->modx->getOption('ms2form_core_path', $config, $this->modx->getOption('core_path') . 'components/ms2form/');
     $assetsUrl = $this->modx->getOption('ms2form_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ms2form/');
     $actionUrl = $this->modx->getOption('ms2form_action_url', $config, $assetsUrl . 'action.php');
+    $disableHtmlpurifier = $this->modx->getOption('ms2form_disable_htmlpurifier');
     if (empty($config['source'])) {
       $config['source'] = $this->modx->getOption('ms2_product_source_default');
     }
@@ -34,14 +34,12 @@ class ms2form
       'assetsUrl' => $assetsUrl
     , 'cssUrl' => $assetsUrl . 'css/'
     , 'vendorUrl' => $assetsUrl . 'vendor/'
-
     , 'connectorUrl' => $connectorUrl
     , 'actionUrl' => $actionUrl
     , 'modelPath' => $corePath . 'model/'
     , 'corePath' => $corePath
-
     , 'cultureKey' => $this->modx->getOption('cultureKey')
-
+    , 'disableHtmlpurifier' => $disableHtmlpurifier
     , 'json_response' => true
     ), $config);
 
@@ -54,9 +52,8 @@ class ms2form
    * Initializes component into different contexts.
    *
    * @param string $ctx The context to load. Defaults to web.
-   * @param array $scriptProperties
    *
-   * @return boolean
+   * @return array
    */
   public function initialize($ctx = 'web')
   {
@@ -67,55 +64,66 @@ class ms2form
 
     $this->config['ctx'] = $ctx;
     $this->initializeMediaSource($this->config['ctx']);
-    if (!empty($this->initialized[$ctx])) {
-      return true;
-    }
-    switch ($ctx) {
-      case 'mgr':
-        break;
-      default:
-        if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
-          $sorceProperties = $this->mediaSource->properties;
-          $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
-            Ms2formConfig = {
-              ctx: "' . $ctx . '"
-              ,cultureKey: "' . $this->config['cultureKey'] . '"
-              ,vendorUrl: "' . $this->config['vendorUrl'] . '"
-              ,cssUrl: "' . $this->config['cssUrl'] . 'web/"
-              ,actionUrl: "' . $this->config['actionUrl'] . '"
-              ,close_all_message: "' . $this->modx->lexicon('ms2form_message_close_all') . '"
-              ,source: {
-                allowedFileTypes: "' . $sorceProperties['allowedFileTypes']['value'] . '"
-                ,maxUploadWidth: "' . $sorceProperties['maxUploadWidth']['value'] . '"
-                ,maxUploadHeight: "' . $sorceProperties['maxUploadHeight']['value'] . '"
-                ,maxUploadSize: "' . $sorceProperties['maxUploadSize']['value'] . '"
-              }
-            };
-          ');
-          $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
-          $this->modx->regClientStartupScript($config_js, true);
-          if ($css = trim($this->modx->getOption('ms2form_frontend_css'))) {
-            $this->modx->regClientCSS($css);
-          }
-          if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
-            if (!empty($js) && preg_match('/\.js/i', $js)) {
-              $jsCurl = '
-                <script type="text/javascript">
-                if(typeof curl == "undefined") {
-                  document.write("<script src=\"' . $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js\" type=\"text/javascript\"><\/script>");
-                  }
-              </script>';
-              $jsCurl = preg_replace(array('/^\n/', '/\t{7}/'), '', $jsCurl);
 
-              $this->modx->regClientStartupScript($jsCurl, true);
-              $this->modx->regClientStartupScript($js);
-            }
-          }
-        }
-        $this->initialized[$ctx] = true;
-        break;
+    if (!empty($this->initialized[$ctx]) or ($ctx == 'mgr') or (MODX_API_MODE )) {
+      return $this->config;
     }
-    return true;
+
+    $sorceProperties = $this->mediaSource->properties;
+    $this->config['sourceProperties'] = $sorceProperties;
+    $this->config['close_all_message'] = $this->modx->lexicon('ms2form_message_close_all');
+    $this->config['cssUrl'] = $this->config['cssUrl'] . 'web/';
+
+    //msearchform
+    if(!empty($this->config['parentMse2form'])){
+      $mse2FormConfig = array(
+        'autocomplete' => 'results'
+      , 'queryVar' => 'query'
+      , 'minQuery' => 3
+      , 'fields' => 'pagetitle:1'
+      , 'pageId' => $this->modx->resource->id
+      , 'tplForm' => 'tpl.ms2form.mSearch2.form'
+      , 'tpl' => 'tpl.ms2form.mSearch2.ac'
+      , 'element' => 'mSearch2'
+      , 'limit' => 5
+      , 'onlyIndex' => false
+      , 'actionUrl' => '/assets/components/msearch2/action.php'
+      );
+      $mse2FormConfig = array_merge($mse2FormConfig, json_decode($this->config['parentMse2form'], true));
+      $mse2FormHash = sha1(serialize($mse2FormConfig));
+      $this->config['parentMse2form'] = $mse2FormConfig;
+      $this->config['mse2formKey'] = $mse2FormHash;
+      $_SESSION['mSearch2'][$mse2FormHash] = $mse2FormConfig;
+    }
+
+    // ms2form
+    $hash = sha1(serialize($this->config));
+    $this->config['formKey'] = $hash;
+    $_SESSION['ms2form'][$hash] = $this->config;
+
+    $config_js = preg_replace(array('/^\n/', '/\t{6}/'), '', '
+        Ms2formConfig = {
+          vendorUrl: "' . $this->config['vendorUrl'] . '"
+          ,assetsUrl: "' . $this->config['assetsUrl'] . '"
+          ,actionUrl: "' . $this->config['actionUrl'] . '"
+          ,cultureKey: "' . $this->config['cultureKey'] . '"
+          ,editor: "' . $this->config['editor'] . '"
+        };
+      ');
+    $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
+    $this->modx->regClientStartupScript($config_js, true);
+    if ($css = trim($this->modx->getOption('ms2form_frontend_css'))) {
+      $this->modx->regClientCSS($css);
+    }
+    if ($js = trim($this->modx->getOption('ms2form_frontend_js'))) {
+      if (!empty($js) && preg_match('/\.js/i', $js)) {
+        $jsCurl = $this->config['vendorUrl'] . 'curl/dist/curl-with-js-and-domReady/curl.js';
+        $this->modx->regClientScript($jsCurl);
+        $this->modx->regClientScript($js);
+      }
+    }
+    $this->initialized[$ctx] = true;
+    return $this->config;
   }
 
   /**
@@ -202,6 +210,25 @@ class ms2form
   }
 
   /**
+   * Sort uploaded files
+   *
+   * @param $rank
+   *
+   * @return array|string
+   */
+  public function fileSort($rank) {
+  	if (!$this->authenticated || empty($this->config['allowFiles'])) {
+  		return $this->error('ms2form_err_access_denied');
+  	}
+  	/** @var modProcessorResponse $response */
+  	$response = $this->modx->runProcessor('web/gallery/sort', array('rank' => $rank), array('processors_path' => dirname(dirname(dirname(__FILE__))) . '/processors/'));
+  	if ($response->isError()) {
+  		return $this->error($response->getMessage());
+  	}
+  	return $this->success();
+  }
+
+  /**
    * This method returns an error
    *
    * @param string $message A lexicon key for error message
@@ -212,13 +239,17 @@ class ms2form
    */
   public function error($message = '', $data = array(), $placeholders = array())
   {
+    header('HTTP/1.1 400 Bad Request');
+    $messageTranslation = $this->modx->lexicon($message, $placeholders);
+    if($messageTranslation){
+      $message = $messageTranslation;
+    }
     $response = array(
       'success' => false
-    , 'message' => $this->modx->lexicon($message, $placeholders)
+    , 'message' => $message
     , 'data' => $data
     );
-    $this->modx->log(modX::LOG_LEVEL_ERROR, $response['message']);
-
+    $this->modx->log(modX::LOG_LEVEL_ERROR, $message);
     return $this->config['json_response']
       ? $this->modx->toJSON($response)
       : $response;
@@ -266,9 +297,8 @@ class ms2form
       : $response;
   }
 
-
   /**
-   * Create Product through processor and redirect to it
+   * Create Product through processor and redirect
    *
    * @param array $data section, pagetitle, text, etc
    *
@@ -280,14 +310,24 @@ class ms2form
 
     $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
     $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
+    $allowedFields = array_diff($allowedFields, array(''));
     $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
-    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle', 'content')));
+    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+    $requiredFields = array_diff($requiredFields, array(''));
+    if(!empty($this->config['parentMse2form'])){
+      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
+      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
+    }
 
     $fields = array();
     foreach ($allowedFields as $field) {
       if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
         $value = $data[$field];
-        if ($field !== 'content' && $field !== 'tags') {
+        if(is_array($value)){
+          foreach($value as $key => $item){
+            $value[$key] = $this->sanitizeString($item);
+          }
+        }else if($field !== 'content'){
           $value = $this->sanitizeString($value);
         }
         $fields[$field] = $value;
@@ -311,6 +351,15 @@ class ms2form
     $fields['class_key'] = 'msProduct';
     $fields['source'] = $source;
 
+    //filter content
+    if(!$this->config['disableHtmlpurifier']){
+      require_once $this->config['corePath'] . '/vendor/autoload.php';
+      $purifierConfig = HTMLPurifier_Config::createDefault();
+      $purifier = new HTMLPurifier($purifierConfig);
+      $fields['content'] = $purifier->purify($fields['content']);
+    }
+
+    //update or create product
     if (!empty($data['pid'])) {
       $fields['id'] = (integer)$data['pid'];
       $fields['context_key'] = $data['context_key'];
@@ -321,6 +370,7 @@ class ms2form
       $response = $this->modx->runProcessor('mgr/product/create', $fields, array('processors_path' => MODX_CORE_PATH . 'components/minishop2/processors/'));
       $flagNew = true;
     }
+
     /* @var modProcessorResponse $response */
     if ($response->isError()) {
       $message = $response->getMessage();
@@ -377,13 +427,89 @@ class ms2form
     $product = $this->modx->getObject('msProduct', $productId);
     $product->updateProductImage();
 
-    if (empty($data['published'])) {
-      $productId = $data['parent'];
+    //redirect
+    $successMessage = '';
+    $successData = array();
+    if($data['redirectPublished'] == '0'){
+      $successMessage = 'ms2form_published';
+    }else if ($data['redirectPublished'] == 'new'){
+      if (empty($data['published'])) {
+        $productId = $data['parent'];
+      }
+      $successData['redirect'] = $this->modx->makeUrl($productId, '', '', $this->config['redirectScheme']);
+    } else if ($data['redirectPublished']){
+      $successData['redirect'] = $this->modx->makeUrl($data['redirectPublished'], '', '', $this->config['redirectScheme']);
     }
-    $redirect = $this->modx->makeUrl($productId, '', '', 'full');
-
-    return $this->success('', array('redirect' => $redirect));
+    return $this->success($successMessage, $successData);
   }
+
+  /**
+   * Create msCategory through processor
+   *
+   * @param array $data section, pagetitle, text, etc
+   *
+   * @return array
+   */
+//  public function categoryCreate (array $data){
+//    $allowedFields = array_map('trim', explode(',', $this->config['allowedFields']));
+//    $allowedFields = array_unique(array_merge($allowedFields, array('parent', 'pagetitle', 'content')));
+//    $requiredFields = array_map('trim', explode(',', $this->config['requiredFields']));
+//    $requiredFields = array_unique(array_merge($requiredFields, array('parent', 'pagetitle')));
+//    if (!empty($this->config['parentMse2form'])) {
+//      $allowedFields[] = $this->config['parentMse2form']['queryVar'];
+//      $requiredFields[] = $this->config['parentMse2form']['queryVar'];
+//    }
+//    $fields = array();
+//    foreach ($allowedFields as $field) {
+//      if (in_array($field, $allowedFields) && array_key_exists($field, $data)) {
+//        $value = $data[$field];
+//        if ($field !== 'content') {
+//          $value = $this->sanitizeString($value);
+//        }
+//        $fields[$field] = $value;
+//      }
+//    }
+//    $errors = array();
+//    foreach ($requiredFields as $v) {
+//      if (empty($fields[$v])) {
+//        $errors[$v] = $this->modx->lexicon('field_required');
+//      }
+//    }
+//    if (!empty($errors)) {
+//      return $this->error($this->modx->lexicon('ms2form_err_form'), $errors);
+//    }
+//
+//    $fields['class_key'] = 'msCategory';
+//    $fields['content'] = $this->modx->getOption('ms2_category_content_default');
+//
+//    //check of existence
+//    $category = $this->modx->getObject('modResource', array(
+//      'parent' => $fields['parent']
+//      ,'pagetitle' => $fields['pagetitle']
+//    ));
+//    if($category){
+//      return $this->success('', array('id' => $category->get('id')));
+//    }
+//
+//    $response = $this->modx->runProcessor('resource/create', $fields);
+//
+//    /* @var modProcessorResponse $response */
+//    if ($response->isError()) {
+//      $message = $response->getMessage();
+//      if (empty($message)) {
+//        $message = $this->modx->lexicon('ms2form_err_form');
+//      }
+//      $tmp = $response->getFieldErrors();
+//      $errors = array();
+//      foreach ($tmp as $v) {
+//        $errors[$v->field] = $v->message;
+//      }
+//      return $this->error($message, $errors);
+//    }
+//    $categoryId = $response->response['object']['id'];
+//
+//    return $this->success('', array('id'=> $categoryId));
+//  }
 
   public function initializeMediaSource($ctx = '')
   {

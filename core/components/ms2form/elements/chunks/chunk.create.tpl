@@ -1,8 +1,11 @@
 <form class="well create" method="post" action="" id="ms2form" role="form">
+  <input type="hidden" id="ms2formFormKey" name="form_key" value="[[+formKey]]">
   <input type="hidden" name="pid" value="0">
   <input type="hidden" name="parent" value="[[+parent]]">
   <input type="hidden" name="published" value="1"/>
   <input type="hidden" name="hidemenu" value="0"/>
+  <input type="hidden" name="redirectPublished" value="[[+redirectPublished]]"/>
+  <input type="hidden" id="ms2formTagsNew" value="[[+tagsNew]]"/>
 
   <div class="form-group">
     <label>[[%ms2form_pagetitle]]</label>
@@ -10,18 +13,17 @@
     <input type="text" class="form-control" placeholder="[[%ms2form_pagetitle]]" name="pagetitle" value="" maxlength="50" id="ms2formPagetitle"/>
   </div>
 
+  [[+parentMse2form.element]]
+
   [[+templates]]
 
   <div class="form-group">
-    <label>[[%ms2form_sections]]</label>
+    <label>[[%ms2form_categories]]</label>
     <br/>
     <input type="hidden" class="form-control" id="ms2formSections">
   </div>
-  <div class="form-group">
-    <label>[[%ms2form_tags]]</label>
-    <br/>
-    <input type="hidden" class="form-control" id="ms2formTags">
-  </div>
+
+  [[+tags]]
 
   <div class="form-group">
     <label>Пример TV </label>
@@ -33,8 +35,7 @@
 
   <div class="form-group popover-help" id="formGroupContent">
     <input id="content" name="content" type="hidden" value="[[+content]]"/>
-    <div id="ms2formEditor">
-    </div>
+    [[$tpl.ms2form.editor.[[+editor]]]]
   </div>
 
   <div class="form-group">
@@ -44,9 +45,26 @@
   </div>
 
   <div class="form-actions">
-    <input type="submit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
+    <input type="submit" id="ms2formSubmit" class="btn btn-primary submit" value="[[%ms2form_save]]"/>
   </div>
 </form>
+
+
+<!--pdotools_parentMse2form.element
+  <div class="form-group">
+    <label>[[%ms2form_category]]</label>
+    <span class="text-danger">*</span>
+    <input type="text" data-key=[[+mse2formKey]] id="ms2formParentMse2form" class="form-control disable-sisyphus" name="[[+parentMse2form.queryVar]]" placeholder="[[%ms2form_search]]" value="" />
+  </div>
+-->
+
+<!--pdotools_tags
+  <div class="form-group">
+    <label>[[%ms2form_tags]]</label>
+    <br/>
+    <input type="hidden" class="form-control" id="ms2formTags">
+  </div>
+-->
 
 <!--pdotools_templates
 <div class="form-group">

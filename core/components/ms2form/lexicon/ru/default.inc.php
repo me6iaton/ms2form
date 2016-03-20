@@ -5,10 +5,14 @@
 
 $_lang['ms2form_pagetitle'] = 'Заголовок';
 $_lang['ms2form_template'] = 'Шаблон';
-$_lang['ms2form_sections'] = 'Категории';
+$_lang['ms2form_category'] = 'Категория';
+$_lang['ms2form_categories'] = 'Категории';
 $_lang['ms2form_tags'] = 'Теги';
 $_lang['ms2form_save'] = 'Сохранить';
 $_lang['ms2form_uploaded_files'] = 'Загруженные файлы';
+$_lang['ms2form_search'] = 'Поиск категории';
+
+$_lang['ms2form_published'] = 'Ресурс опубликован';
 
 $_lang['ms2form_email_bcc'] = 'Новый ресурс у вас на сайте - "[[+pagetitle]]"';
 
