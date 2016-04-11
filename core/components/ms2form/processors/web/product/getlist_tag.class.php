@@ -27,8 +27,8 @@ class ms2FormProductGetTagsListProcessor  extends modObjectProcessor{
 	if ( !empty($this->allowedTags[0]) ) {
 		$tagsAll = array_map(function($tag) {
 		  return array(
-			'id' => $tag,
-			'text' => $tag
+			'id' => trim($tag),
+			'text' => trim($tag)
 		  );
 		}, $this->allowedTags);
 	} else {
