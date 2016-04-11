@@ -41,6 +41,7 @@ class ms2form
     , 'cultureKey' => $this->modx->getOption('cultureKey')
     , 'disableHtmlpurifier' => $disableHtmlpurifier
     , 'json_response' => true
+    , 'allowedTags' => $this->modx->getOption('allowedTags', $config, null)
     ), $config);
 
     $this->modx->lexicon->load('ms2form:default');
@@ -108,6 +109,7 @@ class ms2form
           ,actionUrl: "' . $this->config['actionUrl'] . '"
           ,cultureKey: "' . $this->config['cultureKey'] . '"
           ,editor: "' . $this->config['editor'] . '"
+          '.(($this->config['allowedTags'])?',allowedTags: "'.implode(',', array_map('trim', explode(',', $this->config['allowedTags']))).'"':'').'
         };
       ');
     $config_js = "<script type=\"text/javascript\">\n" . $config_js . "\n</script>";
