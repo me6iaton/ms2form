@@ -47,7 +47,7 @@ if (!empty($pid)) {
         $tvId = (int)trim($field, 'tv');
         $value = $product->getTVValue($tvId);
       }
-      if (is_string($value)) {
+      if (is_string($value) && $field != 'content') {
         $value = html_entity_decode($value, ENT_QUOTES, $charset);
         $value = str_replace(array('[^', '^]', '[', ']'), array('&#91;^', '^&#93;', '{{{{{', '}}}}}'), $value);
         $value = htmlentities($value, ENT_QUOTES, $charset);
