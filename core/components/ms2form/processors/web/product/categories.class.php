@@ -24,6 +24,19 @@ class msProductCategoreisMemberProcessor extends modObjectCreateProcessor {
       return $this->error('empty property product_id');
     }
 
+	foreach ( $catIds as $key => $tmp ) {
+		$tmpcat = $this->modx->getObject('msCategory', intval($tmp));
+		if ( !$tmpcat ) {
+			$tmpcat = $this->modx->newObject('msCategory');
+			$tmpcat->fromArray(array(
+				'pagetitle' => $tmp,
+				'parent' => $this->modx->getOption('ms2form_categories_parent', $scriptProperties, 0),
+				'published' => 1
+			));
+			$tmpcat->save();
+			$catIds[$key] = $tmpcat->get('id');
+		}
+	}
 
     if (!$flagNew) {
       $msCatMembers = $this->modx->getCollection('msCategoryMember', array('product_id' => $productId));
