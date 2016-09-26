@@ -3,7 +3,7 @@
 /* @var ms2form $ms2form */
 
 if (!$modx->user->isAuthenticated()) {
-  return $modx->lexicon('ms2form_err_no_auth');
+  //return $modx->lexicon('ms2form_err_no_auth');
 }
 
 $ms2form = $modx->getService('ms2form', 'ms2form', $modx->getOption('ms2form_core_path', null, $modx->getOption('core_path') . 'components/ms2form/') . 'model/ms2form/', $scriptProperties);
@@ -47,7 +47,7 @@ if (!empty($pid)) {
         $tvId = (int)trim($field, 'tv');
         $value = $product->getTVValue($tvId);
       }
-      if (is_string($value)) {
+      if (is_string($value) && $field != 'content') {
         $value = html_entity_decode($value, ENT_QUOTES, $charset);
         $value = str_replace(array('[^', '^]', '[', ']'), array('&#91;^', '^&#93;', '{{{{{', '}}}}}'), $value);
         $value = htmlentities($value, ENT_QUOTES, $charset);
@@ -111,13 +111,13 @@ if (!empty($allowFiles)) {
     $q->where(array(
       'product_id' => 0
       ,'parent' => 0
-      ,'createdby' => $modx->user->id
+      //,'createdby' => $modx->user->id
     ));
   }else{
     $q->where(array(
       'product_id' => $pid
     , 'parent' => 0
-    , 'createdby' => $modx->user->id
+    //, 'createdby' => $modx->user->id
     ));
   }
   $q->sortby('rank', 'ASC');
@@ -127,7 +127,9 @@ if (!empty($allowFiles)) {
   foreach ($collection as $item) {
       $item = $item->toArray();
       $item['size'] = round($item['size'] / 1024, 2);
-      $item['thumb'] = '/'.$sourceProperties['baseUrl'].$item['path']. $ms2_product_thumbnail_size.'/'. $item['file'];
+      $tmp = explode('.', $item['file']);
+      $extension = strtolower(end($tmp));
+      $item['thumb'] = '/'.$sourceProperties['baseUrl'].$item['path']. $ms2_product_thumbnail_size.'/'. str_replace('.'.$extension, '.'.strtolower($sourceProperties['thumbnailType']), $item['file']);
       $tpl = $item['type'] == 'image'
         ? $tplImage
         : $tplFile;

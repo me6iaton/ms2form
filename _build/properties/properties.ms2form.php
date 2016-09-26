@@ -122,6 +122,10 @@ $tmp = array(
     'value' => true,
     'desc' => 'ms2form_prop_tagsNew'
   ),
+  'allowedTags' => array(
+    'type' => 'textfield',
+    'value' => '',
+  ),
   'editor' => array(
     'type' => 'list',
     'options' => array(

@@ -13,6 +13,11 @@ $tmp = array(
     'value' => PKG_ASSETS_URL,
     'area' => 'ms2form.main',
   ),
+  'categories_parent' => array(
+    'xtype' => 'textfield',
+    'value' => '0',
+    'area' => 'ms2form.main',
+  ),
   'frontend_css' => array(
     'xtype' => 'textfield',
     'value' => PKG_ASSETS_URL . 'css/web/ms2form.css',

@@ -13,6 +13,8 @@ $_lang['setting_ms2form_frontend_css'] = 'Стили фронтенда';
 $_lang['setting_ms2form_frontend_css_desc'] = 'Путь к файлу со стилями магазина. Если вы хотите использовать собственные стили - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';
 $_lang['setting_ms2form_frontend_js'] = 'Скрипты фронтенда';
 $_lang['setting_ms2form_frontend_js_desc'] = 'Путь к файлу со скриптами магазина. Если вы хотите использовать собственные скрипты - укажите путь к ним здесь, или очистите параметр и загрузите их вручную через шаблон сайта.';
+$_lang['setting_ms2form_categories_parent'] = 'Родитель для категорий';
+$_lang['setting_ms2form_categories_parent_desc'] = 'Укажите родителя, который будет контейнером для новых категорий, создаваемых компонентом';
 $_lang['setting_ms2form_disable_htmlpurifier'] = 'Отключить фильтрацию контента';
 $_lang['setting_ms2form_disable_htmlpurifier_desc'] = 'Эта настройка отключает фильтрацию контента с помощью HTML Purifier';
 

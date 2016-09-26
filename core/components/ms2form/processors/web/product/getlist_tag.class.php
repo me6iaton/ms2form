@@ -10,6 +10,7 @@ class ms2FormProductGetTagsListProcessor  extends modObjectProcessor{
   /** @var pdoFetch $pdoFetch */
   private $pdoFetch;
   private $pid;
+  private $allowedTags;
   public $languageTopics = array('ms2form:default');
 
   public function initialize() {
@@ -18,30 +19,40 @@ class ms2FormProductGetTagsListProcessor  extends modObjectProcessor{
     $properties = $this->getProperties();
     $this->pdoFetch = new $pdoClass( $this->modx, (empty($properties))?  array() : $properties);
     $this->pid = $this->getProperty('pid');
+    $this->allowedTags = explode(',', $this->getProperty('allowedTags'));
     return true;
   }
   public function process(){
     $result = array();
-    $queryAll = array(
-    'class' => $this->classKey
-    ,'where' => $this->modx->toJSON(['key'=>'tags'])
-    ,'select' => $this->modx->toJSON(['value'=>'msProductOption.value'])
-    ,'groupby' => 'msProductOption.value'
-    ,'limit' => 0
-    ,'fastMode' => true
-    ,'sortby' => 'msProductOption.value'
-    ,'sortdir' => 'ASC'
-    ,'return' => 'data'
-    );
-    $this->pdoFetch->setConfig($queryAll);
-    $tagsAll = $this->pdoFetch->run();
-    $tagsAll = array_map(function($tag) {
-      return array(
-        'id' => $tag['value'],
-        'text' => $tag['value']
-      );
-    }, $tagsAll);
-    $result['all'] =  $tagsAll;
+	if ( !empty($this->allowedTags[0]) ) {
+		$tagsAll = array_map(function($tag) {
+		  return array(
+			'id' => trim($tag),
+			'text' => trim($tag)
+		  );
+		}, $this->allowedTags);
+	} else {
+		$queryAll = array(
+		'class' => $this->classKey
+		,'where' => $this->modx->toJSON(['key'=>'tags'])
+		,'select' => $this->modx->toJSON(['value'=>'msProductOption.value'])
+		,'groupby' => 'msProductOption.value'
+		,'limit' => 0
+		,'fastMode' => true
+		,'sortby' => 'msProductOption.value'
+		,'sortdir' => 'ASC'
+		,'return' => 'data'
+		);
+		$this->pdoFetch->setConfig($queryAll);
+		$tagsAll = $this->pdoFetch->run();
+		$tagsAll = array_map(function($tag) {
+		  return array(
+			'id' => $tag['value'],
+			'text' => $tag['value']
+		  );
+		}, $tagsAll);
+	}
+	$result['all'] =  $tagsAll;
 
     if($this->pid !== '0'){
       $queryProduct = array(
